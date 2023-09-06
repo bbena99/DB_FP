@@ -1,0 +1,19 @@
+#navBar{
+  height: 5%;
+  width: 100%;
+  box-shadow:
+    0px 10px 15px #A8DF8E,
+    0px 5px 5px #A8DF8E;
+  margin-bottom: 10px;
+  background-color: #A8DF8E;
+  color: #FFE5E5;
+}
+#page{
+  display: flex;
+  height: 94%;
+  width: 100%;
+}
+#topBar{
+  height: 5%;
+  width: 100%;
+}
