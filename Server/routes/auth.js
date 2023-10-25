@@ -1,7 +1,7 @@
 const express = require('express');
 var router = express.Router();
 const bcrypt = require("bcrypt");
-var Userdb = require('../models/users');
+//var Userdb = require('../models/users');
 //const {v4: uuidv4} = require('uuid');
 
 /**
@@ -12,7 +12,7 @@ router.post("/login", async (req,res) => {
     //console.log("    .post('/login') was called proper");
     let query = req.query;
     //console.log(query);
-    let user = await Userdb.findOne({username:query.username});
+    //let user = await Userdb.findOne({username:query.username});
     if(user==undefined&&user.enabled==true){
         res.status(404).send("User not found");
         return;
@@ -39,13 +39,13 @@ router.post("/createUser", async (req,res) => {
         res.status(400).send('NO QUERY FOUND');
         return;
     }
-    if(await Userdb.findOne({'username':req.query.username})){
+    /*if(await Userdb.findOne({'username':req.query.username})){
         res.status(408).send('USERNAME TAKEN');
         return;
-    }
-    let encrypted = await bcrypt.hash(req.query.password,10);
-    let newUser = {'username' : req.query.username , 'password' : encrypted, 'admin': false, 'enabled' : true};
-    let dbUser = await Userdb.create( newUser );
+    }*/
+    //let encrypted = await bcrypt.hash(req.query.password,10);
+    //let newUser = {'username' : req.query.username , 'password' : encrypted, 'admin': false, 'enabled' : true};
+    //let dbUser = await Userdb.create( newUser );
     /*
     console.log("Before the for loop");
     for(let i=0; i<1200; i++){

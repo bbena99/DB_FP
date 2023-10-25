@@ -4,10 +4,14 @@ var session = require('express-session');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var sql = require('mysqlx');
 
 var authRouter = require('./routes/auth');
 var userRouter = require('./routes/user');
 
+/**
+ * Will need to add a connection to the DB here.
+ */
 
 var app = express();
 
