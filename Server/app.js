@@ -4,7 +4,7 @@ var session = require('express-session');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var sql = require('mysqlx');
+var sql = require('mysql');
 
 var authRouter = require('./routes/auth');
 var userRouter = require('./routes/user');
