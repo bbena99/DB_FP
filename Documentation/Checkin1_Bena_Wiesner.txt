@@ -14,7 +14,7 @@
     Create the db on the server, set up connection between backend and server.
 
 3. What problems did we run into, and how did we solve them?
-  We did have some issues with some of the frontend on User Authentication based on user recieved from backend.
+  We did have some issues with some of the frontend on User Authentication based on user received from backend.
       Brock will be looking into solving this issue by next week.
 
 4. What questions do we have?
