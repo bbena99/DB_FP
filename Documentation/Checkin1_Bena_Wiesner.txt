@@ -11,7 +11,9 @@
   ♦ Brock:
     Works on User Auth on the frontend.
   ♦ Travis:
-    Create the db on the server, set up connection between backend and server.
+    Create the db on the server
+    set up connection between backend and server.
+    review er diagram based off of in class lecture 10/30 on "has" and "have" relations
 
 3. What problems did we run into, and how did we solve them?
   We did have some issues with some of the frontend on User Authentication based on user received from backend.
