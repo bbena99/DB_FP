@@ -1,13 +1,21 @@
 1. Progress made in the last week: 
-  Brock: Changed from mysqlx to mysql modules. Added some sql interactions and some schema files. 
-  Travis: Did documentation work and uploaded it to github. Added a bot to our discord server to allow us to easily have changes to our github documented.
+  ♦ Brock:
+    Changed from mysqlx to mysql module/library.
+    Added some sql interactions.
+    Added some blank schema files and one example for Travis to build off of. 
+  ♦ Travis:
+    Did documentation work and uploaded it to github.
+    Added a bot to our discord server to allow us to easily have changes to our github documented.
 
 2. Goals for next week: 
-  Brock: Works on User Auth on the frontend.
-  Travis: Create the db on the server, set up connection between backend and server.
+  ♦ Brock:
+    Works on User Auth on the frontend.
+  ♦ Travis:
+    Create the db on the server, set up connection between backend and server.
 
 3. What problems did we run into, and how did we solve them?
-  We did have some issues with some of the frontend that we were able to do in the past week, but we were able to get past it through research and looking for examples online
+  We did have some issues with some of the frontend on User Authentication based on user recieved from backend.
+      Brock will be looking into solving this issue by next week.
 
 4. What questions do we have?
   None
