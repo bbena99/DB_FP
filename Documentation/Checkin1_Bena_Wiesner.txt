@@ -1,6 +1,6 @@
 1. Progress made in the last week: 
   Brock: Changed from mysqlx to mysql modules. Added some sql interactions and some schema files. 
-  Travis: Did documentation work and uploaded it to github
+  Travis: Did documentation work and uploaded it to github. Added a bot to our discord server to allow us to easily have changes to our   github documented.
 
 2. Goals for next week: 
   Brock: Adding more SQL interactions
