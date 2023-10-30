@@ -1,0 +1,13 @@
+1. Progress made in the last week: 
+  Brock: Changed from mysqlx to mysql modules. Added some sql interactions and some schema files. 
+  Travis: Did documentation work and uploaded it to github
+
+2. Goals for next week: 
+  Brock: Adding more SQL interactions
+  Travis: Working on the frontend more
+
+3. What problems did we run into, and how did we solve them?
+  We did have some issues with some of the frontend that we were able to do in the past week, but we were able to get past it through      research and looking for examples online
+
+4. What questions do we have?
+  None
