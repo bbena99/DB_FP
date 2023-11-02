@@ -5,13 +5,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var sql = require('mysql');
-
 var authRouter = require('./routes/auth');
 var userRouter = require('./routes/user');
 
 /**
  * Will need to add a connection to the DB here.
- */
+*/
 
 var app = express();
 
@@ -26,7 +25,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '')));//need to change later
+app.use(express.static(path.join(__dirname, 'public')));//need to change later
 
 const api = '/api/v1';
 app.use(api, authRouter); //used for authentication endpoints

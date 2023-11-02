@@ -70,6 +70,11 @@ router.post("/createUser", async (req,res) => {
     });
     res.status(201).send(dbUser);
 });
+
+/**
+ * POST "/logout"
+ * Logs a user out
+ */
 router.post("/logout", (req, res) => {
     req.session.destroy( () => {
         //console.log( req.session );
