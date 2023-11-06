@@ -1,12 +1,13 @@
 1. Progress made in the last week: 
-  ♦ Brock: 
+  ♦ Brock: Regenerated the backend due to init failures.
   ♦ Travis: Created the javascript schemas for the database regarding our various tables
 
 2. Goals for next week: 
-  ♦ Brock:
+  ♦ Brock: Now that the backend is working, I'll be making a static user to return to frontend to fix frontend problems.
   ♦ Travis: Continue working on javascript schemas for relationship tables
 
 3. What problems did we run into, and how did we solve them?
+  Backend was failing to compile/init.
   Had some struggle creating the javascript schemas, but through some research and examples found online I was able to create them.
 
 4. What questions do we have?
