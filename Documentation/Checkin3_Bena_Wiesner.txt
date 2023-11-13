@@ -1,5 +1,7 @@
 1. Progress made in the last week: 
-  ♦ Brock: Started work on the front end, and scheduled a bit meeting this upcoming Friday.
+  ♦ Brock: 
+      Started work on the front end login. Fixed the bug from last time.
+      Scheduled a bit meeting this upcoming Friday.
   ♦ Travis:
 
 2. Goals for next week: 
