@@ -3,12 +3,12 @@
       Started work on the front end login. Fixed the bug from last time.
       Scheduled a bit meeting this upcoming Friday.
   ♦ Travis:
-
+      Started work on more relationship tables
 2. Goals for next week: 
   ♦ Brock: Get Travis caught up on the backend works, and continue work on the frontend.
-  ♦ Travis: 
+  ♦ Travis: Get caught up on backend stuff with Brock, continue work from there.
 
 3. What problems did we run into, and how did we solve them?
-
+  None
 4. What questions do we have?
   None
