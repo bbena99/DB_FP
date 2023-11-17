@@ -8,9 +8,13 @@ var sql = require('mysql');
 var authRouter = require('./routes/auth');
 var userRouter = require('./routes/user');
 
-/**
- * Will need to add a connection to the DB here.
-*/
+const mysqlConnection = mysql.createConnection({
+  host: "127.0.01",
+  user: "wiesner5474",
+  database: "wiesner5474Project",
+  password: "h&UHukbS@x2W}DF",
+  multipleStatements: true,
+});
 
 var app = express();
 
