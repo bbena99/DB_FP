@@ -1,16 +1,17 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Constants } from '../constants/constants';
-import { User } from '../models/user';
 import { BehaviorSubject, Observable, of, tap } from 'rxjs';
+import { Constants } from '../constants/constants';
+import { Student } from '../models/student';
+import { Teacher } from '../models/teacher';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private URL : string = Constants.API_VERSION
-  private user : User | undefined;
-  public userSubject : BehaviorSubject<User|undefined> = new BehaviorSubject<User|undefined>( undefined )
+  private user : Student | Teacher | undefined;
+  public userSubject : BehaviorSubject<Student|Teacher|undefined> = new BehaviorSubject<Student|Teacher|undefined>( undefined )
   constructor(private http : HttpClient) {
     this.ngOnInit()
   }
@@ -18,17 +19,19 @@ export class AuthService {
     this.getAuthenticatedUser().subscribe()
   }
   //Start of internal function calls
-  getAuthenticatedUser() : Observable<User> {
+  getAuthenticatedUser() : Observable<Student|Teacher> {
     let localUser = window.localStorage.getItem('user')
     if(localUser){
-      let user : User = JSON.parse( localUser as string ) as User
+      let user : Student|Teacher = JSON.parse( localUser as string ) as Student|Teacher
       this.setUser( user )
       return of(user)
     } else {
       return this.fetchUser()
     }
   }
-  setUser(user : User | undefined ): void {
+  setUser(user : Student | Teacher | undefined ): void {
+    console.log("Entered setUser(user)")
+    console.log(user)
     this.user = user
     if (this.user){
       window.localStorage.setItem('user', JSON.stringify( user ))
@@ -37,37 +40,37 @@ export class AuthService {
     }
     this.userSubject.next( user )
   }
-  fetchUser() : Observable<User> {
-    return this.http.get<User>(this.URL + "/who").pipe(tap(user=>{
+  fetchUser() : Observable<Student|Teacher> {
+    return this.http.get<Student|Teacher>(this.URL + "/who").pipe(tap(user=>{
       this.setUser(user)
     }))
   }
 
   //Start of main external function calls w/ backend calls.
-  login( username : string, password : string ) : Observable<User> {
+  login( username : string, password : string ) : Observable<Student|Teacher> {
     const API = this.URL + "/login"
     let credentials = '?username='+username+"&password="+password
     return this.http
-      .post<User>( API+credentials,undefined)
-      .pipe<User>( tap( u => this.setUser( u ) ) )
+      .post<Student|Teacher>( API+credentials,undefined)
+      .pipe<Student|Teacher>( tap( u => this.setUser( u ) ) )
     }
-  createUser( username : string, password : string ) : Observable<User> {
+  createUser( username : string, password : string ) : Observable<Student|Teacher> {
     const API = this.URL + "/createUser"
     let credentials = '?username='+username+"&password="+password
     return this.http
-      .post<User>( API+credentials,undefined)
-      .pipe<User>( tap( u => this.setUser( u ) ) )
+      .post<Student|Teacher>( API+credentials,undefined)
+      .pipe<Student|Teacher>( tap( u => this.setUser( u ) ) )
   }
   logout() {
     const API = this.URL+"/logout"
     return this.http
-    .post<User>(API,{})
+    .post<Student|Teacher>(API,{})
       .pipe( tap( ()=>this.setUser(undefined) ) )
   }
-  isUser(username:string):boolean{
+  isUser():boolean{
     if(this.getAuthenticatedUser())return true
-    let tempUser:User|undefined
-    this.http.get<User>('/users/')
+    let tempUser:Student|Teacher|undefined
+    this.http.get<Student|Teacher>('/users/')
       .pipe( tap( user => tempUser = user ) )
     if(tempUser)return true
     return false

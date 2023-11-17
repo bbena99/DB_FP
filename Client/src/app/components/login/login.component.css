@@ -1,0 +1,23 @@
+.user-form {
+  max-width : 600px;
+  min-width: 300px;
+  padding: 15px;
+  background-color : #512B81;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: .5em;
+  border-color: #355ca0;
+  color: #8CABFF;
+}
+.my-btn-p{
+  background-color: #4477CE;
+  color: #35155D;
+}
+.my-btn-s{
+  color: #8CABFF;
+  border:#8CABFF solid 2px;
+}
+
+/*
+  Start of the modal css
+*/

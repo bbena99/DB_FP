@@ -1,18 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~bootstrap/dist/css/bootstrap.min.css';
 html{
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
 }
 body{
   height: 100%;
   width: 100%;
   margin: 0px;
   padding: 0px;
-  background-color: #FFBFBF;
+  background-color: #35155D;
 }
 #app-root{
   display: flex;
   flex-wrap: wrap;
+  align-content: flex-start;
   height: 100%;
   width: 100%;
+}
+/* common <Dialog> stylings */
+dialog{
+  position: fixed;
+  top:0px;
+  left: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #00000075;
+  border: 0;
 }
