@@ -1,9 +1,21 @@
 const express = require('express');
 var router = express.Router();
 const bcrypt = require("bcrypt");
+const TeacherModel = require('../schema/Teacher');
 //var Userdb = require('../models/users');
 //const {v4: uuidv4} = require('uuid');
 
+router.get("/test",(req,res)=>{
+    //by hitting '.' it gives you special commands indicated by a star. These are the important ones
+    console.log("GET/api/v1/test was called with req.params:")
+    console.log(req.params)
+    console.log(req.body)
+    console.log(req.query)
+    console.log("And res:")
+    //console.log(res)
+    console.log("End of GET/api/v1/test!")
+    //tl:dr, these are big objects with a lot of data that you typically don't want to log out.
+})
 /**
  * POST "/login"
  * Is used to login an existing user.
@@ -11,12 +23,22 @@ const bcrypt = require("bcrypt");
 router.post("/login", async (req,res) => {
     //console.log("    .post('/login') was called proper");
     let query = req.query;
-    //console.log(query);
+    /**
+     * query should look like this:
+     * 
+     *  query = {
+     *      username: string,
+     *      password: string
+     *  }
+     */
+    console.log(query);
     //let user = await Userdb.findOne({username:query.username});
     if(user==undefined&&user.enabled==true){
         res.status(404).send("User not found");
         return;
     }
+    let TM = new TeacherModel();
+    console.log(TM);
     //console.log(user);
     const ERROR = "Invalid credentials";
     let correct = await bcrypt.compare(req.query.password,user.password);
