@@ -54,9 +54,9 @@ const api = '/api/v1';
 app.use(api, authRouter); //used for authentication endpoints
 app.use(api, userRouter); //used for nonauthentication user endpoints
 
-app.use('/**',(req,res,next)=>{
-  res.redirect("/");
-})
+// app.use('/**',(req,res,next)=>{
+//   res.redirect("/");
+// })
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

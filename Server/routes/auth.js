@@ -22,6 +22,7 @@ Router.get("/", (req, res) => {
   );
 });
 */
+
 /*
 example of return from "SELECT * FROM Teacher"
 Teacher = {
@@ -34,6 +35,7 @@ Teacher = {
   ReportsTo: Number
 }
 */
+
 /*
 example of return from "SELECT * FROM Teacher JOIN Department"
 Teacher X Department = {
@@ -47,6 +49,7 @@ Teacher X Department = {
   ReportsTo: Number
 }
 */
+
 /*
 example of return from "SELECT TId,FirstName,LastName FROM Teacher"
 Teacher = {
@@ -55,6 +58,16 @@ Teacher = {
   LastName: String
 }
 */
+/**
+ * GET "/test"
+ * @description A test endpoint for Travywavy
+ * 
+ * @param {JSON} req.params
+ * @param {JSON} req.body
+ * @param {JSON} req.query
+ * 
+ * @returns {JSON}
+ */
 router.get("/test",(req,res)=>{
     //by hitting '.' it gives you special commands indicated by a star. These are the important ones
     console.log("GET/api/v1/test was called with req.params:")
@@ -77,27 +90,24 @@ router.get("/test",(req,res)=>{
  * 
  * @returns {Student|Teacher} 
  */
-router.post("/login", async (req,res) => {
-    //console.log("    .post('/login') was called proper");
-    let query = req.query;
+router.post("/login", async (req,res,next) => {
+    console.log("    .post('/login') was called proper")
+    let query = req.query
+    console.log(query)
+    const ERROR = "Invalid credentials"
     let sqlquery = `SELECT * from ${req.query.type}`
-    console.log(query);
-    //let user = await Userdb.findOne({username:query.username});
-    if(user==undefined&&user.enabled==true){
-        res.status(404).send("User not found");
-        return;
+    let user = {
+      TId : 1,
+      username:query.username,
+      FirstName: "Big",
+      LastName: "Chungus",
+      DepartmentId: 0,
+      ReportsTo: 0
     }
-    let TM = new TeacherModel();
-    console.log(TM);
-    //console.log(user);
-    const ERROR = "Invalid credentials";
-    let correct = await bcrypt.compare(req.query.password,user.password);
-    if(correct){
-        req.session.user = user;
-        //console.log(req.session);
-        res.status(200).send(user);
-    }
-    else res.status(401).send(ERROR);
+    console.log(user)
+    req.session.user=user
+    res.status(200).send(user)
+    next()
 });
 
 /**
@@ -170,11 +180,12 @@ router.get("/who", (req,res,next)=>{
  * Is used to validate user
  */
 router.all( '*', (req,res,next)=>{
-    //console.log("    .all('*') was called");
-    //console.log(req.session);
+    console.log("    .all('*') was called")
+    console.log(req.session)
+    //console.log(req.query)
     if( req.session && req.session.user){
         //console.log("User found ☺");
-        next();
+        res.status(200).send(req.session.user)
     } else if( req.session ){
         req.session.regenerate( err => {
         console.log("No user found");
