@@ -39,6 +39,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));//need to change later
 
+/**
+ * Status code notes for Travywavy:
+ * 200: successful endpoint hit and return (Level success)
+ * 302: same hit/redundant (Level warning)
+ * 402: Permission denied (Level miss)
+ * 404: Recieved an endpoint, but that endpoint doesn't exist(Level miss)
+ * 500: Server failure Method failed (Level fucked)
+ * 502: Server Timed out (Level fucked)
+ */
 const api = '/api/v1';
 app.use(api, authRouter); //used for authentication endpoints
 app.use(api, userRouter); //used for nonauthentication user endpoints

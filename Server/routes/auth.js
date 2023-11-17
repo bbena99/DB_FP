@@ -6,51 +6,55 @@ const TeacherModel = require('../schema/Teacher');
 //const {v4: uuidv4} = require('uuid');
 
 /*
- Example of a query:
+Example of a query:
 
- Router.get("/", (req, res) => {
-     mysqlConnection.query(
-       "SELECT * FROM quarterback_rankings",
-       (err, results, fields) => {
-         if (!err) {
-           res.send(results);
-         } else {
-           console.log(err);
-         }
-       }
-     );
-   });
+Router.get("/", (req, res) => {
+  let query = "SELECT * FROM quarterback_rankings"
+  mysqlConnection.query(
+    query,
+    (err, results, fields) => {
+      if (!err) {
+        res.send(results);
+      } else {
+        console.log(err);
+      }
+    }
+  );
+});
 */
-/**
- * Teacher = {
- *      TId: Number,
- *      Username: String,
- *      Password: Bcrypt Hash,
- *      FirstName: String,
- *      LastName: String,
- *      DepartmentId: Number,
- *      ReportsTo: Number
- * }
- */
-/**
- * Teacher X Department = {
- *      TId: Number,
- *      Username: String,
- *      Password: Bcrypt Hash,
- *      FirstName: String,
- *      LastName: String,
- *      DepartmentId: Number,
- *      <department attr>
- *      ReportsTo: Number
- * }
- */
-/**
- * Teacher = {
- *      TId: Number,
- *      FirstName: String,
- *      LastName: String
- * }
- */
+/*
+example of return from "SELECT * FROM Teacher"
+Teacher = {
+  TId: Number,
+  Username: String,
+  Password: Bcrypt Hash,
+  FirstName: String,
+  LastName: String,
+  DepartmentId: Number,
+  ReportsTo: Number
+}
+*/
+/*
+example of return from "SELECT * FROM Teacher JOIN Department"
+Teacher X Department = {
+  TId: Number,
+  Username: String,
+  Password: Bcrypt Hash,
+  FirstName: String,
+  LastName: String,
+  DepartmentId: Number,
+  <department attr>
+  ReportsTo: Number
+}
+*/
+/*
+example of return from "SELECT TId,FirstName,LastName FROM Teacher"
+Teacher = {
+  TId: Number,
+  FirstName: String,
+  LastName: String
+}
+*/
 router.get("/test",(req,res)=>{
     //by hitting '.' it gives you special commands indicated by a star. These are the important ones
     console.log("GET/api/v1/test was called with req.params:")
@@ -62,21 +66,21 @@ router.get("/test",(req,res)=>{
     console.log("End of GET/api/v1/test!")
     //tl:dr, these are big objects with a lot of data that you typically don't want to log out.
 })
+
 /**
  * POST "/login"
- * Is used to login an existing user.
+ * @description Is used to login an existing user.
+ * 
+ * @param {String} req.query.type "Student"|"Teacher"
+ * @param {String} req.query.username
+ * @param {String} req.query.password
+ * 
+ * @returns {Student|Teacher} 
  */
 router.post("/login", async (req,res) => {
     //console.log("    .post('/login') was called proper");
     let query = req.query;
-    /**
-     * query should look like this:
-     * 
-     *  query = {
-     *      username: string,
-     *      password: string
-     *  }
-     */
+    let sqlquery = `SELECT * from ${req.query.type}`
     console.log(query);
     //let user = await Userdb.findOne({username:query.username});
     if(user==undefined&&user.enabled==true){
