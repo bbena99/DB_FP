@@ -4,7 +4,7 @@ var session = require('express-session');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var sql = require('mysql');
+var mysql = require('mysql');
 var authRouter = require('./routes/auth');
 var userRouter = require('./routes/user');
 
@@ -16,6 +16,7 @@ const mysqlConnection = mysql.createConnection({
   multipleStatements: true,
 });
 
+/* CONNECTION FAILED
 mysqlConnection.connect((err) => {
   if (!err) {
     console.log("Connected");
@@ -23,6 +24,7 @@ mysqlConnection.connect((err) => {
     console.log("Connection Failed");
   }
 });
+*/
 
 var app = express();
 
