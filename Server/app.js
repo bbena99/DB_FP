@@ -16,6 +16,14 @@ const mysqlConnection = mysql.createConnection({
   multipleStatements: true,
 });
 
+mysqlConnection.connect((err) => {
+  if (!err) {
+    console.log("Connected");
+  } else {
+    console.log("Connection Failed");
+  }
+});
+
 var app = express();
 
 app.use(session({

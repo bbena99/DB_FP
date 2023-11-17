@@ -5,6 +5,52 @@ const TeacherModel = require('../schema/Teacher');
 //var Userdb = require('../models/users');
 //const {v4: uuidv4} = require('uuid');
 
+/*
+ Example of a query:
+
+ Router.get("/", (req, res) => {
+     mysqlConnection.query(
+       "SELECT * FROM quarterback_rankings",
+       (err, results, fields) => {
+         if (!err) {
+           res.send(results);
+         } else {
+           console.log(err);
+         }
+       }
+     );
+   });
+*/
+/**
+ * Teacher = {
+ *      TId: Number,
+ *      Username: String,
+ *      Password: Bcrypt Hash,
+ *      FirstName: String,
+ *      LastName: String,
+ *      DepartmentId: Number,
+ *      ReportsTo: Number
+ * }
+ */
+/**
+ * Teacher X Department = {
+ *      TId: Number,
+ *      Username: String,
+ *      Password: Bcrypt Hash,
+ *      FirstName: String,
+ *      LastName: String,
+ *      DepartmentId: Number,
+ *      <department attr>
+ *      ReportsTo: Number
+ * }
+ */
+/**
+ * Teacher = {
+ *      TId: Number,
+ *      FirstName: String,
+ *      LastName: String
+ * }
+ */
 router.get("/test",(req,res)=>{
     //by hitting '.' it gives you special commands indicated by a star. These are the important ones
     console.log("GET/api/v1/test was called with req.params:")
