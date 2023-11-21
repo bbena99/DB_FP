@@ -8,18 +8,25 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  @Input() typeOfUser : string = 'Student'
   @Input() username? : string
   @Input() password? : string
   @Input() newUsername? : string
   @Input() newPassword? : string
+  @Input() firstName! : string
+  @Input() lastName! : string
   modalBool : boolean = false
   loginError : boolean = false
+  typeDef:String[]=['Student','Teacher']
 
   constructor(
     private router : Router,
     private authService : AuthService
   ) {
     this.ngOnInit()
+    for (let x of this.typeDef){
+      console.log(x)
+    }
   }
   ngOnInit(){
     this.authService.getAuthenticatedUser().subscribe((res)=>{
@@ -28,7 +35,7 @@ export class LoginComponent {
   }
   login(){
     if( this.username && this.password){
-      this.authService.login(this.username,this.password).subscribe(
+      this.authService.login(this.typeOfUser,this.username,this.password).subscribe(
         (user)=>{
           this.username = '';
           this.password = '';
@@ -41,9 +48,11 @@ export class LoginComponent {
   }
   createUser(){
     if( this.newUsername && this.newPassword ){
-      this.authService.createUser(this.newUsername,this.newPassword).subscribe((res)=>{
-        this.newUsername=""
-        this.newPassword=""
+      this.authService.createUser(this.typeOfUser, this.firstName,this.lastName, this.newUsername,this.newPassword).subscribe((res)=>{
+        this.firstName=''
+        this.lastName=''
+        this.newUsername=''
+        this.newPassword=''
         if(res)this.router.navigateByUrl('/DashBoard')
       },(error)=>{
         //console.error(error)

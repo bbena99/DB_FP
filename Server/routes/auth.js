@@ -58,6 +58,8 @@ Teacher = {
   LastName: String
 }
 */
+
+
 /**
  * GET "/test"
  * @description A test endpoint for Travywavy
@@ -80,6 +82,7 @@ router.get("/test",(req,res)=>{
     //tl:dr, these are big objects with a lot of data that you typically don't want to log out.
 })
 
+
 /**
  * POST "/login"
  * @description Is used to login an existing user.
@@ -90,67 +93,73 @@ router.get("/test",(req,res)=>{
  * 
  * @returns {Student|Teacher} 
  */
-router.post("/login", async (req,res,next) => {
-    console.log("    .post('/login') was called proper")
-    let query = req.query
-    console.log(query)
-    const ERROR = "Invalid credentials"
-    let sqlquery = `SELECT * from ${req.query.type}`
-    let user = {
-      TId : 1,
-      username:query.username,
-      FirstName: "Big",
-      LastName: "Chungus",
-      DepartmentId: 0,
-      ReportsTo: 0
-    }
-    console.log(user)
-    req.session.user=user
-    res.status(200).send(user)
-    next()
+router.post("/Login", async (req,res,next) => {
+  //parse the frontend data sent.
+  console.log("    .post('/CreateUser') was called proper")
+  let query = req.query
+  console.log(query)
+  const ERROR = "Invalid credentials"
+  let sqlquery = `SELECT * from ${req.query.type}`
+
+  //This object will be replaced with the obj returned from the db parse.
+  let user = {
+    TId : 1,
+    username:query.username,
+    password:query.password,
+    FirstName: 'Big',
+    LastName: 'Chungus',
+    DepartmentId: 0,
+    ReportsTo: 0
+  }
+  
+  //IMPORTANT: Must delete the password before returning the user's object back to the frontend for security!
+  delete user.password
+
+  //Send user back to frontend
+  req.session.user=user
+  res.status(200).send(user)
+  next()
 });
 
+
 /**
- * POST "/createUser"
- * Is used to create a new user
+ * POST "/CreateUser"
+ * @description Is used to login an existing user.
+ * 
+ * @param {String} req.query.type "Student"|"Teacher"
+ * @param {String} req.query.username
+ * @param {String} req.query.password
+ * @param {String} req.query.FirstName
+ * @param {String} req.query.LastName
+ *  
+ * @returns {Student|Teacher} 
  */
-router.post("/createUser", async (req,res) => {
-    //console.log("    .post('/createUser') was called proper");
-    //console.log(req.query);
-    if(req.query=={}){
-        res.status(400).send('NO QUERY FOUND');
-        return;
-    }
-    /*if(await Userdb.findOne({'username':req.query.username})){
-        res.status(408).send('USERNAME TAKEN');
-        return;
-    }*/
-    //let encrypted = await bcrypt.hash(req.query.password,10);
-    //let newUser = {'username' : req.query.username , 'password' : encrypted, 'admin': false, 'enabled' : true};
-    //let dbUser = await Userdb.create( newUser );
-    /*
-    console.log("Before the for loop");
-    for(let i=0; i<1200; i++){
-        console.log(i);
-        let name = uuidv4();
-        let pw = await bcrypt.hash('123',10);
-        let botUser = {
-            'username' : name,
-            'password' : pw,
-            'admin' : false,
-            'enabled' : true
-        }
-        await Userdb.create(botUser);
-    }
-    console.log("end of for loop");
-    */
-    req.session.regenerate((err)=>{
-        if(err){
-            console.log("Error in regenerate: "+err);
-        }
-        req.session.user = dbUser;
-    });
-    res.status(201).send(dbUser);
+router.post("/CreateUser", async (req,res,next) => {
+  //Parse the frontend data sent.
+  console.log("    .post('/CreateUser') was called proper")
+  let query = req.query
+  console.log(query)
+  const ERROR = "Invalid credentials"
+  let sqlquery = `SELECT * from ${req.query.type}`
+
+  //This object will be replaced with the obj returned from the db parse.
+  let user = {
+    TId : 1,
+    username:query.username,
+    password:query.password,
+    FirstName: query.FirstName,
+    LastName: query.LastName,
+    DepartmentId: 0,
+    ReportsTo: 0
+  }
+
+  //IMPORTANT: Must delete the password before returning the user's object back to the frontend for security!
+  delete user.password
+
+  //Return data to the frontend
+  req.session.user=user
+  res.status(200).send(user)
+  next()
 });
 
 /**
@@ -158,10 +167,11 @@ router.post("/createUser", async (req,res) => {
  * Logs a user out
  */
 router.post("/logout", (req, res) => {
-    req.session.destroy( () => {
-        //console.log( req.session );
-        res.status(200).send({});
-    });
+  console.log("Inside of /logout in auth.js")
+  req.session.destroy( () => {
+    //console.log( req.session );
+    res.status(200).send({});
+  });
 });
 
 /**

@@ -47,16 +47,16 @@ export class AuthService {
       return this.fetchUser()
     }
   }
-  login( username : string, password : string ) : Observable<Student|Teacher> {
+  login( typeOfUser : string, username : string, password : string ) : Observable<Student|Teacher> {
     const API = this.URL + "/login"
-    let credentials = '?username='+username+"&password="+password
+    let credentials = `?userType=${typeOfUser}&username=${username}&password=${password}`
     return this.http
       .post<Student|Teacher>( API+credentials,undefined)
       .pipe<Student|Teacher>( tap( u => this.setUser( u ) ) )
     }
-  createUser( username : string, password : string ) : Observable<Student|Teacher> {
+  createUser( typeOfUser:string, firstName:string, lastName:string, username:string, password:string ) : Observable<Student|Teacher> {
     const API = this.URL + "/createUser"
-    let credentials = '?username='+username+"&password="+password
+    let credentials = `?userType=${typeOfUser}&username=${username}&password=${password}`
     return this.http
       .post<Student|Teacher>( API+credentials,undefined)
       .pipe<Student|Teacher>( tap( u => this.setUser( u ) ) )
