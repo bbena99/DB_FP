@@ -1,0 +1,16 @@
+1. Progress made in the last week: 
+  ♦ Brock:
+    
+  ♦ Travis:
+     Created the database tables for the project, fixed the ER Diagram
+
+2. Goals for next week: 
+  ♦ Brock:
+    
+  ♦ Travis:
+    Connect our code to the database so we can begin writing methods for logins and creating new users
+
+3. What problems did we run into, and how did we solve them?
+
+4. What questions do we have?
+  None
