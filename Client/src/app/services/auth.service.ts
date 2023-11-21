@@ -19,6 +19,24 @@ export class AuthService {
     this.getAuthenticatedUser().subscribe()
   }
   //Start of internal function calls
+  setUser(user : Student | Teacher | undefined ): void {
+    this.user = user
+    if (this.user){
+      window.localStorage.setItem('user', JSON.stringify( user ))
+    } else {
+      window.localStorage.removeItem('user')
+    }
+    this.userSubject.next( user )
+  }
+  fetchUser() : Observable<Student|Teacher> {
+    return this.http
+    .get<Student|Teacher>(this.URL + "/who")
+    .pipe(tap(user=>{
+      this.setUser(user)
+    }))
+  }
+
+  //Start of main external function calls w/ backend calls.
   getAuthenticatedUser() : Observable<Student|Teacher> {
     let localUser = window.localStorage.getItem('user')
     if(localUser){
@@ -29,24 +47,6 @@ export class AuthService {
       return this.fetchUser()
     }
   }
-  setUser(user : Student | Teacher | undefined ): void {
-    console.log("Entered setUser(user)")
-    console.log(user)
-    this.user = user
-    if (this.user){
-      window.localStorage.setItem('user', JSON.stringify( user ))
-    } else {
-      window.localStorage.removeItem('user')
-    }
-    this.userSubject.next( user )
-  }
-  fetchUser() : Observable<Student|Teacher> {
-    return this.http.get<Student|Teacher>(this.URL + "/who").pipe(tap(user=>{
-      this.setUser(user)
-    }))
-  }
-
-  //Start of main external function calls w/ backend calls.
   login( username : string, password : string ) : Observable<Student|Teacher> {
     const API = this.URL + "/login"
     let credentials = '?username='+username+"&password="+password
@@ -64,7 +64,7 @@ export class AuthService {
   logout() {
     const API = this.URL+"/logout"
     return this.http
-    .post<Student|Teacher>(API,{})
+      .post<Student|Teacher>(API,{})
       .pipe( tap( ()=>this.setUser(undefined) ) )
   }
   isUser():boolean{

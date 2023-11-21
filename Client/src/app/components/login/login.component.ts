@@ -23,30 +23,35 @@ export class LoginComponent {
   }
   ngOnInit(){
     this.authService.getAuthenticatedUser().subscribe((res)=>{
-      if(res)this.router.navigateByUrl( 'DashBoard' );
+      if(res)this.router.navigateByUrl( '/DashBoard' );
     });
   }
   login(){
     if( this.username && this.password){
       this.authService.login(this.username,this.password).subscribe(
         (user)=>{
-          console.log("Made it through .login() from authService");
-          console.log(user)
           this.username = '';
           this.password = '';
-          this.router.navigateByUrl( 'DashBoard' );
+          this.router.navigateByUrl( '/DashBoard' );
         },
         (error)=>{
-
+          //console.error(error)
         })
     }
   }
   createUser(){
-
+    if( this.newUsername && this.newPassword ){
+      this.authService.createUser(this.newUsername,this.newPassword).subscribe((res)=>{
+        this.newUsername=""
+        this.newPassword=""
+        if(res)this.router.navigateByUrl('/DashBoard')
+      },(error)=>{
+        //console.error(error)
+      })
+    }
   }
   handleModal(){
-    console.log("Entered handleModal() with modalBool=",this.modalBool)
     this.modalBool=!this.modalBool
-    console.log("Leaving handleModal() with modalBool=",this.modalBool)
   }
+
 }

@@ -3,4 +3,10 @@
     <i class="fa-solid fa-brain"></i>
     Bena-Wiesner
   </h1>
+  <div *ngIf="isAuthenticated()">
+    Logged In
+    <button type="button" (click)="logout()" class="btn btn-danger">
+      Logout
+    </button>
+  </div>
 </nav>

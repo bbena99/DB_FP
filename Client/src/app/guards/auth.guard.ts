@@ -1,7 +1,19 @@
-import { ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
 
+@Injectable({
+  providedIn: 'root'
+})
+//@ts-ignore
+export class AuthGuard implements CanActivate {
+  constructor(private authService: AuthService, private router: Router){}
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean{
+    return this.authService.isUser();
+  }
+}
+/*
 var authService:AuthService;
 
 export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot,state: RouterStateSnapshot):
@@ -9,6 +21,10 @@ export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot,state: Ro
   Promise<boolean|UrlTree> |
   boolean |
   UrlTree => {
-    //console.warn("Here");
-    return authService.isUser()
+    let bool = false;
+    authService.getAuthenticatedUser().subscribe((u)=>{
+      if(u)bool=true
+    })
+    return bool
   };
+*/
