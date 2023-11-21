@@ -6,9 +6,11 @@ var router = express.Router();
 
 /**
  * GET "/users"
- * get a list of users
- * can have a filter to filter out certain users.
- * Will be used only for moderation purposes
+ * @description Get a list of users. Will be used only for moderation purposes
+ * 
+ * @param {string?} req.query.filter.any Can pass in a string filter
+ * 
+ * @returns {Student[]|Teacher[]} Returns a list of users
  */
 router.get('/users', async(req, res, next)=> {
   //console.log("    GET '/users' was called to get a list of all users");
@@ -18,6 +20,7 @@ router.get('/users', async(req, res, next)=> {
   //else returnUsers = await Userdb.find();
   res.status(200).send(returnUsers);
 });
+
 
 /**
  * PUT "/users/:username"

@@ -50,7 +50,6 @@ app.use(express.static(path.join(__dirname, 'public')));//need to change later
  * 500: Server failure Method failed (Level fucked)
  * 502: Server Timed out (Level fucked)
  */
-console.log("Ping")
 const api = '/api/v1';
 app.use(api, authRouter); //used for authentication endpoints
 app.use(api, userRouter); //used for nonauthentication user endpoints
