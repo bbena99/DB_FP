@@ -39,7 +39,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));//need to change later
+app.use(express.static(path.join(__dirname, 'client')));//need to change later
 
 /**
  * Status code notes for Travywavy:
