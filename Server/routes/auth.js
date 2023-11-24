@@ -110,9 +110,9 @@ router.post("/Login", async (req,res,next) => {
 
   //Make query for Sql
   let sqlquery = undefined
-  if(query.type=='student'){
+  if(query.userType=='Student'){
     //make student query
-  }else if(query.type=='teacher'){
+  }else if(query.userType=='Teacher'){
     //make teacher query
   }else{
     console.error("ERROR: invalid type passed into /Login")
@@ -124,6 +124,12 @@ router.post("/Login", async (req,res,next) => {
     password:query.password,
     FirstName: 'Big',
     LastName: 'Chungus',
+  }
+  if(query.userType=='Teacher'){
+    user.TId=0
+    user.DepartmentId=0
+  } else {
+    user.SId=0
   }
 
   //double check user's values are specific
