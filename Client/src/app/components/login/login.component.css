@@ -1,23 +1,23 @@
+#maxW{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 90vh;
+}
 .user-form {
-  max-width : 600px;
-  min-width: 300px;
-  padding: 15px;
+  min-width: 350px;
+  padding: 25px;
   background-color : #512B81;
   border-style: solid;
   border-width: 2px;
   border-radius: .5em;
   border-color: #355ca0;
   color: #8CABFF;
+  box-shadow: 4px 4px 15px #000000AA,
+              4px 4px 10px #00000055,
+              4px 4px 05px #00000000;
 }
-.my-btn-p{
-  background-color: #4477CE;
-  color: #35155D;
+h2{
+  text-decoration: underline;
 }
-.my-btn-s{
-  color: #8CABFF;
-  border:#8CABFF solid 2px;
-}
-
-/*
-  Start of the modal css
-*/

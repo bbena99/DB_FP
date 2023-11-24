@@ -5,7 +5,7 @@ import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   @Input() typeOfUser : string = 'Student'
@@ -15,18 +15,24 @@ export class LoginComponent {
   @Input() newPassword? : string
   @Input() firstName! : string
   @Input() lastName! : string
+  @Input() department? : number
+  @Input() reportsTo? : string
   modalBool : boolean = false
   loginError : boolean = false
   typeDef:String[]=['Student','Teacher']
+  departDef:String[]=[
+    'Computer Science',
+    'Mathmatics',
+    'English',
+    'Biology',
+    'Information Science'
+  ]
 
   constructor(
     private router : Router,
     private authService : AuthService
   ) {
     this.ngOnInit()
-    for (let x of this.typeDef){
-      console.log(x)
-    }
   }
   ngOnInit(){
     this.authService.getAuthenticatedUser().subscribe((res)=>{
@@ -48,7 +54,7 @@ export class LoginComponent {
   }
   createUser(){
     if( this.newUsername && this.newPassword ){
-      this.authService.createUser(this.typeOfUser, this.firstName,this.lastName, this.newUsername,this.newPassword).subscribe((res)=>{
+      this.authService.createUser(this.typeOfUser, this.firstName,this.lastName, this.newUsername,this.newPassword,this.department).subscribe((res)=>{
         this.firstName=''
         this.lastName=''
         this.newUsername=''

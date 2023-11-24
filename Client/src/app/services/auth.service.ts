@@ -54,9 +54,10 @@ export class AuthService {
       .post<Student|Teacher>( API+credentials,undefined)
       .pipe<Student|Teacher>( tap( u => this.setUser( u ) ) )
     }
-  createUser( typeOfUser:string, firstName:string, lastName:string, username:string, password:string ) : Observable<Student|Teacher> {
+  createUser( typeOfUser:string, firstName:string, lastName:string, username:string, password:string, department?:number ) : Observable<Student|Teacher> {
     const API = this.URL + "/createUser"
-    let credentials = `?userType=${typeOfUser}&username=${username}&password=${password}`
+    let credentials = `?userType=${typeOfUser}&firstname=${firstName}&lastname=${lastName}&username=${username}&password=${password}`
+    if(department)credentials=credentials+"&departmentId="+department
     return this.http
       .post<Student|Teacher>( API+credentials,undefined)
       .pipe<Student|Teacher>( tap( u => this.setUser( u ) ) )

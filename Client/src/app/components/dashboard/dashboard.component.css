@@ -1,0 +1,11 @@
+#page{
+  height: 90vh;
+  width: 100vw;
+}
+.top{
+  top: 50px;
+  width: 100%;
+}
+#sort-type{
+  color: #8CABFF;
+}

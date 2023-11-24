@@ -1,40 +1,44 @@
-<form id="login-form" class="user-form float-md-start">
-  <div style="padding-bottom: 20px;">
-    <div class="form-group">
-      <label for="type_of_user">
-        <i class="fa-solid fa-brain"></i>
-        Type of user:
-      </label>
-      <select name="type_of_user" id="type_of_user" class="form-control" aria-label="Default select example" [(ngModel)]="typeOfUser">
-        <option *ngFor="let x of typeDef" [value]="x">{{x}}</option>
-      </select>
+<div id="maxW">
+  <form id="login-form" class="user-form float-md-start">
+    <h2>Login</h2>
+    <div style="padding-bottom: 20px;">
+      <div class="form-group mb-2">
+        <label for="type_of_user">
+          <i class="fa-solid fa-brain"></i>
+          Type of user:
+        </label>
+        <select name="type_of_user" id="type_of_user" class="form-control" aria-label="Default select example" [(ngModel)]="typeOfUser">
+          <option *ngFor="let x of typeDef" [value]="x">{{x}}</option>
+        </select>
+      </div>
+      <div class="form-group mb-2">
+        <i class="fa-solid fa-user"></i>
+        Username:
+        <input type="text" class="form-control" name="username" placeholder="username" [(ngModel)]="username">
+      </div>
+      <div class="form-group mb-2">
+        <i class="fa-solid fa-lock"></i>
+        Password:
+        <input type="password" class="form-control" name="password" placeholder="password" [(ngModel)]="password">
+      </div>
     </div>
-    <div class="form-group mb-2">
-      <i class="fa-solid fa-user"></i>
-      Username:
-      <input type="text" class="form-control" name="username" placeholder="username" [(ngModel)]="username">
-    </div>
-    <div class="form-group mb-2">
-      <i class="fa-solid fa-lock"></i>
-      Password:
-      <input type="password" class="form-control" name="password" placeholder="password" [(ngModel)]="password">
-    </div>
-  </div>
-  <button type="submit" id="login" (click)="login()" class="btn my-btn-p">
-    Login
-    <i class="fa-solid fa-right-to-bracket"></i>
-  </button>
-  <button type="button" (click)="handleModal()" class="btn float-end my-btn-s">
-    <i class="fa-solid fa-circle-plus"></i>
-    Create Account
-  </button>
-</form>
+    <button type="submit" id="login" (click)="login()" class="btn my-btn-p">
+      Login
+      <i class="fa-solid fa-right-to-bracket"></i>
+    </button>
+    <button type="button" (click)="handleModal()" class="btn float-end my-btn-s">
+      <i class="fa-solid fa-circle-plus"></i>
+      Create Account
+    </button>
+  </form>
+</div>
 
 <!-- Start of the dialog/modal popup for creating a user -->
 <dialog *ngIf="modalBool"><!--I hate this-->
   <form id="create-form" class="user-form float-md-start">
+    <h2>Create Account</h2>
     <div style="padding-bottom: 20px;">
-      <div class="form-group">
+      <div class="form-group mb-2">
         <label for="type_of_user">
           <i class="fa-solid fa-brain"></i>
           Type of user:
@@ -63,12 +67,22 @@
         Password:
         <input type="password" class="form-control" name="password" placeholder="password" [(ngModel)]="newPassword">
       </div>
+      <div class="form-group mb-2" *ngIf="typeOfUser=='Teacher'">
+        <label for="type_of_user">
+          <i class="fa-solid fa-school"></i>
+          Department:
+        </label>
+        <select name="type_of_department" id="type_of_department" class="form-control" aria-label="Default select example" [(ngModel)]="department">
+          <option [value]="undefined" disabled hidden data-default>Select a Department</option>
+          <option *ngFor="let x of departDef; let i = index" [value]="i">{{x}}</option>
+        </select>
+      </div>
     </div>
     <button type="button" (click)="handleModal()" class="btn my-btn-s">
       <i class="fa-regular fa-circle-xmark"></i>
       Close
     </button>
-    <button type="button" (click)="createUser()" class="btn my-btn-p float-end">
+    <button type="submit" (click)="createUser()" class="btn my-btn-p float-end">
       Create Accounts
       <i class="fa-solid fa-circle-plus"></i>
     </button>

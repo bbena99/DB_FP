@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class NavBarComponent {
   User : Student|Teacher|undefined
+  teacherbool : boolean = false
 
   constructor(
     private authService:AuthService,
@@ -18,6 +19,7 @@ export class NavBarComponent {
   ){
     authService.userSubject.subscribe((user:Student|Teacher|undefined)=>{
       this.User=user
+      if(this.User && 'TId' in this.User)this.teacherbool=true
     },(error)=>{
       console.error("ERROR: Not logged in")
       router.navigateByUrl("/Login")
@@ -32,6 +34,14 @@ export class NavBarComponent {
       return true
     }
     return false
+  }
+
+  home(){
+    this.router.navigateByUrl('/')
+  }
+
+  account(){
+    this.router.navigateByUrl('/Account')
   }
 
   logout(){
