@@ -1,5 +1,5 @@
 export interface Teacher{
-  TId : String,
+  TId : Number,
   Username : String,
   FirstName : String,
   LastName : String,

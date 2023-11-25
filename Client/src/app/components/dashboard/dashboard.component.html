@@ -5,15 +5,30 @@
       <div id="sort-type" class="float-end">
         Sort by:
         <div class="btn-group">
-          <label for="byDate" class="btn my-btn-s">Date</label>
-          <input type="radio" id="byDate" name="sort" [value]="true" [(ngModel)]="byDateBool">
-          <input type="radio" id="byClass" name="sort" [value]="false">
-          <label for="byClass" class="btn my-btn-s">Class</label>
+          <button type="button" class="btn my-btn-s" (click)="changeBool(true)">Date</button>
+          <button type="button" class="btn my-btn-s" (click)="changeBool(false)">Class</button>
         </div>
       </div>
     </div>
     <div id="list">
-
+      <div *ngIf="byDateBool">
+        <div *ngFor="let i of byDateMap.keys()" class="accordion">
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button type="button" class="accordion-button">
+                {{i}}
+              </button>
+            </h3>
+            <div class="accordion-body">
+              <div *ngFor="let assign of byDateMap.get(i)">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!byDateBool">
+        byClass
+      </div>
     </div>
   </div>
 </div>

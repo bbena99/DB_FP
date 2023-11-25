@@ -1,3 +1,5 @@
+import { Class } from "./class";
+
 export interface Assignment {
   AssignmentId : Number,
   Name : String,
@@ -5,5 +7,6 @@ export interface Assignment {
   FileType : String,
   TotalPoints : number,
   Visibility : Boolean,
-  dueData : Date,
+  dueData : String,
+  class : Class
 }
