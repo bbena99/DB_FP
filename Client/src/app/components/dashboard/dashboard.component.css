@@ -3,9 +3,25 @@
   width: 100vw;
 }
 .top{
+  display: flex;
   top: 50px;
   width: 100%;
+  padding-top: 1%;
+}
+h2{
+  width: 50%;
+  color:#8CABFF;
+  font-size: xx-large;
+  text-decoration: underline;
 }
 #sort-type{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 50%;
   color: #8CABFF;
+}
+input{
+  display: none;
+  visibility: hidden;
 }

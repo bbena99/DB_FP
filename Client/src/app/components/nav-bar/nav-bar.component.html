@@ -1,19 +1,19 @@
 <nav id="topNavBar">
-  <button type="button" (click)="home()" class="btn home-btn">
+  <button type="button" class="btn home-btn" (click)="home()">
     <h1>
       <i class="fa-solid fa-dragon"></i>
       Bena-Wiesner
     </h1>
   </button>
-  <div id="teacher-btn" *ngIf="teacherbool">
-    <button type="button" class="btn">Dashboard </button>
-    <button type="button" class="btn">To-Do</button>
+  <div id="nav-btn-group" class="btn-group" *ngIf="isAuthenticated()">
+    <button type="button" class="btn" (click)="home()">Dashboard</button>
+    <button type="button" class="btn">Class List</button>
   </div>
   <div *ngIf="isAuthenticated()">
-    <button type="button" (click)="account()" class="btn">
+    <button type="button" class="btn" (click)="account()">
       {{User!.FirstName}}
     </button>
-    <button type="button" (click)="logout()" class="btn btn-danger">
+    <button type="button" class="btn btn-danger" (click)="logout()">
       Logout
     </button>
   </div>

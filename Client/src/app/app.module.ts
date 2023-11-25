@@ -10,6 +10,10 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ClasslistComponent } from './components/classlist/classlist.component';
+import { SingleclassComponent } from './components/singleclass/singleclass.component';
+import { GradesComponent } from './components/grades/grades.component';
+import { AssignmentComponent } from './components/assignment/assignment.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +21,11 @@ import { CommonModule } from '@angular/common';
     LoginComponent,
     ProfileComponent,
     NavBarComponent,
-    DashboardComponent
+    DashboardComponent,
+    ClasslistComponent,
+    SingleclassComponent,
+    GradesComponent,
+    AssignmentComponent
   ],
   imports: [
     CommonModule,
