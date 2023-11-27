@@ -5,8 +5,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mysql = require('mysql');
-var authRouter = require('./routes/auth');
-var userRouter = require('./routes/user');
+var authRouter = require('./routes/auth')
+var userRouter = require('./routes/user')
+var classRouter = require('./routes/class')
+var assignmentRouter = require('./routes/assignment')
+var submissionsRouter = require('./routes/submission')
 
 const mysqlConnection = mysql.createConnection({
   host: "127.0.01",
@@ -53,6 +56,9 @@ app.use(express.static(path.join(__dirname, 'client')));//need to change later
 const api = '/api/v1';
 app.use(api, authRouter); //used for authentication endpoints
 app.use(api, userRouter); //used for nonauthentication user endpoints
+app.use(api, classRouter) //used for classes endpoints
+app.use(api, assignmentRouter) //used for assignment endpoints
+app.use(api, submissionsRouter) //used for submission endpoints
 
 // app.use('/**',(req,res,next)=>{
 //   res.redirect("/");

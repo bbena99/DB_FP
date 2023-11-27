@@ -1,7 +1,6 @@
 const express = require('express');
 var router = express.Router();
 const bcrypt = require("bcrypt");
-const TeacherModel = require('../schema/Teacher');
 //var Userdb = require('../models/users');
 //const {v4: uuidv4} = require('uuid');
 
