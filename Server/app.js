@@ -15,18 +15,18 @@ var assignmentRouter = require('./routes/assignment')
 var submissionsRouter = require('./routes/submission')
 
 const dbServer = {
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  user: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE
+  host: "127.0.01",
+  port: 3306,
+  user: "wiesner5474",
+  password: "h&UHukbS@x2W}DF ",
+  database: "wiesner5474Project"
 }
 
 const tunnelConfig = {
-  host: process.env.DB_SSH_HOST,
+  host: "138.49.184.47",
   port: 22,
-  username: process.env.DB_SSH_USER,
-  password: process.env.DB_SSH_PASSWORD
+  username: "wiesner5474",
+  password: "106raay02324"
 }
 
 const forwardConfig = {
