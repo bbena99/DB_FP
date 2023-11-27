@@ -4,19 +4,65 @@ var session = require('express-session');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mysql = require('mysql');
+var mysql = require('mysql2');
+var {Client} = require('ssh2')
+const sshClient = new Client()
+
 var authRouter = require('./routes/auth')
 var userRouter = require('./routes/user')
 var classRouter = require('./routes/class')
 var assignmentRouter = require('./routes/assignment')
 var submissionsRouter = require('./routes/submission')
 
-const mysqlConnection = mysql.createConnection({
-  host: "127.0.01",
-  user: "wiesner5474",
-  database: "wiesner5474Project",
-  password: "h&UHukbS@x2W}DF",
-  multipleStatements: true,
+const dbServer = {
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE
+}
+
+const tunnelConfig = {
+  host: process.env.DB_SSH_HOST,
+  port: 22,
+  username: process.env.DB_SSH_USER,
+  password: process.env.DB_SSH_PASSWORD
+}
+
+const forwardConfig = {
+  srcHost: '127.0.0.1', // any valid address
+  srcPort: 3306, // any valid port
+  dstHost: dbServer.host, // destination database
+  dstPort: dbServer.port // destination port
+};
+
+const SSHConnection = new Promise((resolve, reject) => {
+  sshClient.on('ready', () => {
+      sshClient.forwardOut(
+      forwardConfig.srcHost,
+      forwardConfig.srcPort,
+      forwardConfig.dstHost,
+      forwardConfig.dstPort,
+      (err, stream) => {
+           if (err) reject(err);
+         
+          // create a new DB server object including stream
+          const updatedDbServer = {
+               ...dbServer,
+               stream
+          };
+          // connect to mysql
+          const connection =  mysql.createConnection(updatedDbServer);
+          // check for successful connection
+         //  resolve or reject the Promise accordingly          
+         connection.connect((error) => {
+          if (error) {
+              reject(error);
+          }
+          resolve(connection);
+          });
+     });
+  }).connect(tunnelConfig);
 });
 
 /* CONNECTION FAILED
