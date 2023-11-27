@@ -3,7 +3,7 @@
     Added a lot of elements to the frontend
     Made base methods for a few endpoints on the backend
   ♦ Travis:
-    Nothing
+    Worked on connecting to database
 
 2. Goals for next week: 
   ♦ Brock:
