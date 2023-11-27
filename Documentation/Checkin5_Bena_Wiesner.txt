@@ -1,0 +1,19 @@
+1. Progress made in the last week: 
+  ♦ Brock:
+    Added a lot of elements to the frontend
+    Made base methods for a few endpoints on the backend
+  ♦ Travis:
+    Nothing
+
+2. Goals for next week: 
+  ♦ Brock:
+    Finish base endpoints for the backend, and some more frontend Progress
+  ♦ Travis:
+    Connect to the database
+
+3. What problems did we run into, and how did we solve them?
+  Trying to use the Sql2 nodejs library to connect to the database
+
+4. What questions do we have?
+  We need to talk to you during office hours to talk about connecting to the host.
+  And possibly what you're seeing on the server end?
