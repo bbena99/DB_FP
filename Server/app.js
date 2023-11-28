@@ -5,8 +5,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mysql = require('mysql2');
-var {Client} = require('ssh2')
-const sshClient = new Client()
 
 var authRouter = require('./routes/auth')
 var userRouter = require('./routes/user')
@@ -14,66 +12,24 @@ var classRouter = require('./routes/class')
 var assignmentRouter = require('./routes/assignment')
 var submissionsRouter = require('./routes/submission')
 
-const dbServer = {
-  host: "127.0.01",
-  port: 3306,
-  user: "wiesner5474",
-  password: "h&UHukbS@x2W}DF ",
-  database: "wiesner5474Project"
-}
-
-const tunnelConfig = {
+const mysqlConnection = mysql.createConnection({
   host: "138.49.184.47",
-  port: 22,
-  username: "wiesner5474",
-  password: "106raay02324"
-}
-
-const forwardConfig = {
-  srcHost: '127.0.0.1', // any valid address
-  srcPort: 3306, // any valid port
-  dstHost: dbServer.host, // destination database
-  dstPort: dbServer.port // destination port
-};
-
-const SSHConnection = new Promise((resolve, reject) => {
-  sshClient.on('ready', () => {
-      sshClient.forwardOut(
-      forwardConfig.srcHost,
-      forwardConfig.srcPort,
-      forwardConfig.dstHost,
-      forwardConfig.dstPort,
-      (err, stream) => {
-           if (err) reject(err);
-         
-          // create a new DB server object including stream
-          const updatedDbServer = {
-               ...dbServer,
-               stream
-          };
-          // connect to mysql
-          const connection =  mysql.createConnection(updatedDbServer);
-          // check for successful connection
-         //  resolve or reject the Promise accordingly          
-         connection.connect((error) => {
-          if (error) {
-              reject(error);
-          }
-          resolve(connection);
-          });
-     });
-  }).connect(tunnelConfig);
+  user: "wiesner5474",
+  database: "wiesner5474Project",
+  password: "Spidahman616!",
+  multipleStatements: true,
 });
 
-/* CONNECTION FAILED
+// CONNECTION FAILED
 mysqlConnection.connect((err) => {
   if (!err) {
     console.log("Connected");
   } else {
     console.log("Connection Failed");
+    throw err
   }
 });
-*/
+
 
 var app = express();
 
