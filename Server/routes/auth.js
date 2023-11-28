@@ -94,7 +94,7 @@ router.get("/test",(req,res)=>{
  * POST "/login"
  * @description Is used to login an existing user.
  * 
- * @param {String} req.query.type "Student"|"Teacher"
+ * @param {String} req.query.userType "Student"|"Teacher"
  * @param {String} req.query.username
  * @param {String} req.query.password
  * 
@@ -106,19 +106,19 @@ router.post("/Login", async (req,res,next) => {
   let query = req.query
   console.log(query)
   const ERROR = "Invalid credentials"
-
+  let user
   //Make query for Sql
   let sqlquery = undefined
-  if(query.userType=='Student'){
-    //make student query
-  }else if(query.userType=='Teacher'){
-    //make teacher query
-  }else{
-    console.error("ERROR: invalid type passed into /Login")
-  }
+  `SELECT * FROM ${query.userType}
+                  WHERE ${query.username} = Username`
+  if(user==undefined)res.status(404).send("ERROR User not found in Database")
+  //pw check
+  user.password==query.password
+  if(failed)res.status(401).send(ERROR)
+  
 
   //This object will be replaced with the obj returned from the db parse.
-  let user = {
+  user = {
     username:query.username,
     password:query.password,
     FirstName: 'Big',
@@ -152,7 +152,7 @@ router.post("/Login", async (req,res,next) => {
  * @param {String} req.query.password
  * @param {String} req.query.firstname
  * @param {String} req.query.lastname
- * @param {number} req.query.departmentId
+ * @param {Number} req.query.departmentId
  *  
  * @returns {Student|Teacher} 
  */
@@ -161,7 +161,6 @@ router.post("/CreateUser", async (req,res,next) => {
   console.log("-->.post('/CreateUser') was called proper")
   let query = req.query
   console.log(query)
-
   //This object will be replaced with the obj returned from the db parse.
   let user = {
     username:query.username,
@@ -169,6 +168,13 @@ router.post("/CreateUser", async (req,res,next) => {
     FirstName: query.firstname,
     LastName: query.lastname,
   }
+
+  `SELECT * FROM ${userType}
+                  WHERE Username == ${username}`
+  if(!user){
+    `INSERT INTO ${userType} (Username, Password, FirstName, LastName)
+    VALUES (${username}, ${password}, ${firstname}, ${lastname})`
+               }
   //handle specific student|teacher fields w/helper functions below
   if(query.userType=='Student')handleStudent(user)
   else if(query.userType=='Teacher')handleTeacher(user,+query.departmentId)
