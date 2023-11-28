@@ -94,7 +94,7 @@ router.get("/test",(req,res)=>{
  * POST "/login"
  * @description Is used to login an existing user.
  * 
- * @param {String} req.query.type "Student"|"Teacher"
+ * @param {String} req.query.userType "Student"|"Teacher"
  * @param {String} req.query.username
  * @param {String} req.query.password
  * 
@@ -109,13 +109,8 @@ router.post("/Login", async (req,res,next) => {
 
   //Make query for Sql
   let sqlquery = undefined
-  if(query.userType=='Student'){
-    //make student query
-  }else if(query.userType=='Teacher'){
-    //make teacher query
-  }else{
-    console.error("ERROR: invalid type passed into /Login")
-  }
+  `SELECT * FROM ${query.userType}`
+  
 
   //This object will be replaced with the obj returned from the db parse.
   let user = {
