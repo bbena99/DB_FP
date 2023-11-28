@@ -1,3 +1,5 @@
 Where I got the teacher exapmle from: https://stackoverflow.com/questions/38980031/node-js-mysql-model-designing
 
 For documentation notation: https://jsdoc.app/
+
+documentation of the mysql2 library: https://www.npmjs.com/package/mysql2
