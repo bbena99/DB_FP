@@ -20,7 +20,7 @@ const mysqlConnection = mysql.createConnection({
   multipleStatements: true,
 });
 
-// CONNECTION FAILED
+// Test connection
 mysqlConnection.connect((err) => {
   if (!err) {
     console.log("Connected");
