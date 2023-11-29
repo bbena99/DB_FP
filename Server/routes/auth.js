@@ -113,26 +113,25 @@ router.post("/Login", async (req,res,next) => {
   `SELECT * FROM ${query.userType}
     WHERE ${query.username} = ${query.userType}.Username`
   mysqlConnection.query(sqlquery, (err, results, fields)=> {
-      console.log(results); // results contains rows returned by server
-      user = {...results}
-      console.log(fields); // fields contains extra meta data about results, if available
-    }
-  )
-  if(user==undefined)res.status(404).send("ERROR User not found in Database")
-
-  //pw check
-  user.password==query.password
-  if(failed)res.status(401).send(ERROR)
-
-  //double check user's values are specific
-  console.log(user)
+    console.log(results); // results contains rows returned by server
+    user = {...results}
+    console.log(fields); // fields contains extra meta data about results, if available
+    if(user==undefined)res.status(404).send("ERROR User not found in Database")
   
-  //IMPORTANT: Must delete the password before returning the user's object back to the frontend for security!
-  delete user.password
-
-  //Send user back to frontend
-  req.session.user=user
-  next()
+    //pw check
+    let failed = !(user.password==query.password)
+    if(failed)res.status(401).send(ERROR)
+  
+    //double check user's values are specific
+    console.log(user)
+    
+    //IMPORTANT: Must delete the password before returning the user's object back to the frontend for security!
+    delete user.password
+  
+    //Send user back to frontend
+    req.session.user=user
+    next()
+  })
 });
 
 
@@ -164,42 +163,41 @@ router.post("/CreateUser", async (req,res,next) => {
   //debug console.log
   console.log("dbq1 = "+sqlquery)
   //query the db!
-  mysqlConnection.query(sqlquery,
-                  function(err, results, fields) {
-                    user = {...results}
-                  }
-  )
-  //debug console.log
-  console.log("user after dpq1 : (Should be undefined)")
-  console.log(user)
-  //if username is taken, return an error
-  if(user){res.status(401).send("User already exists")}
-
-  //Make the insert query
-  sqlquery = 
-  `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName)
-    VALUES (${query.username}, ${query.password}, ${query.firstname}, ${query.lastname})`
-  //Debug query
-  console.log("dbq2 = "+sqlquery)
-  //Insert to the db!
-  mysqlConnection.query(sqlquery, (err, results, fields)=> {
-    console.log(results); // results contains rows returned by server
+  mysqlConnection.query(sqlquery,(err, results, fields)=> {
     user = {...results}
-    console.log(fields); // fields contains extra meta data about results, if available
+    //debug console.log
+    console.log("user after dpq1 : (Should be {})")
+    console.log(user)
+    //if username is taken, return an error
+    if(user=={}){
+      console.error("!!!Inside of if statement")
+      res.status(401).send("User already exists")
+    }
+    
+    //Make the insert query
+    sqlquery = 
+    `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName)
+      VALUES (${query.username}, ${query.password}, ${query.firstname}, ${query.lastname})`
+    //Debug query
+    console.log("dbq2 = "+sqlquery)
+    //Insert to the db!
+    mysqlConnection.query(sqlquery, (err, results, fields)=> {
+      user = {...results}
+      
+      //debug console.log that the user was made proper
+      console.log("User after insert : ")
+      console.log(user)
+      
+      //Send the data to the database here!
+    
+      //IMPORTANT: Must delete the password before returning the user's object back to the frontend for security!
+      delete user.password
+    
+      //Return data to the frontend
+      req.session.user=user
+      next()
+    })
   })
-
-  //debug console.log that the user was made proper
-  console.log("User after insert : ")
-  console.log(user)
-  
-  //Send the data to the database here!
-
-  //IMPORTANT: Must delete the password before returning the user's object back to the frontend for security!
-  delete user.password
-
-  //Return data to the frontend
-  req.session.user=user
-  next()
 });
 
 
