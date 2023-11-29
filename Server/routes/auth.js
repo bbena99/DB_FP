@@ -2,7 +2,6 @@ const express = require('express');
 var router = express.Router();
 const bcrypt = require("bcrypt");
 var mysqlConnection = require('../sqlConnect/Connection');
-const { Connection } = require('mysql2/typings/mysql/lib/Connection');
 //var Userdb = require('../models/users');
 //const {v4: uuidv4} = require('uuid');
 
@@ -110,35 +109,20 @@ router.post("/Login", async (req,res,next) => {
   const ERROR = "Invalid credentials"
   let user
   //Make query for Sql
-  let sqlquery = undefined
-  mysqlConnection.query(
+  let sqlquery = 
   `SELECT * FROM ${query.userType}
-                  WHERE ${query.username} = Username`,
-                  function(err, results, fields) {
-                    console.log(results); // results contains rows returned by server
-                    let returnResults = results
-                    console.log(fields); // fields contains extra meta data about results, if available
-                  }
-)
+    WHERE ${query.username} = Username`
+  mysqlConnection.query(sqlquery, (err, results, fields)=> {
+      console.log(results); // results contains rows returned by server
+      let returnResults = results
+      console.log(fields); // fields contains extra meta data about results, if available
+    }
+  )
   if(user==undefined)res.status(404).send("ERROR User not found in Database")
+
   //pw check
   user.password==query.password
   if(failed)res.status(401).send(ERROR)
-  
-
-  //This object will be replaced with the obj returned from the db parse.
-  user = {
-    username:query.username,
-    password:query.password,
-    FirstName: 'Big',
-    LastName: 'Chungus',
-  }
-  if(query.userType=='Teacher'){
-    user.TId=0
-    user.DepartmentId=0
-  } else {
-    user.SId=0
-  }
 
   //double check user's values are specific
   console.log(user)
@@ -171,39 +155,26 @@ router.post("/CreateUser", async (req,res,next) => {
   let query = req.query
   console.log(query)
   //This object will be replaced with the obj returned from the db parse.
-  let user = {
-    username:query.username,
-    password:query.password,
-    FirstName: query.firstname,
-    LastName: query.lastname,
-  }
-mysqlConnection.query(
-  `SELECT * FROM ${userType}
-                  WHERE Username == ${username}`,
+  let user = undefined
+  let sqlquery =
+  `SELECT * FROM ${query.userType}
+                  WHERE Username == ${query.username}`
+  mysqlConnection.query(sqlquery,
                   function(err, results, fields) {
                     console.log(results); // results contains rows returned by server
-                    let returnResults = results
+                    user = results
                     console.log(fields); // fields contains extra meta data about results, if available
                   }
-)
-  if(!user){
-    mysqlConnection.query(
-    `INSERT INTO ${userType} (Username, Password, FirstName, LastName)
-    VALUES (${username}, ${password}, ${firstname}, ${lastname})`,
-    function(err, results, fields) {
-      console.log(results); // results contains rows returned by server
-      let returnResults = results
-      console.log(fields); // fields contains extra meta data about results, if available
-    }
-)
-               }
-  //handle specific student|teacher fields w/helper functions below
-  if(query.userType=='Student')handleStudent(user)
-  else if(query.userType=='Teacher')handleTeacher(user,+query.departmentId)
-  else{
-    console.error(`ERROR: invalid type_of_user passed in query="${query.userType}`)
-    res.status(502).send(undefined)
-  }
+  )
+  if(user){res.status(402).send("User already exists")}
+  sqlquery = 
+  `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName)
+  VALUES (${query.username}, ${query.password}, ${query.firstname}, ${query.lastname})`
+  mysqlConnection.query(sqlquery, (err, results, fields)=> {
+    console.log(results); // results contains rows returned by server
+    user = results
+    console.log(fields); // fields contains extra meta data about results, if available
+  })
 
   //double check user's values are specific
   console.log(user)
