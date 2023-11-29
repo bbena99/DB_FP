@@ -111,10 +111,10 @@ router.post("/Login", async (req,res,next) => {
   //Make query for Sql
   let sqlquery = 
   `SELECT * FROM ${query.userType}
-    WHERE ${query.username} = Username`
+    WHERE ${query.username} = ${query.userType}.Username`
   mysqlConnection.query(sqlquery, (err, results, fields)=> {
       console.log(results); // results contains rows returned by server
-      let returnResults = results
+      user = {...results}
       console.log(fields); // fields contains extra meta data about results, if available
     }
   )
@@ -156,27 +156,40 @@ router.post("/CreateUser", async (req,res,next) => {
   console.log(query)
   //This object will be replaced with the obj returned from the db parse.
   let user = undefined
+
+  //Make the check query
   let sqlquery =
   `SELECT * FROM ${query.userType}
-                  WHERE Username == ${query.username}`
+      WHERE Username == ${query.username}`
+  //debug console.log
+  console.log("dbq1 = "+sqlquery)
+  //query the db!
   mysqlConnection.query(sqlquery,
                   function(err, results, fields) {
-                    console.log(results); // results contains rows returned by server
-                    user = results
-                    console.log(fields); // fields contains extra meta data about results, if available
+                    user = {...results}
                   }
   )
-  if(user){res.status(402).send("User already exists")}
+  //debug console.log
+  console.log("user after dpq1 : (Should be undefined)")
+  console.log(user)
+  //if username is taken, return an error
+  if(user){res.status(401).send("User already exists")}
+
+  //Make the insert query
   sqlquery = 
   `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName)
-  VALUES (${query.username}, ${query.password}, ${query.firstname}, ${query.lastname})`
+    VALUES (${query.username}, ${query.password}, ${query.firstname}, ${query.lastname})`
+  //Debug query
+  console.log("dbq2 = "+sqlquery)
+  //Insert to the db!
   mysqlConnection.query(sqlquery, (err, results, fields)=> {
     console.log(results); // results contains rows returned by server
-    user = results
+    user = {...results}
     console.log(fields); // fields contains extra meta data about results, if available
   })
 
-  //double check user's values are specific
+  //debug console.log that the user was made proper
+  console.log("User after insert : ")
   console.log(user)
   
   //Send the data to the database here!
@@ -189,37 +202,6 @@ router.post("/CreateUser", async (req,res,next) => {
   next()
 });
 
-
-//Start of Login+CreateUser helper functions
-/**
- * handleStudent(student) helper function
- * @description Handle user specific fields for login/create user
- * 
- * @param {Student} student for handleStudent
- * 
- * @returns {Student} with added fields
- */
-function handleStudent(student){
-  //will need to handle the creation of a unique ID here
-  student.SId = 0;
-  //no other fields
-}
-/**
- * handleTeacher(teacher) helper function
- * @description Handle user specific fields for login/create user
- * 
- * @param {Teacher} teacher             for handleTeacher
- * @param {Number}  DepartmentId  id of department the teacher reports to
- * 
- * @returns {Teacher} with added specific fields
- */
-function handleTeacher(teacher,DepartmentId){
-  //will need to handle the creation of a unique ID here
-  teacher.TId = 0
-  //Will be in query
-  teacher.DepartmentId = DepartmentId
-  teacher.ReportsTo = departmentHead[DepartmentId]
-}
 
 /**
  * POST "/logout"
@@ -242,7 +224,7 @@ router.post("/logout", (req, res) => {
  * GET "/who"
  * @description Checks the current logged in user based on session for frontend validation
  * 
- * @param {any} req.session This is automatic
+ * @param {Session} req.session This is automatic
  * 
  * @returns {Student|Teacher} //returns the current student|teacher logged in.
  */
