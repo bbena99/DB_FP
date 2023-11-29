@@ -1,6 +1,8 @@
 const express = require('express');
 var router = express.Router();
 const bcrypt = require("bcrypt");
+var mysqlConnection = require('../sqlConnect/Connection');
+const { Connection } = require('mysql2/typings/mysql/lib/Connection');
 //var Userdb = require('../models/users');
 //const {v4: uuidv4} = require('uuid');
 
@@ -109,8 +111,15 @@ router.post("/Login", async (req,res,next) => {
   let user
   //Make query for Sql
   let sqlquery = undefined
+  mysqlConnection.query(
   `SELECT * FROM ${query.userType}
-                  WHERE ${query.username} = Username`
+                  WHERE ${query.username} = Username`,
+                  function(err, results, fields) {
+                    console.log(results); // results contains rows returned by server
+                    let returnResults = results
+                    console.log(fields); // fields contains extra meta data about results, if available
+                  }
+)
   if(user==undefined)res.status(404).send("ERROR User not found in Database")
   //pw check
   user.password==query.password
@@ -168,12 +177,25 @@ router.post("/CreateUser", async (req,res,next) => {
     FirstName: query.firstname,
     LastName: query.lastname,
   }
-
+mysqlConnection.query(
   `SELECT * FROM ${userType}
-                  WHERE Username == ${username}`
+                  WHERE Username == ${username}`,
+                  function(err, results, fields) {
+                    console.log(results); // results contains rows returned by server
+                    let returnResults = results
+                    console.log(fields); // fields contains extra meta data about results, if available
+                  }
+)
   if(!user){
+    mysqlConnection.query(
     `INSERT INTO ${userType} (Username, Password, FirstName, LastName)
-    VALUES (${username}, ${password}, ${firstname}, ${lastname})`
+    VALUES (${username}, ${password}, ${firstname}, ${lastname})`,
+    function(err, results, fields) {
+      console.log(results); // results contains rows returned by server
+      let returnResults = results
+      console.log(fields); // fields contains extra meta data about results, if available
+    }
+)
                }
   //handle specific student|teacher fields w/helper functions below
   if(query.userType=='Student')handleStudent(user)
