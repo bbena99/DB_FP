@@ -2,7 +2,6 @@ const express = require('express');
 var router = express.Router();
 const bcrypt = require("bcrypt");
 var mysqlConnection = require('../sqlConnect/Connection');
-const { Connection } = require('mysql2/typings/mysql/lib/Connection');
 //var Userdb = require('../models/users');
 //const {v4: uuidv4} = require('uuid');
 
@@ -178,8 +177,8 @@ router.post("/CreateUser", async (req,res,next) => {
     LastName: query.lastname,
   }
 mysqlConnection.query(
-  `SELECT * FROM ${userType}
-                  WHERE Username == ${username}`,
+  `SELECT * FROM ${query.userType}
+                  WHERE Username == ${query.username}`,
                   function(err, results, fields) {
                     console.log(results); // results contains rows returned by server
                     let returnResults = results
@@ -188,24 +187,18 @@ mysqlConnection.query(
 )
   if(!user){
     mysqlConnection.query(
-    `INSERT INTO ${userType} (Username, Password, FirstName, LastName)
-    VALUES (${username}, ${password}, ${firstname}, ${lastname})`,
+    `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName)
+    VALUES (${query.username}, ${query.password}, ${query.firstname}, ${query.lastname})`,
     function(err, results, fields) {
       console.log(results); // results contains rows returned by server
-      let returnResults = results
+      user  = results
       console.log(fields); // fields contains extra meta data about results, if available
     }
 )
                }
-  //handle specific student|teacher fields w/helper functions below
-  if(query.userType=='Student')handleStudent(user)
-  else if(query.userType=='Teacher')handleTeacher(user,+query.departmentId)
-  else{
-    console.error(`ERROR: invalid type_of_user passed in query="${query.userType}`)
-    res.status(502).send(undefined)
-  }
 
   //double check user's values are specific
+  console.log("dbuser : ")
   console.log(user)
   
   //Send the data to the database here!
@@ -217,38 +210,6 @@ mysqlConnection.query(
   req.session.user=user
   next()
 });
-
-
-//Start of Login+CreateUser helper functions
-/**
- * handleStudent(student) helper function
- * @description Handle user specific fields for login/create user
- * 
- * @param {Student} student for handleStudent
- * 
- * @returns {Student} with added fields
- */
-function handleStudent(student){
-  //will need to handle the creation of a unique ID here
-  student.SId = 0;
-  //no other fields
-}
-/**
- * handleTeacher(teacher) helper function
- * @description Handle user specific fields for login/create user
- * 
- * @param {Teacher} teacher             for handleTeacher
- * @param {Number}  DepartmentId  id of department the teacher reports to
- * 
- * @returns {Teacher} with added specific fields
- */
-function handleTeacher(teacher,DepartmentId){
-  //will need to handle the creation of a unique ID here
-  teacher.TId = 0
-  //Will be in query
-  teacher.DepartmentId = DepartmentId
-  teacher.ReportsTo = departmentHead[DepartmentId]
-}
 
 /**
  * POST "/logout"
