@@ -57,9 +57,5 @@ export class DashboardComponent {
 
   changeBool(bool:Boolean){
     this.byDateBool=bool
-    this.log()
-  }
-  log(){
-    console.log(this.byDateBool)
   }
 }

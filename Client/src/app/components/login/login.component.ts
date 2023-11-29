@@ -22,6 +22,7 @@ export class LoginComponent {
   typeDef:String[]=['Student','Teacher']
   departDef:String[]=[
     'Computer Science',
+    'Psychology',
     'Mathmatics',
     'English',
     'Biology',
