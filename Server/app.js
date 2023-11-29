@@ -4,7 +4,6 @@ var session = require('express-session');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mysql = require('mysql2');
 
 var authRouter = require('./routes/auth')
 var userRouter = require('./routes/user')
@@ -12,24 +11,7 @@ var classRouter = require('./routes/class')
 var assignmentRouter = require('./routes/assignment')
 var submissionsRouter = require('./routes/submission')
 
-const mysqlConnection = mysql.createConnection({
-  host: "138.49.184.47",
-  user: "wiesner5474",
-  database: "wiesner5474Project",
-  password: "Spidahman616!",
-  multipleStatements: true,
-});
-
-// Test connection
-mysqlConnection.connect((err) => {
-  if (!err) {
-    console.log("Connected");
-  } else {
-    console.log("Connection Failed");
-    throw err
-  }
-});
-
+var mysqlConnection = require('./sqlConnect/Connection')
 
 var app = express();
 
