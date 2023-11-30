@@ -23,23 +23,14 @@ export class AssignmentService {
 
   //Start of external function calls
   getAllByUser(user:Student|Teacher) : Observable<Assignment[]>|undefined {
-    const API = this.URL+"/assignments/user"
-    let id : Number
-    if('SId' in user)id = user.SId
-    else if('TId' in user)id = user.TId
-    else{
-      console.error("ERROR: Invalid credentials passed into getAllByUser(user:Student|Teacher) in class.service.ts")
-      return undefined
-    }
     return this.http
-      .get<Assignment[]>(API+`?id=${id}`)
+      .get<Assignment[]>(this.URL+`/Users/${user.Username}/`)
       .pipe<Assignment[]>( tap( a => this.assignArray=a ))
   }
   getAllByClass(classObj:Class):Observable<Assignment[]> {
     const API = this.URL+"/assignments/class"
-    let query = `?DepartmentId=${classObj.Department}&CourseNumber=${classObj.CourseNumber}`
     return this.http
-      .get<Assignment[]>(API+query)
+      .get<Assignment[]>(API)
       .pipe<Assignment[]>( tap( a => this.assignArray=a ))
   }
 }

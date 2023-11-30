@@ -3,7 +3,7 @@
     <div class="top">
       <h2>Dashboard</h2>
       <div id="sort-type" class="float-end">
-        Sort by:
+        Sort by:&nbsp;
         <div class="btn-group">
           <button type="button" class="btn my-btn-s" (click)="changeBool(true)">Date</button>
           <button type="button" class="btn my-btn-s" (click)="changeBool(false)">Class</button>
@@ -15,9 +15,7 @@
         <div *ngFor="let i of byDateMap.keys()" class="accordion">
           <div class="accordion-item">
             <h3 class="accordion-header">
-              <button type="button" class="accordion-button">
-                {{i}}
-              </button>
+              <button type="button" class="accordion-button">{{i}}</button>
             </h3>
             <div class="accordion-body">
               <div *ngFor="let assign of byDateMap.get(i)">

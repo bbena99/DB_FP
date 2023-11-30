@@ -109,45 +109,29 @@ router.post("/Login", async (req,res,next) => {
   const ERROR = "Invalid credentials"
   let user
   //Make query for Sql
-  let sqlquery = undefined
-  mysqlConnection.query(
+  let sqlquery = 
   `SELECT * FROM ${query.userType}
-                  WHERE ${query.username} = Username`,
-                  function(err, results, fields) {
-                    console.log(results); // results contains rows returned by server
-                    let returnResults = results
-                    console.log(fields); // fields contains extra meta data about results, if available
-                  }
-)
-  if(user==undefined)res.status(404).send("ERROR User not found in Database")
-  //pw check
-  user.password==query.password
-  if(failed)res.status(401).send(ERROR)
+    WHERE ${query.username} = ${query.userType}.Username`
+  mysqlConnection.query(sqlquery, (err, results, fields)=> {
+    console.log(results); // results contains rows returned by server
+    user = {...results}
+    console.log(fields); // fields contains extra meta data about results, if available
+    if(user==undefined)res.status(404).send("ERROR User not found in Database")
   
-
-  //This object will be replaced with the obj returned from the db parse.
-  user = {
-    username:query.username,
-    password:query.password,
-    FirstName: 'Big',
-    LastName: 'Chungus',
-  }
-  if(query.userType=='Teacher'){
-    user.TId=0
-    user.DepartmentId=0
-  } else {
-    user.SId=0
-  }
-
-  //double check user's values are specific
-  console.log(user)
+    //pw check
+    let failed = !(user.password==query.password)
+    if(failed)res.status(401).send(ERROR)
   
-  //IMPORTANT: Must delete the password before returning the user's object back to the frontend for security!
-  delete user.password
-
-  //Send user back to frontend
-  req.session.user=user
-  next()
+    //double check user's values are specific
+    console.log(user)
+    
+    //IMPORTANT: Must delete the password before returning the user's object back to the frontend for security!
+    delete user.password
+  
+    //Send user back to frontend
+    req.session.user=user
+    next()
+  })
 });
 
 
@@ -170,46 +154,52 @@ router.post("/CreateUser", async (req,res,next) => {
   let query = req.query
   console.log(query)
   //This object will be replaced with the obj returned from the db parse.
-  let user = {
-    username:query.username,
-    password:query.password,
-    FirstName: query.firstname,
-    LastName: query.lastname,
-  }
-mysqlConnection.query(
+  let user = undefined
+
+  //Make the check query
+  let sqlquery =
   `SELECT * FROM ${query.userType}
-                  WHERE Username == ${query.username}`,
-                  function(err, results, fields) {
-                    console.log(results); // results contains rows returned by server
-                    let returnResults = results
-                    console.log(fields); // fields contains extra meta data about results, if available
-                  }
-)
-  if(!user){
-    mysqlConnection.query(
-    `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName)
-    VALUES (${query.username}, ${query.password}, ${query.firstname}, ${query.lastname})`,
-    function(err, results, fields) {
-      console.log(results); // results contains rows returned by server
-      user  = results
-      console.log(fields); // fields contains extra meta data about results, if available
+      WHERE Username == ${query.username}`
+  //debug console.log
+  console.log("dbq1 = "+sqlquery)
+  //query the db!
+  mysqlConnection.query(sqlquery,(err, results, fields)=> {
+    user = {...results}
+    //debug console.log
+    console.log("user after dpq1 : (Should be {})")
+    console.log(user)
+    //if username is taken, return an error
+    if(user=={}){
+      console.error("!!!Inside of if statement")
+      res.status(401).send("User already exists")
     }
-)
-               }
-
-  //double check user's values are specific
-  console.log("dbuser : ")
-  console.log(user)
-  
-  //Send the data to the database here!
-
-  //IMPORTANT: Must delete the password before returning the user's object back to the frontend for security!
-  delete user.password
-
-  //Return data to the frontend
-  req.session.user=user
-  next()
+    
+    //Make the insert query
+    sqlquery = 
+    `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName)
+      VALUES (${query.username}, ${query.password}, ${query.firstname}, ${query.lastname})`
+    //Debug query
+    console.log("dbq2 = "+sqlquery)
+    //Insert to the db!
+    mysqlConnection.query(sqlquery, (err, results, fields)=> {
+      user = {...results}
+      
+      //debug console.log that the user was made proper
+      console.log("User after insert : ")
+      console.log(user)
+      
+      //Send the data to the database here!
+    
+      //IMPORTANT: Must delete the password before returning the user's object back to the frontend for security!
+      delete user.password
+    
+      //Return data to the frontend
+      req.session.user=user
+      next()
+    })
+  })
 });
+
 
 /**
  * POST "/logout"
@@ -232,7 +222,7 @@ router.post("/logout", (req, res) => {
  * GET "/who"
  * @description Checks the current logged in user based on session for frontend validation
  * 
- * @param {any} req.session This is automatic
+ * @param {Session} req.session This is automatic
  * 
  * @returns {Student|Teacher} //returns the current student|teacher logged in.
  */
