@@ -1,5 +1,6 @@
 const mysql = require('mysql2');
 
+var headArray = []
 
 mysqlConnection = mysql.createConnection({
   host: "138.49.184.47",
@@ -18,5 +19,13 @@ mysqlConnection.connect((err) => {
     throw err
   }
 });
-
-module.exports = mysqlConnection
+var query =
+`SELECT *
+  FROM Teacher
+  WHERE Teacher.ReportsTo IS NULL`
+mysqlConnection.query(query,(err,results,fields)=>{
+  results.map((r,index)=>{
+    headArray[index]=r.Username
+  })
+})
+module.exports = {mysqlConnection, headArray}
