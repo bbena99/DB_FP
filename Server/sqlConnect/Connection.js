@@ -1,12 +1,13 @@
 const mysql = require('mysql2');
+require('dotenv').config()
 
 var headArray = []
 
 mysqlConnection = mysql.createConnection({
-  host: "138.49.184.47",
-  user: "wiesner5474",
-  database: "wiesner5474Project",
-  password: "Spidahman616!",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USERNAME,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
   multipleStatements: true,
 });
 
