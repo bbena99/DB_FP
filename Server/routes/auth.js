@@ -1,17 +1,12 @@
 const express = require('express');
 var router = express.Router();
 const bcrypt = require("bcrypt");
-var mysqlConnection = require('../sqlConnect/Connection');
+var connect = require('../sqlConnect/Connection');
+var mysqlConnection = connect.mysqlConnection
+var headArray = connect.headArray
 //var Userdb = require('../models/users');
 //const {v4: uuidv4} = require('uuid');
 
-var departmentHead = [ //Used in handleTeacher() below
-  0, //CS head Tid = 0
-  4, //MTH head Tid = 4
-  2, //ENG head Tid = 2
-  3, //BIO head Tid = 3
-  1, //IS head Tid = 1
-]
 
 /*
 Example of a query:
@@ -79,15 +74,8 @@ Teacher = {
  * @returns {JSON}
  */
 router.get("/test",(req,res)=>{
-    //by hitting '.' it gives you special commands indicated by a star. These are the important ones
-    console.log("GET/api/v1/test was called with req.params:")
-    console.log(req.params)
-    console.log(req.body)
-    console.log(req.query)
-    console.log("And res:")
-    //console.log(res)
-    console.log("End of GET/api/v1/test!")
-    //tl:dr, these are big objects with a lot of data that you typically don't want to log out.
+  console.log(headArray)
+  res.status(200).send(headArray)
 })
 
 
@@ -111,16 +99,17 @@ router.post("/Login", async (req,res,next) => {
   //Make query for Sql
   let sqlquery = 
   `SELECT * FROM ${query.userType}
-    WHERE ${query.username} = ${query.userType}.Username`
+    WHERE '${query.username}' = ${query.userType}.Username`
   mysqlConnection.query(sqlquery, (err, results, fields)=> {
     console.log(results); // results contains rows returned by server
-    user = {...results}
-    console.log(fields); // fields contains extra meta data about results, if available
+    user = results[0]
     if(user==undefined)res.status(404).send("ERROR User not found in Database")
   
     //pw check
-    let failed = !(user.password==query.password)
-    if(failed)res.status(401).send(ERROR)
+    let failed = !(user.password===query.password)
+    if(failed){
+      res.status(401).send(ERROR)
+    }
   
     //double check user's values are specific
     console.log(user)
@@ -159,11 +148,12 @@ router.post("/CreateUser", async (req,res,next) => {
   //Make the check query
   let sqlquery =
   `SELECT * FROM ${query.userType}
-      WHERE Username == ${query.username}`
+      WHERE Username = '${query.username}'`
   //debug console.log
   console.log("dbq1 = "+sqlquery)
   //query the db!
   mysqlConnection.query(sqlquery,(err, results, fields)=> {
+    if(err)console.error(err)
     user = {...results}
     //debug console.log
     console.log("user after dpq1 : (Should be {})")
@@ -177,25 +167,35 @@ router.post("/CreateUser", async (req,res,next) => {
     //Make the insert query
     sqlquery = 
     `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName)
-      VALUES (${query.username}, ${query.password}, ${query.firstname}, ${query.lastname})`
+      VALUES ('${query.username}', '${query.password}', '${query.firstname}', '${query.lastname}')`
+    if(query.departmentId) sqlquery = 
+    `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName, DepartmentNumber, ReportsTo)
+    VALUES ('${query.username}', '${query.password}', '${query.firstname}', '${query.lastname}', ${query.departmentId}, '${headArray[query.departmentId]}')`
     //Debug query
     console.log("dbq2 = "+sqlquery)
     //Insert to the db!
     mysqlConnection.query(sqlquery, (err, results, fields)=> {
-      user = {...results}
+      console.log(fields)
+      if(err)console.error(err)
+
+      sqlquery =
+      `SELECT * FROM ${query.userType}
+        WHERE Username = '${query.username}'`
+      mysqlConnection.query(sqlquery, (err,results,fields)=>{
+        //debug console.log that the user was made proper
+        user = results[0]
+        console.log("User after insert : ")
+        console.log(user)
+        
+        //Send the data to the database here!
       
-      //debug console.log that the user was made proper
-      console.log("User after insert : ")
-      console.log(user)
+        //IMPORTANT: Must delete the password before returning the user's object back to the frontend for security!
+        delete user.password
       
-      //Send the data to the database here!
-    
-      //IMPORTANT: Must delete the password before returning the user's object back to the frontend for security!
-      delete user.password
-    
-      //Return data to the frontend
-      req.session.user=user
-      next()
+        //Return data to the frontend
+        req.session.user=user
+        next()
+      })
     })
   })
 });

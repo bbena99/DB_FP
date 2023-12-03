@@ -11,7 +11,8 @@ var classRouter = require('./routes/class')
 var assignmentRouter = require('./routes/assignment')
 var submissionsRouter = require('./routes/submission')
 
-var mysqlConnection = require('./sqlConnect/Connection')
+var Connection = require('./sqlConnect/Connection')
+var mysqlConnection = Connection.mysqlConnection
 
 var app = express();
 
