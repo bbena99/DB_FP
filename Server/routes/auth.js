@@ -1,12 +1,29 @@
 const express = require('express');
 var router = express.Router();
 const bcrypt = require("bcrypt");
+const SaltRounds = 10
 var connect = require('../sqlConnect/Connection');
 var mysqlConnection = connect.mysqlConnection
 var headArray = connect.headArray
 //var Userdb = require('../models/users');
 //const {v4: uuidv4} = require('uuid');
 
+bcrypt
+  .hash(password, SaltRounds)
+  .then(hash => {
+    console.log('Hash ', hash)
+    validatePassword(hash)
+  })
+  .catch(err => console.error(err.message))
+
+  function validatePassword(hash) {
+    bcrypt
+      .compare(password, hash)
+      .then(res => {
+        console.log(res) // return true
+      })
+      .catch(err => console.error(err.message))        
+}
 
 /*
 Example of a query:
@@ -106,20 +123,20 @@ router.post("/Login", async (req,res,next) => {
     if(user==undefined)res.status(404).send("ERROR User not found in Database")
   
     //pw check
-    let failed = !(user.password===query.password)
-    if(failed){
-      res.status(401).send(ERROR)
-    }
-  
-    //double check user's values are specific
-    console.log(user)
-    
-    //IMPORTANT: Must delete the password before returning the user's object back to the frontend for security!
-    delete user.password
-  
-    //Send user back to frontend
-    req.session.user=user
-    next()
+    bcrypt
+      .compare(query.password,user.Password)
+      .then(result=>{
+        if(!result)res.status(401).send(ERROR)
+        //double check user's values are specific
+        console.log(user)
+        
+        //IMPORTANT: Must delete the password before returning the user's object back to the frontend for security!
+        delete user.password
+      
+        //Send user back to frontend
+        req.session.user=user
+        next()
+      })
   })
 });
 
@@ -167,10 +184,10 @@ router.post("/CreateUser", async (req,res,next) => {
     //Make the insert query
     sqlquery = 
     `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName)
-      VALUES ('${query.username}', '${query.password}', '${query.firstname}', '${query.lastname}')`
+      VALUES ('${query.username}', '${hash(query.password)}', '${query.firstname}', '${query.lastname}')`
     if(query.departmentId) sqlquery = 
     `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName, DepartmentNumber, ReportsTo)
-    VALUES ('${query.username}', '${query.password}', '${query.firstname}', '${query.lastname}', ${query.departmentId}, '${headArray[query.departmentId]}')`
+    VALUES ('${query.username}', '${hash(query.password)}', '${query.firstname}', '${query.lastname}', ${query.departmentId}, '${headArray[query.departmentId]}')`
     //Debug query
     console.log("dbq2 = "+sqlquery)
     //Insert to the db!
