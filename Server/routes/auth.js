@@ -8,22 +8,22 @@ var headArray = connect.headArray
 //var Userdb = require('../models/users');
 //const {v4: uuidv4} = require('uuid');
 
-bcrypt
-  .hash(password, SaltRounds)
-  .then(hash => {
-    console.log('Hash ', hash)
-    validatePassword(hash)
-  })
-  .catch(err => console.error(err.message))
+// bcrypt
+//   .hash(password, SaltRounds)
+//   .then(hash => {
+//     console.log('Hash ', hash)
+//     validatePassword(hash)
+//   })
+//   .catch(err => console.error(err.message))
 
-  function validatePassword(hash) {
-    bcrypt
-      .compare(password, hash)
-      .then(res => {
-        console.log(res) // return true
-      })
-      .catch(err => console.error(err.message))        
-}
+//   function validatePassword(hash) {
+//     bcrypt
+//       .compare(password, hash)
+//       .then(res => {
+//         console.log(res) // return true
+//       })
+//       .catch(err => console.error(err.message))        
+// }
 
 /*
 Example of a query:
@@ -182,38 +182,42 @@ router.post("/CreateUser", async (req,res,next) => {
     }
     
     //Make the insert query
-    sqlquery = 
-    `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName)
-      VALUES ('${query.username}', '${hash(query.password)}', '${query.firstname}', '${query.lastname}')`
-    if(query.departmentId) sqlquery = 
-    `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName, DepartmentNumber, ReportsTo)
-    VALUES ('${query.username}', '${hash(query.password)}', '${query.firstname}', '${query.lastname}', ${query.departmentId}, '${headArray[query.departmentId]}')`
-    //Debug query
-    console.log("dbq2 = "+sqlquery)
-    //Insert to the db!
-    mysqlConnection.query(sqlquery, (err, results, fields)=> {
-      console.log(fields)
-      if(err)console.error(err)
-
-      sqlquery =
-      `SELECT * FROM ${query.userType}
-        WHERE Username = '${query.username}'`
-      mysqlConnection.query(sqlquery, (err,results,fields)=>{
-        //debug console.log that the user was made proper
-        user = results[0]
-        console.log("User after insert : ")
-        console.log(user)
-        
-        //Send the data to the database here!
-      
-        //IMPORTANT: Must delete the password before returning the user's object back to the frontend for security!
-        delete user.password
-      
-        //Return data to the frontend
-        req.session.user=user
-        next()
-      })
-    })
+    bcrypt
+      .hash(password, SaltRounds)
+      .then(hash => {        
+        sqlquery = 
+        `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName)
+        VALUES ('${query.username}', '${hash}', '${query.firstname}', '${query.lastname}')`
+        if(query.departmentId) sqlquery = 
+        `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName, DepartmentNumber, ReportsTo)
+        VALUES ('${query.username}', '${hash}', '${query.firstname}', '${query.lastname}', ${query.departmentId}, '${headArray[query.departmentId]}')`
+        //Debug query
+        console.log("dbq2 = "+sqlquery)
+        //Insert to the db!
+        mysqlConnection.query(sqlquery, (err, results, fields)=> {
+          console.log(fields)
+          if(err)console.error(err)
+    
+          sqlquery =
+          `SELECT * FROM ${query.userType}
+            WHERE Username = '${query.username}'`
+          mysqlConnection.query(sqlquery, (err,results,fields)=>{
+            //debug console.log that the user was made proper
+            user = results[0]
+            console.log("User after insert : ")
+            console.log(user)
+            
+            //Send the data to the database here!
+          
+            //IMPORTANT: Must delete the password before returning the user's object back to the frontend for security!
+            delete user.password
+          
+            //Return data to the frontend
+            req.session.user=user
+            next()
+          })
+        })
+    }).catch(err => console.error(err.message))
   })
 });
 
