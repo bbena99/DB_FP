@@ -54,7 +54,7 @@ router.get("/", (req,res,next)=>{
   //Get params
   const username = req.params.username
   let returnClasses
-
+  
   let sqlquery =
   `SELECT * 
       FROM Student JOIN TAKES
@@ -65,6 +65,15 @@ router.get("/", (req,res,next)=>{
       ON TAKES.SectionNumber = Class.SectionNumber
       WHERE Student.Username = ${username}`
 
+      mysqlConnection.query(sqlquery,(err, results, fields)=>{
+        if(err){
+          console.error(err)
+          res.status(500).send(err)
+        }
+        console.log(results);
+        res.status(200).send(results);
+        
+      })
   //Debug console.logs
   console.log(`   GET to "/Users/:username/Classes" was called proper
   Username`)
