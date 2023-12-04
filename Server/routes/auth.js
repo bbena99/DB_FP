@@ -269,7 +269,7 @@ router.get("/who", (req,res,next)=>{
  * @returns {Student|Teacher} returns the student|teacher in the session object.
  */
 router.all( '*', (req,res,next)=>{
-    //console.log("    .all('*') was called")
+    console.log("    .all('*') was called")
     //console.log(req.session)
     //console.log(req.query)
     if( req.session && req.session.user){

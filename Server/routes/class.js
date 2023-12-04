@@ -5,17 +5,25 @@ var router = express.Router();
 
 //Start of endpoints
 /**
- * POST "/Users/:username/Classes"
+ * ALL "/Users/:Username/Classes"
+ */
+router.all("/",(req,res,next)=>{
+  console.log('-->Inside of class.js')
+  console.log(req.url)
+  next()
+})
+/**
+ * POST "/Users/:Username/Classes"
  * @description Creates a class for the teacher
  * 
- * @param req.params.username username of teacher making the class
+ * @param req.params.Username username of teacher making the class
  * @param req.body.class a class object
  * 
  * @returns {undefined}
  */
-router.post("/Users/:username/Classes", (req,res,next)=>{
+router.post("/", (req,res,next)=>{
   //Get params
-  const username = req.params.username
+  const username = req.params.Username
   let newClass = req.body.class
 
   //Debug console.logs
@@ -40,7 +48,7 @@ router.post("/Users/:username/Classes", (req,res,next)=>{
  * 
  * @returns {Class[]}
  */
-router.get("/Users/:username/Classes", (req,res,next)=>{
+router.get("/", (req,res,next)=>{
   //Get params
   const username = req.params.username
   let returnClasses
