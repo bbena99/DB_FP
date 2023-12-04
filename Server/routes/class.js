@@ -46,12 +46,24 @@ router.post("/", (req,res,next)=>{
  * 
  * @param req.param.username
  * 
+ * 
+ * 
  * @returns {Class[]}
  */
 router.get("/", (req,res,next)=>{
   //Get params
   const username = req.params.username
   let returnClasses
+
+  let sqlquery =
+  `SELECT * 
+      FROM Student JOIN TAKES
+      ON Student.Username = TAKES.Username
+      JOIN Class
+      ON TAKES.CourseNumber = Class.CourseNumber
+      ON TAKES.Department = Class.Department
+      ON TAKES.SectionNumber = Class.SectionNumber
+      WHERE Student.Username = ${username}`
 
   //Debug console.logs
   console.log(`   GET to "/Users/:username/Classes" was called proper
