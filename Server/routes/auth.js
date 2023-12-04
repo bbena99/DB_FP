@@ -184,7 +184,9 @@ router.post("/CreateUser", async (req,res,next) => {
     //Make the insert query
     console.log(query.password)
     console.log(process.env.SALT)
-    bcrypt.genSalt(process.env.SALT,(err,salt)=>{
+    bcrypt.genSalt(+(process.env.SALT),(err,salt)=>{
+      if(err)console.error(err)
+      console.log(salt)
       bcrypt
         .hash(query.password, salt)
         .then(hash => {        
