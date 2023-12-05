@@ -25,18 +25,11 @@ router.all('/Users/:Username/Classes',(req,res,next)=>{
 router.post('/Users/:Username/Classes', (req,res,next)=>{
   //Get params
   const username = req.params.Username
-  const user = req.session.user
-  let newClass = req.body.class
-
-  if(!("DepartmentNumber" in user)){
-    console.error("Student tried to make a class")
-    res.status(401).send("Student tried to make a class")
-  }
+  let newClass = req.body
   //Debug console.logs
   console.log(`  POST to "/User/:Username/Classes" was called
   Username : ${username}
-  Class :
-  `)
+  Class :`)
   console.log(newClass)
 
   //Check if teacher Return status(401) if not
@@ -46,17 +39,16 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
   // VALUES ('${query.name}', '${query.department}', '${query.courseNumber}', '${query.sectionnumber}')
   //Return status(200)
   let sqlquery=
-  `INSERT INTO Class (Name, Department, CourseNumber, SectionNumber)
-    VALUES ('${query.Name}', '${query.Department}', '${query.CourseNumber}', '${query.SectionNumber})`
-    mysqlConnection.query(sqlquery, (err,results,fields)=>{
-      if(err){
-        console.error(err)
-        res.status(500).send(err)
-      }
-      console.log(results);
-      res.status(200).send([])
-      })
-
+  `INSERT INTO Class (Name, Department, CourseNumber, Section)
+    VALUES ('${newClass.Name}', '${newClass.Department}', ${newClass.CourseNumber}, ${newClass.Section})`
+  mysqlConnection.query(sqlquery, (err,results,fields)=>{
+    if(err){
+      console.error(err)
+      res.status(500).send(err)
+    }
+    console.log(results);
+    res.status(200).send(results)
+  })
 })
 
 /**

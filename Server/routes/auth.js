@@ -136,8 +136,15 @@ router.post("/Login", async (req,res,next) => {
     WHERE '${query.username}' = ${query.userType}.Username`
   mysqlConnection.query(sqlquery, (err, results, fields)=> {
     //console.log(results); // results contains rows returned by server
+    if(err){
+      console.error(err)
+      res.status(500).send(err)
+    }
     user = results[0]
-    if(user==undefined)res.status(404).send("ERROR User not found in Database")
+    if(!user){
+      console.error("User undefined")
+      res.status(404).send("No user found")
+    }
   
     //pw check
     bcrypt
