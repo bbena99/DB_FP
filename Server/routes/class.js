@@ -46,8 +46,6 @@ router.post("/", (req,res,next)=>{
  * 
  * @param req.param.username
  * 
- * 
- * 
  * @returns {Class[]}
  */
 router.get("/", (req,res,next)=>{
