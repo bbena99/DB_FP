@@ -7,11 +7,12 @@ var router = express.Router();
 /**
  * ALL "/Users/:Username/Classes"
  */
-router.all("/",(req,res,next)=>{
+router.all('/Users/:Username/Classes',(req,res,next)=>{
   console.log('-->Inside of class.js')
   console.log(req.url)
   next()
 })
+
 /**
  * POST "/Users/:Username/Classes"
  * @description Creates a class for the teacher
@@ -21,13 +22,13 @@ router.all("/",(req,res,next)=>{
  * 
  * @returns {undefined}
  */
-router.post("/", (req,res,next)=>{
+router.post('/Users/:Username/Classes', (req,res,next)=>{
   //Get params
   const username = req.params.Username
   let newClass = req.body.class
 
   //Debug console.logs
-  console.log(`  POST to "/User/:username/Classes" was called
+  console.log(`  POST to "/User/:Username/Classes" was called
   Username : ${username}
   Class :
   `)
@@ -48,14 +49,14 @@ router.post("/", (req,res,next)=>{
  * 
  * @returns {Class[]}
  */
-router.get("/", (req,res,next)=>{
+router.get('/Users/:Username/Classes', (req,res,next)=>{
   //Get params
-  const username = req.params.username
+  const username = req.params.Username
   let returnClasses
   
   //Debug console.logs
-  console.log(`   GET to "/Users/:username/Classes" was called proper
-  Username =`,username)
+  console.log(`   GET to "/Users/:Username/Classes" was called proper
+      Username =`,username)
   
   // query the db for class[] and store in "returnClasses"
   let sqlquery =
