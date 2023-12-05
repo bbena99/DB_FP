@@ -56,9 +56,9 @@ router.get("/", (req,res,next)=>{
   //Debug console.logs
   console.log(`   GET to "/Users/:username/Classes" was called proper
   Username =`,username)
-  let sqlquery =
   
   // query the db for class[] and store in "returnClasses"
+  let sqlquery =
   `SELECT * 
       FROM Student JOIN TAKES
       ON Student.Username = TAKES.Username
