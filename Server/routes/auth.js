@@ -92,12 +92,23 @@ Teacher = {
  */
 router.get("/test",(req,res)=>{
   console.log(headArray)
+  let allArray =[]
   let q =
   `SELECT *
     FROM Student`
   mysqlConnection.query(q,(err,results,fields)=>{
-    console.log(results)
-    res.status(200).send(results)
+    results.map((r)=>{
+      allArray.push(r)
+    })
+    q =
+    `SELECT *
+      FROM Teacher`
+    mysqlConnection.query(q,(err,results,fields)=>{
+      results.map((r)=>{
+        allArray.push(r)
+      })
+      res.status(200).send(allArray)
+    })
   })
 })
 
@@ -203,7 +214,7 @@ router.post("/CreateUser", async (req,res,next) => {
           VALUES ('${query.username}', '${hash}', '${query.firstname}', '${query.lastname}')`
           if(query.departmentId) sqlquery = 
           `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName, DepartmentNumber, ReportsTo)
-          VALUES ('${query.username}', '${hash}', '${query.firstname}', '${query.lastname}', ${query.departmentId}, '${head}')`
+          VALUES ('${query.username}', '${hash}', '${query.firstname}', '${query.lastname}', ${query.departmentId}, ${head})`
           //Debug query
           //console.log("dbq2 = "+sqlquery)
           //Insert to the db!

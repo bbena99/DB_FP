@@ -68,7 +68,7 @@ router.get('/Users/:Username/Classes', (req,res,next)=>{
       ON TAKES.Department = Class.Department
       ON TAKES.SectionNumber = Class.SectionNumber
       WHERE Student.Username = ${username}`
-
+  res.status(200).send([])
 })
 //Export the router
 module.exports = router;

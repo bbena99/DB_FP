@@ -40,10 +40,10 @@ app.use(express.static(path.join(__dirname, 'client')));//need to change later
  */
 const api = '/api/v1';
 
-app.use(api+'/Users/:Username/Classes/:ClassId/Assignments/:AssignmentId/Submissions', submissionsRouter) //used for submission endpoints
-app.use(api+'/Users/:Username/Classes/:ClassId/Assignments', assignmentRouter) //used for assignment endpoints
-app.use(api+'/Users/:Username/Classes', classRouter) //used for classes endpoints
-app.use(api+'/Users', userRouter); //used for nonauthentication user endpoints
+app.use(api, submissionsRouter) //used for submission endpoints
+app.use(api, assignmentRouter) //used for assignment endpoints
+app.use(api, classRouter) //used for classes endpoints
+app.use(api, userRouter); //used for nonauthentication user endpoints
 app.use(api, authRouter); //used for authentication endpoints
 
 // app.use('/**',(req,res,next)=>{
