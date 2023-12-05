@@ -52,6 +52,8 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
         console.error(err)
         res.status(500).send(err)
       }
+      sqlquery=
+      `INSERT INTO TEACHES...`
       console.log(results)
       res.status(200).send(results)
     })
@@ -77,7 +79,7 @@ router.get('/Users/:Username/Classes', (req,res,next)=>{
 
   //Debug console.logs
   console.log(` GET to "/Users/:Username/Classes" was called proper
-      Username='${username}'    userDef=${userDef}`)
+      Username='${username}'    userDef.type=${userDef.type}    userDef.verb=${userDef.verb}`)
   
   // query the db for class[] and store in "returnClasses"
   let sqlquery =
