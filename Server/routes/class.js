@@ -55,11 +55,6 @@ router.get("/", (req,res,next)=>{
   const username = req.params.username
   let returnClasses
 
-  //Debug console.logs
-  console.log(`   GET to "/Users/:username/Classes" was called proper
-  Username`)
-  
-  // query the db for class[] and store in "returnClasses"
   let sqlquery =
   `SELECT * 
       FROM Student JOIN TAKES
@@ -69,6 +64,12 @@ router.get("/", (req,res,next)=>{
       ON TAKES.Department = Class.Department
       ON TAKES.SectionNumber = Class.SectionNumber
       WHERE Student.Username = ${username}`
+
+  //Debug console.logs
+  console.log(`   GET to "/Users/:username/Classes" was called proper
+  Username`)
+
+  // query the db for class[] and store in "returnClasses"
 })
 //Export the router
 module.exports = router;
