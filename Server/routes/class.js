@@ -52,7 +52,7 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
         console.error(err)
         res.status(500).send(err)
       }
-      console.log(results);
+      console.log(results)
       res.status(200).send(results)
     })
   })
@@ -69,6 +69,7 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
 router.get('/Users/:Username/Classes', (req,res,next)=>{
   //Get params
   const username = req.params.Username
+  const teacherBool = req.query.Teacherbool
   let returnClasses
   
   //Debug console.logs
@@ -82,18 +83,16 @@ router.get('/Users/:Username/Classes', (req,res,next)=>{
       ON Student.Username = TAKES.Username
       AND TAKES.CourseNumber = Class.CourseNumber
       AND TAKES.Department = Class.Department
-      AND TAKES.SectionNumber = Class.SectionNumber
-      WHERE Student.Username = ${username}`
-
-      mysqlConnection.query(sqlquery, (err,results,fields)=>{
-        if(err){
-          console.error(err)
-          res.status(500).send(err)
-        }
-        console.log(results);
-        res.status(200).send([])
-        })
-  
+      AND TAKES.Section = Class.Section
+      WHERE Student.Username = '${username}'`
+  mysqlConnection.query(sqlquery, (err,results,fields)=>{
+    if(err){
+      console.error(err)
+      res.status(500).send(err)
+    }
+    console.log(results);
+    res.status(200).send([])
+  })
 })
 //Export the router
 module.exports = router;
