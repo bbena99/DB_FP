@@ -34,19 +34,19 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
   console.log(newClass)
 
   //Check if teacher Return status(401) if not
-let sqlquery=
-`SELECT * FROM Teacher WHERE Username = '${username}'`
-mysqlConnection.query(sqlquery, (err,results,fields)=>{
-  if(err){
-    console.error(err)
-    res.status(404).send(err)
-  }
-  console.log(results);
-  //Make query to make class
-  //Return status(200)
-  sqlquery=
-  `INSERT INTO Class (Name, Department, CourseNumber, Section)
-    VALUES ('${newClass.Name}', '${newClass.Department}', ${newClass.CourseNumber}, ${newClass.Section})`
+  let sqlquery=
+  `SELECT * FROM Teacher WHERE Username = '${username}'`
+  mysqlConnection.query(sqlquery, (err,results,fields)=>{
+    if(err){
+      console.error(err)
+      res.status(404).send(err)
+    }
+    console.log(results);
+    //Make query to make class
+    //Return status(200)
+    sqlquery=
+    `INSERT INTO Class (Name, Department, CourseNumber, Section)
+      VALUES ('${newClass.Name}', '${newClass.Department}', ${newClass.CourseNumber}, ${newClass.Section})`
     mysqlConnection.query(sqlquery, (err,results,fields)=>{
       if(err){
         console.error(err)
