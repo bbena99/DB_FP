@@ -1,4 +1,5 @@
 const express = require('express');
+const { mysqlConnection } = require('../sqlConnect/Connection');
 var router = express.Router();
 
 //Start of variables to use
@@ -33,21 +34,27 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
   console.log(newClass)
 
   //Check if teacher Return status(401) if not
-
+let sqlquery=
+`SELECT * FROM Teacher WHERE Username = '${username}'`
+mysqlConnection.query(sqlquery, (err,results,fields)=>{
+  if(err){
+    console.error(err)
+    res.status(404).send(err)
+  }
+  console.log(results);
   //Make query to make class
-  //INSERT INTO Class (Name, Department, CourseNumber, SectionNumber) 
-  // VALUES ('${query.name}', '${query.department}', '${query.courseNumber}', '${query.sectionnumber}')
   //Return status(200)
-  let sqlquery=
+  sqlquery=
   `INSERT INTO Class (Name, Department, CourseNumber, Section)
     VALUES ('${newClass.Name}', '${newClass.Department}', ${newClass.CourseNumber}, ${newClass.Section})`
-  mysqlConnection.query(sqlquery, (err,results,fields)=>{
-    if(err){
-      console.error(err)
-      res.status(500).send(err)
-    }
-    console.log(results);
-    res.status(200).send(results)
+    mysqlConnection.query(sqlquery, (err,results,fields)=>{
+      if(err){
+        console.error(err)
+        res.status(500).send(err)
+      }
+      console.log(results);
+      res.status(200).send(results)
+    })
   })
 })
 
