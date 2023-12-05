@@ -71,7 +71,8 @@ router.get('/Users/:Username/Classes', (req,res,next)=>{
   const username = req.params.Username
   const teacherBool = req.query.Teacherbool
   let returnClasses
-  
+  let userType = 'Student'
+  if(teacherBool)userType = 'Teacher'
   //Debug console.logs
   console.log(`   GET to "/Users/:Username/Classes" was called proper
       Username =`,username)
