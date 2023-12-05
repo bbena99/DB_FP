@@ -69,29 +69,31 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
 router.get('/Users/:Username/Classes', (req,res,next)=>{
   //Get params
   const username = req.params.Username
-  const teacherBool = req.query.Teacherbool
   let returnClasses
-  let userType = 'Student'
-  if(teacherBool)userType = 'Teacher'
+
+  const teacherBool = req.query.Teacherbool
+  let userDef = {type:'Student',verb:'TAKES'}
+  if(teacherBool)userDef = {type:'Teacher',verb:'TEACHES'}
+
   //Debug console.logs
-  console.log(`   GET to "/Users/:Username/Classes" was called proper
-      Username =`,username)
+  console.log(` GET to "/Users/:Username/Classes" was called proper
+      Username='${username}'    userDef=${userDef}`)
   
   // query the db for class[] and store in "returnClasses"
   let sqlquery =
   `SELECT * 
-      FROM Student JOIN TAKES JOIN Class
-      ON Student.Username = TAKES.Username
-      AND TAKES.CourseNumber = Class.CourseNumber
-      AND TAKES.Department = Class.Department
-      AND TAKES.Section = Class.Section
-      WHERE Student.Username = '${username}'`
+      FROM ${userDef.type} JOIN ${userDef.verb} JOIN Class
+      ON ${userDef.type}.Username = ${userDef.verb}.Username
+      AND ${userDef.verb}.CourseNumber = Class.CourseNumber
+      AND ${userDef.verb}.Department = Class.Department
+      AND ${userDef.verb}.Section = Class.Section
+      WHERE ${userDef.type}.Username = '${username}'`
   mysqlConnection.query(sqlquery, (err,results,fields)=>{
     if(err){
       console.error(err)
       res.status(500).send(err)
     }
-    console.log(results);
+    console.log(results)
     res.status(200).send([])
   })
 })

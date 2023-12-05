@@ -1,7 +1,7 @@
 const mysql = require('mysql2');
 require('dotenv').config()
 
-var headArray = []
+headArray = []
 
 mysqlConnection = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -25,9 +25,9 @@ var query =
   FROM Teacher
   WHERE Teacher.ReportsTo IS NULL`
 mysqlConnection.query(query,(err,results,fields)=>{
-  console.log(results)
+  //console.log(results)
   results.map((r,index)=>{
-    headArray[index]=r.Username
+    headArray[index]="'"+r.Username+"'"
   })
 })
 module.exports = {mysqlConnection, headArray}
