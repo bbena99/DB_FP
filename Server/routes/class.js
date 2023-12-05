@@ -52,10 +52,18 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
         console.error(err)
         res.status(500).send(err)
       }
-      sqlquery=
-      `INSERT INTO TEACHES...`
       console.log(results)
-      res.status(200).send(results)
+      sqlquery=
+      `INSERT INTO TEACHES (Username, Department, CourseNumber, Section)
+          VALUES ('${username}', '${newClass.Department}', ${newClass.CourseNumber}, ${newClass.Section})`
+          mysqlConnection.query(sqlquery, (err,results,fields)=>{
+            if(err){
+              console.error(err)
+              res.status(500).send(err)
+            }
+            console.log(results)
+            res.status(200).send(results)
+          })
     })
   })
 })
