@@ -92,7 +92,13 @@ Teacher = {
  */
 router.get("/test",(req,res)=>{
   console.log(headArray)
-  res.status(200).send(headArray)
+  let q =
+  `SELECT *
+    FROM Teacher`
+  mysqlConnection.query(q,(err,results,fields)=>{
+    console.log(results)
+    res.status(200).send(results)
+  })
 })
 
 
@@ -189,18 +195,20 @@ router.post("/CreateUser", async (req,res,next) => {
       console.log(salt)
       bcrypt
         .hash(query.password, salt)
-        .then(hash => {        
+        .then(hash => {
+          let head = headArray[query.departmentId]
+          if(!head)head = 'NULL'     
           sqlquery = 
           `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName)
           VALUES ('${query.username}', '${hash}', '${query.firstname}', '${query.lastname}')`
           if(query.departmentId) sqlquery = 
           `INSERT INTO ${query.userType} (Username, Password, FirstName, LastName, DepartmentNumber, ReportsTo)
-          VALUES ('${query.username}', '${hash}', '${query.firstname}', '${query.lastname}', ${query.departmentId}, '${headArray[query.departmentId]}')`
+          VALUES ('${query.username}', '${hash}', '${query.firstname}', '${query.lastname}', ${query.departmentId}, '${head}')`
           //Debug query
           console.log("dbq2 = "+sqlquery)
           //Insert to the db!
           mysqlConnection.query(sqlquery, (err, results, fields)=> {
-            console.log(fields)
+            console.log(results)
             if(err)console.error(err)
       
             sqlquery =

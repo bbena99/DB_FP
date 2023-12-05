@@ -25,6 +25,7 @@ var query =
   FROM Teacher
   WHERE Teacher.ReportsTo IS NULL`
 mysqlConnection.query(query,(err,results,fields)=>{
+  console.log(results)
   results.map((r,index)=>{
     headArray[index]=r.Username
   })
