@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'client')));//need to change later
  * Status code notes for Travywavy:
  * 200: successful endpoint hit and return (Level success)
  * 302: same hit/redundant (Level warning)
- * 402: Permission denied (Level miss)
+ * 401: Permission denied (Level miss)
  * 404: Recieved an endpoint, but that endpoint doesn't exist(Level miss)
  * 500: Server failure Method failed (Level fucked)
  * 502: Server Timed out (Level fucked)

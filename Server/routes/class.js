@@ -25,8 +25,13 @@ router.all('/Users/:Username/Classes',(req,res,next)=>{
 router.post('/Users/:Username/Classes', (req,res,next)=>{
   //Get params
   const username = req.params.Username
+  const user = req.session.user
   let newClass = req.body.class
 
+  if(!("DepartmentNumber" in user)){
+    console.error("Student tried to make a class")
+    res.status(401).send("Student tried to make a class")
+  }
   //Debug console.logs
   console.log(`  POST to "/User/:Username/Classes" was called
   Username : ${username}
@@ -37,8 +42,21 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
   //Check if teacher Return status(401) if not
 
   //Make query to make class
-
+  //INSERT INTO Class (Name, Department, CourseNumber, SectionNumber) 
+  // VALUES ('${query.name}', '${query.department}', '${query.courseNumber}', '${query.sectionnumber}')
   //Return status(200)
+  let sqlquery=
+  `INSERT INTO Class (Name, Department, CourseNumber, SectionNumber)
+    VALUES ('${query.Name}', '${query.Department}', '${query.CourseNumber}', '${query.SectionNumber})`
+    mysqlConnection.query(sqlquery, (err,results,fields)=>{
+      if(err){
+        console.error(err)
+        res.status(500).send(err)
+      }
+      console.log(results);
+      res.status(200).send([])
+      })
+
 })
 
 /**
@@ -61,14 +79,22 @@ router.get('/Users/:Username/Classes', (req,res,next)=>{
   // query the db for class[] and store in "returnClasses"
   let sqlquery =
   `SELECT * 
-      FROM Student JOIN TAKES
+      FROM Student JOIN TAKES JOIN Class
       ON Student.Username = TAKES.Username
-      JOIN Class
-      ON TAKES.CourseNumber = Class.CourseNumber
-      ON TAKES.Department = Class.Department
-      ON TAKES.SectionNumber = Class.SectionNumber
+      AND TAKES.CourseNumber = Class.CourseNumber
+      AND TAKES.Department = Class.Department
+      AND TAKES.SectionNumber = Class.SectionNumber
       WHERE Student.Username = ${username}`
-  res.status(200).send([])
+
+      mysqlConnection.query(sqlquery, (err,results,fields)=>{
+        if(err){
+          console.error(err)
+          res.status(500).send(err)
+        }
+        console.log(results);
+        res.status(200).send([])
+        })
+  
 })
 //Export the router
 module.exports = router;
