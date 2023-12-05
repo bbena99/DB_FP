@@ -55,7 +55,9 @@ export class LoginComponent {
   }
   createUser(){
     if( this.newUsername && this.newPassword ){
-      this.authService.createUser(this.typeOfUser, this.firstName,this.lastName, this.newUsername,this.newPassword,this.department).subscribe((res)=>{
+      let depo = this.department
+      if (this.typeOfUser=='Student')depo = undefined
+      this.authService.createUser(this.typeOfUser, this.firstName,this.lastName, this.newUsername,this.newPassword,depo).subscribe((res)=>{
         this.firstName=''
         this.lastName=''
         this.newUsername=''

@@ -1,6 +1,6 @@
 export interface Class {
   Name : String,
   Department : String,
-  CourseNumber : Number,
+  CourseNumber : number,
   Section : Number
 }

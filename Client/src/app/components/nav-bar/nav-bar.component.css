@@ -5,9 +5,13 @@
   width: 100%;
   padding: 15px;
 }
+#left{
+  display: flex ;
+}
 .btn{
   font-size: x-large;
   color: #35155D;
+  height: 50px;
 }
 .home-btn{
   height: 100%;
@@ -19,5 +23,5 @@
   border-color: #8CABFF00;
 }
 .home-btn>h1{
-  font-size: xxx-large;
+  font-size: xx-large;
 }

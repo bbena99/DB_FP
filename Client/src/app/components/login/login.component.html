@@ -35,7 +35,7 @@
 
 <!-- Start of the dialog/modal popup for creating a user -->
 <dialog *ngIf="modalBool"><!--I hate this-->
-  <form id="create-form" class="user-form float-md-start">
+  <form #createForm class="user-form float-md-start">
     <h2>Create Account</h2>
     <div style="padding-bottom: 20px;">
       <div class="form-group mb-2">

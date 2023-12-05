@@ -19,6 +19,11 @@ body{
   width: 100%;
 }
 
+.page{
+  height: 90vh;
+  width: 100vw;
+  padding-top: 20px;
+}
 /* common <Dialog> stylings */
 dialog{
   position: fixed;
@@ -31,6 +36,22 @@ dialog{
   width: 100vw;
   background-color: #00000075;
   border: 0;
+}
+.user-form {
+  min-width: 350px;
+  padding: 25px;
+  background-color : #512B81;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: .5em;
+  border-color: #355ca0;
+  color: #8CABFF;
+  box-shadow: 4px 4px 15px #000000AA,
+              4px 4px 10px #00000055,
+              4px 4px 05px #00000000;
+}
+.user-form > h2{
+  text-decoration: underline;
 }
 
 /* common button stylings*/

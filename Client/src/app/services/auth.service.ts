@@ -11,6 +11,7 @@ import { Teacher } from '../models/teacher';
 export class AuthService {
   private URL : string = Constants.API_VERSION
   private user : Student | Teacher | undefined;
+  private teacherBool : boolean = false
   public userSubject : BehaviorSubject<Student|Teacher|undefined> = new BehaviorSubject<Student|Teacher|undefined>( undefined )
   constructor(private http : HttpClient) {
     this.ngOnInit()
@@ -19,9 +20,13 @@ export class AuthService {
     this.getAuthenticatedUser().subscribe()
   }
   //Start of internal function calls
+  isTeacher():boolean{
+    return this.teacherBool
+  }
   setUser(user : Student | Teacher | undefined ): void {
     this.user = user
     if (this.user){
+      if('DepartmentNumber' in this.user!)this.teacherBool=true
       window.localStorage.setItem('user', JSON.stringify( user ))
     } else {
       window.localStorage.removeItem('user')
@@ -30,10 +35,10 @@ export class AuthService {
   }
   fetchUser() : Observable<Student|Teacher> {
     return this.http
-    .get<Student|Teacher>(this.URL + "/who")
-    .pipe(tap(user=>{
-      this.setUser(user)
-    }))
+      .get<Student|Teacher>(this.URL + "/who")
+      .pipe(tap(user=>{
+        this.setUser(user)
+      }))
   }
 
   //Start of main external function calls w/ backend calls.
@@ -52,7 +57,10 @@ export class AuthService {
     let credentials = `?userType=${typeOfUser}&username=${username}&password=${password}`
     return this.http
       .post<Student|Teacher>( API+credentials,undefined)
-      .pipe<Student|Teacher>( tap( u => this.setUser( u ) ) )
+      .pipe<Student|Teacher>( tap( u =>{
+        console.log(u)
+        this.setUser( u )
+      }))
     }
   createUser( typeOfUser:string, firstName:string, lastName:string, username:string, password:string, department?:number ) : Observable<Student|Teacher> {
     const API = this.URL + "/createUser"
@@ -60,7 +68,10 @@ export class AuthService {
     if(department)credentials=credentials+"&departmentId="+department
     return this.http
       .post<Student|Teacher>( API+credentials,undefined)
-      .pipe<Student|Teacher>( tap( u => this.setUser( u ) ) )
+      .pipe<Student|Teacher>( tap( u =>{
+        console.log(u)
+        this.setUser( u )
+      }))
   }
   logout() {
     const API = this.URL+"/logout"

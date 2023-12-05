@@ -1,1 +1,61 @@
-<p>classlist works!</p>
+<div class="page">
+  <div class="container">
+    <div *ngIf="this.classList">
+      <div *ngFor="let key of this.classList.keys()" class="classContainer">
+      </div>
+    </div>
+    <div *ngIf="teacherBool" class="classContainer">
+      <button type="button" class="btn" (click)="modalBool=true">
+      <div class="classCard add">
+          <i class="fa-solid fa-plus"></i>
+          Create New Class
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Start of the dialog/modal popup for creating a class -->
+<dialog *ngIf="modalBool"><!--I hate this-->
+  <form #createForm class="user-form float-md-start">
+    <h2>Create Class</h2>
+    <div style="padding-bottom: 20px;">
+      <div class="form-group">
+        <label for="Name">
+          <i class="fa-solid fa-pen"></i>
+          Course Name
+        </label>
+        <input type="text" class="form-control" name="Name" placeholder="Name of Course" [(ngModel)]="newClass.Name">
+      </div>
+      <div class="form-group">
+        <label for="type_of_department">
+          <i class="fa-solid fa-school"></i>
+          Department
+        </label>
+        <select name="type_of_department" id="type_of_department" class="form-control" aria-label="Default select example" [(ngModel)]="departIndex" disabled>
+          <option *ngFor="let x of departLabel; let i = index" [value]="i">{{x}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="CNum"><i class="fa-solid fa-hashtag"></i>
+          Course Number
+        </label>
+        <input type="number" class="form-control" name="CNum" [(ngModel)]="newClass.CourseNumber">
+      </div>
+      <div class="form-group">
+        <label for="CSec"><i class="fa-solid fa-hashtag"></i>
+          Course Section
+        </label>
+        <input type="number" class="form-control" name="CSec" [(ngModel)]="newClass.CourseNumber">
+      </div>
+    </div>
+    <button type="button" (click)="modalBool=false" class="btn my-btn-s">
+      <i class="fa-regular fa-circle-xmark"></i>
+      Close
+    </button>
+    <button type="submit" (click)="createClass()" class="btn my-btn-p float-end">
+      Create Class
+      <i class="fa-solid fa-circle-plus"></i>
+    </button>
+  </form>
+</dialog>

@@ -39,6 +39,9 @@ export class NavBarComponent {
   home(){
     this.router.navigateByUrl('/')
   }
+  classes(){
+    this.router.navigateByUrl('/Classes')
+  }
 
   account(){
     this.router.navigateByUrl('/Account')
