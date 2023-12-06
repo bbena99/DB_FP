@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const concat = require('concat-stream');
+const { mysqlConnection } = require('../sqlConnect/Connection');
 
 var router = express.Router();
 
@@ -8,17 +9,24 @@ var router = express.Router();
  * GET "/users"
  * @description Get a list of users. Will be used only for moderation purposes
  * 
- * @param {string?} req.query.filter.any Can pass in a string filter
- * 
+ * @param {string?} req.query.userType Either 'Student' or 'Teacher'
+ *  
  * @returns {Student[]|Teacher[]} Returns a list of users
  */
 router.get('/users', async(req, res, next)=> {
+  const userType = req.query.userType
   //console.log("    GET '/users' was called to get a list of all users");
   let returnUsers;
-  //console.log(req.query.filter);
-  //if(req.query.username!='undefined')returnUsers = await Userdb.find({'username':{$regex:req.query.username}});
-  //else returnUsers = await Userdb.find();
-  res.status(200).send(returnUsers);
+  let sqlquery =
+  `SELECT * FROM '${userType}'`
+  mysqlConnection.query(sqlquery, (err,results,fields)=>{
+    if(err){
+      console.error(err)
+      res.status(404).send(err)
+    }
+    console.log(results)
+    res.status(200).send(returnUsers);
+  })
 });
 
 
