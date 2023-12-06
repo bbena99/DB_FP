@@ -56,14 +56,14 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
       sqlquery=
       `INSERT INTO TEACHES (Username, Department, CourseNumber, Section)
           VALUES ('${username}', '${newClass.Department}', ${newClass.CourseNumber}, ${newClass.Section})`
-          mysqlConnection.query(sqlquery, (err,results,fields)=>{
-            if(err){
-              console.error(err)
-              res.status(500).send(err)
-            }
-            console.log(results)
-            res.status(200).send(results)
-          })
+      mysqlConnection.query(sqlquery, (err,results,fields)=>{
+        if(err){
+          console.error(err)
+          res.status(500).send(err)
+        }
+        console.log(results)
+        res.status(200).send(results)
+      })
     })
   })
 })
@@ -104,7 +104,10 @@ router.get('/Users/:Username/Classes', (req,res,next)=>{
       res.status(500).send(err)
     }
     console.log(results)
-    res.status(200).send([])
+    results.map((r)=>{
+      delete r.Password
+    })
+    res.status(200).send(results)
   })
 })
 //Export the router
