@@ -1,17 +1,18 @@
 <div class="page">
   <div class="container">
-    <div *ngIf="this.classList">
-      <div *ngFor="let key of this.classList.keys()" class="classContainer">
+    <button type="button" *ngFor="let key of classList|keyvalue" class="btn classContainer" (click)="nav(key.key)">
+      <div class="classCard">
+        <h3>{{key.key}}</h3>
       </div>
-    </div>
-    <div *ngIf="teacherBool" class="classContainer">
-      <button type="button" class="btn" (click)="modalBool=true">
-      <div class="classCard add">
+    </button>
+    <button *ngIf="teacherBool" class="" type="button" class="btn classContainer" (click)="modalBool=true">
+      <div class="classCard">
+        <h3>
           <i class="fa-solid fa-plus"></i>
           Create New Class
-        </div>
-      </button>
-    </div>
+        </h3>
+      </div>
+    </button>
   </div>
 </div>
 
@@ -46,7 +47,7 @@
         <label for="CSec"><i class="fa-solid fa-hashtag"></i>
           Course Section
         </label>
-        <input type="number" class="form-control" name="CSec" [(ngModel)]="newClass.CourseNumber">
+        <input type="number" class="form-control" name="CSec" [(ngModel)]="newClass.Section">
       </div>
     </div>
     <button type="button" (click)="modalBool=false" class="btn my-btn-s">

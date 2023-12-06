@@ -29,6 +29,7 @@ export class AuthService {
       if('DepartmentNumber' in this.user!)this.teacherBool=true
       window.localStorage.setItem('user', JSON.stringify( user ))
     } else {
+      this.teacherBool=false
       window.localStorage.removeItem('user')
     }
     this.userSubject.next( user )

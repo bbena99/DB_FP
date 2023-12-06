@@ -1,7 +1,6 @@
-export interface Teacher{
-  Username : String,
-  FirstName : String,
-  LastName : String,
+import { Student } from "./student";
+
+export interface Teacher extends Student{
   DepartmentId : Number,
-  ReportsTo : Number
+  ReportsTo : String
 }

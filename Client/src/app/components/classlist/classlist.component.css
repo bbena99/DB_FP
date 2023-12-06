@@ -11,23 +11,20 @@
   padding: 2%;
 }
 .classCard{
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
   color: #35155D;
   background-color: #8CABFF;
   border: 5px solid #4477CE;
-  border-radius: 5px;
+  border-radius: 10px;
+  box-shadow: 4px 4px 15px #000000AA,
+              4px 4px 10px #00000055,
+              4px 4px 05px #00000000;
 }
-.add{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.btn{
-  width: 100%;
-  height: 100%;
-}
-.add:hover{
+.classCard:hover{
   background-color: #4477CE;
   border: 5px solid #8CABFF;
 }

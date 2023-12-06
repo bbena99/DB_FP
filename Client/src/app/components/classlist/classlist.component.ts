@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 export class ClasslistComponent {
   @Input() newClass : Class
   user! : Teacher | Student
-  classList : Map<Number,Class> = new Map<Number,Class>([])
+  classList : Map<String,Class> = new Map<String,Class>()
   teacherBool : Boolean = false
   modalBool: Boolean = false
 
@@ -39,26 +39,40 @@ export class ClasslistComponent {
       classService.getAllByUser(this.user).subscribe((cl:Class[])=>{
         console.log(cl)
         cl.map((c:Class)=>{
-          this.classList.set(c.CourseNumber,c)
+          this.classList.set(`${c.Department}-${c.CourseNumber}.${c.Section}`,c)
         })
         this.teacherBool = authService.isTeacher()
         console.log(this.classList.keys())
         console.log(this.classList)
-        console.log("teacherBool:",this.teacherBool)
       })
     })
     //@ts-ignore
-    if('DepartmentID' in this.user)this.departIndex = this.user.DepartmentID
+    if('DepartmentNumber' in this.user)this.departIndex = this.user.DepartmentNumber
+    console.log(this.departIndex)
     this.newClass={
+      Username:"",
+      FirstName:"",
+      LastName:"",
+      DepartmentId:0,
+      ReportsTo:"",
       Name:"",
       Department:this.departLabel[this.departIndex],
       CourseNumber:0,
       Section:0
     }
+    console.log(this.newClass)
+  }
+  nav(classStr:String){
+    this.router.navigateByUrl("/Classes/"+classStr)
   }
   createClass(){
     if(this.teacherBool==false)return
     //@ts-ignore
-    this.classService.createClass(this.user,this.newClass).subscribe()
+    this.classService.createClass(this.user,this.newClass).subscribe((c)=>{
+      this.newClass.Name=""
+      this.newClass.CourseNumber=0
+      this.newClass.Section=0
+      this.router.navigateByUrl("/Classes")
+    })
   }
 }

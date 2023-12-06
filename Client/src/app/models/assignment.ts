@@ -1,6 +1,6 @@
 import { Class } from "./class";
 
-export interface Assignment {
+export interface Assignment extends Class {
   AssignmentId : Number,
   Name : String,
   Description : String,
