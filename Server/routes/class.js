@@ -117,7 +117,7 @@ router.get('/Users/:Username/Classes', (req,res,next)=>{
 })
 
 /**
- * GET "/Users/:username/Classes"
+ * GET "/Users/:username/Classes/:ClassId"
  * @description Get a list of all Students for a Class
  * 
  * @param req.param.username Teacher
@@ -145,5 +145,61 @@ router.get('/Users/:Username/Classes/:ClassId',(req,res,next)=>{
     })
 })
 
+/**
+ * GET "/Users/:username/Classes/:ClassId"
+ * @description Get a list of all Students for a Class
+ * 
+ * @param req.param.username Teacher
+ * @param req.param.ClassId class to get roster of (in form of a comma separated list) 
+ * @param req.body.stdMap Map obj of the student list to add to TAKES
+ * 
+ * @returns {boolean}
+ */
+router.put('Users/:Username/Classes/:ClassId',(req,res,next)=>{
+  let reqMap = new Map(req.body.stdMap)
+  let strarr = req.params.ClassId.split(',')
+  let sqlquery=
+  `SELECT TAKES.Username
+    FROM TAKES 
+    WHERE TAKES.Department = '${strarr[0]}' AND TAKES.CourseNumber = ${strarr[1]} AND TAKES.Section = ${strarr[2]}`
+
+    mysqlConnection.query(sqlquery, (err,results,fields)=>{
+      if(err){
+        console.error(err)
+        res.status(500).send(err)
+      }
+      let deleteArr
+      results.map((r)=>{
+        if(reqMap.has(r.Username)) reqMap.delete(r.Username)
+        else deleteArr.push(r.Username)
+      })
+      reqMap.forEach((student,Username)=>{
+        let sqlInsert =
+        `INSERT INTO TAKES (Username, Department, CourseNumber, Section)
+          VALUES ('${Username}', '${strarr[0]}', ${strarr[1]}, ${strarr[2]})`
+          mysqlConnection.query(sqlInsert, (err,results,fields)=>{
+            if(err){
+              console.error(err)
+              res.status(500).send(err)
+            }
+            console.log(results)
+          })
+      })
+      deleteArr.map(Username=>{
+        let sqlDelete = 
+        `DELETE FROM TAKES 
+          WHERE Username = '${Username}' AND TAKES.Department = '${strarr[0]}' AND TAKES.CourseNumber = ${strarr[1]} AND TAKES.Section = ${strarr[2]}`
+        mysqlConnection.query(sqlDelete, (err,results,fields)=>{
+          if(err){
+            console.error(err)
+            res.status(500).send(err)
+          }
+          console.log(results)
+        })
+      })
+      console.log(results)
+      res.status(200).send(true)
+    })
+})
 //Export the router
 module.exports = router;
