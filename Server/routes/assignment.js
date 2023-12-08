@@ -4,6 +4,17 @@ var router = express.Router();
 //Start of variables to use
 
 //Start of endpoints
+/**
+ * ALL "/Users/:Username/Classes/:ClassId/Assignments"
+ * @description debug endpoint
+ */
+router.all('Users/:Username/Classes/:ClassId/Assignments',(req,res,next)=>{
+  let un = req.params.Username
+  let cid = req.params.ClassId
+  console.log(`Inside Users/:Username/Classes/:ClassId with url:
+  Users/${un}/Classes/:${cid}/Assignments`)
+  next()
+})
 
 /**
  * POST "/Assignments"
@@ -14,7 +25,7 @@ var router = express.Router();
  * 
  * @param req.body.assignment an assignment object
 */
-router.post("/User/:username/Classes/:classId/Assignments",(req,res,next)=>{
+router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   const params = req.params
   const body = req.body
 
@@ -40,7 +51,7 @@ router.post("/User/:username/Classes/:classId/Assignments",(req,res,next)=>{
  * 
  * @returns {Assignment[]}
 */
-router.get("/User/:username/Classes/:classId/Assignments",(req,res,next)=>{
+router.get("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   const params = req.params
 })
 

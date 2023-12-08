@@ -8,10 +8,103 @@ var router = express.Router();
 /**
  * ALL "/Users/:Username/Classes"
  */
-router.all('/Users/:Username/Classes',(req,res,next)=>{
+router.all('/Users/:Username/Classes*',(req,res,next)=>{
   console.log('-->Inside of class.js')
   console.log(req.url)
   next()
+})
+
+/**
+ * POST "/Users/:username/Classes/:ClassId"
+ * @description Get a list of all Students for a Class
+ * 
+ * @param req.param.username Teacher
+ * @param req.param.ClassId class to get roster of (in form of a comma separated list) 
+ * @param req.body.stdArr Arr obj of the student list to add to TAKES
+ * 
+ * @returns {boolean}
+ */
+router.post('/Users/:Username/Classes/:ClassId',(req,res,next)=>{
+  console.log("POST Users/:Username/Classes/:ClassId")
+  let stdMap = new Map()
+  let stdArr = req.body
+  console.log(stdArr)
+  stdArr.map(std=>{
+    stdMap.set(std.Username,std)
+  })
+  let strarr = req.params.ClassId.split('~')
+  let sqlquery=
+  `SELECT TAKES.Username
+    FROM TAKES 
+    WHERE TAKES.Department = '${strarr[0]}' AND TAKES.CourseNumber = ${strarr[1]} AND TAKES.Section = ${strarr[2]}`
+
+  mysqlConnection.query(sqlquery,(err,results,fields)=>{
+    if(err){
+      console.error(err)
+      res.status(500).send(err)
+    }
+    let deleteArr=[]
+    results.map((r)=>{
+      if(stdMap.has(r.Username)) stdMap.delete(r.Username)
+      else deleteArr.push(r.Username)
+    })
+    stdMap.forEach((student,Username)=>{
+      let sqlInsert =
+      `INSERT INTO TAKES (Username, Department, CourseNumber, Section)
+        VALUES ('${Username}', '${strarr[0]}', ${strarr[1]}, ${strarr[2]})`
+      mysqlConnection.query(sqlInsert, (err,results,fields)=>{
+        if(err){
+          console.error(err)
+          res.status(500).send(err)
+        }
+        console.log(results)
+      })
+    })
+    deleteArr.map(Username=>{
+      let sqlDelete = 
+      `DELETE FROM TAKES 
+        WHERE Username = '${Username}' AND TAKES.Department = '${strarr[0]}' AND TAKES.CourseNumber = ${strarr[1]} AND TAKES.Section = ${strarr[2]}`
+      mysqlConnection.query(sqlDelete, (err,results,fields)=>{
+        if(err){
+          console.error(err)
+          res.status(500).send(err)
+        }
+        console.log(results)
+      })
+    })
+    console.log(results)
+    res.status(200).send(true)
+  })
+})
+
+/**
+ * GET "/Users/:username/Classes/:ClassId"
+ * @description Get a list of all Students for a Class
+ * 
+ * @param req.param.username Teacher
+ * @param req.param.ClassId class to get roster of (in form of a comma separated list) 
+ * 
+ * @returns {Student[]}
+ */
+router.get('/Users/:Username/Classes/:ClassId',(req,res,next)=>{
+  let strarr = req.params.ClassId.split('~')
+  console.log('GET /Users/:Username/Classes/:ClassId')
+  console.log(strarr)
+  let sqlquery=
+  `SELECT Student.* 
+    FROM Student JOIN TAKES
+    ON Student.Username = TAKES.Username
+    WHERE TAKES.Department = '${strarr[0]}' AND TAKES.CourseNumber = ${strarr[1]} AND TAKES.Section = ${strarr[2]}`
+
+    mysqlConnection.query(sqlquery, (err,results,fields)=>{
+      
+      if(err){
+        console.error(err)
+        res.status(500).send(err)
+      }
+      console.log(results)
+      res.status(200).send(results)
+    })
 })
 
 /**
@@ -80,7 +173,7 @@ router.get('/Users/:Username/Classes', (req,res,next)=>{
   //Get params
   const username = req.params.Username
 
-  const teacherBool = req.query.Teacherbool
+  const teacherBool = req.query.Teacherbool==="true"
   let userDef = {type:'Student',verb:'TAKES'}
   if(teacherBool)userDef = {type:'Teacher',verb:'TEACHES'}
 
@@ -116,90 +209,5 @@ router.get('/Users/:Username/Classes', (req,res,next)=>{
   })
 })
 
-/**
- * GET "/Users/:username/Classes/:ClassId"
- * @description Get a list of all Students for a Class
- * 
- * @param req.param.username Teacher
- * @param req.param.ClassId class to get roster of (in form of a comma separated list) 
- * 
- * @returns {Student[]}
- */
-router.get('/Users/:Username/Classes/:ClassId',(req,res,next)=>{
-  let strarr = req.params.ClassId.split(',')
-  
-  let sqlquery=
-  `SELECT Student.* 
-    FROM Student JOIN TAKES
-    ON Student.Username = TAKES.Username
-    WHERE TAKES.Department = '${strarr[0]}' AND TAKES.CourseNumber = ${strarr[1]} AND TAKES.Section = ${strarr[2]}`
-
-    mysqlConnection.query(sqlquery, (err,results,fields)=>{
-      
-      if(err){
-        console.error(err)
-        res.status(500).send(err)
-      }
-      console.log(results)
-      res.status(200).send(results)
-    })
-})
-
-/**
- * GET "/Users/:username/Classes/:ClassId"
- * @description Get a list of all Students for a Class
- * 
- * @param req.param.username Teacher
- * @param req.param.ClassId class to get roster of (in form of a comma separated list) 
- * @param req.body.stdMap Map obj of the student list to add to TAKES
- * 
- * @returns {boolean}
- */
-router.put('Users/:Username/Classes/:ClassId',(req,res,next)=>{
-  let reqMap = new Map(req.body.stdMap)
-  let strarr = req.params.ClassId.split(',')
-  let sqlquery=
-  `SELECT TAKES.Username
-    FROM TAKES 
-    WHERE TAKES.Department = '${strarr[0]}' AND TAKES.CourseNumber = ${strarr[1]} AND TAKES.Section = ${strarr[2]}`
-
-    mysqlConnection.query(sqlquery, (err,results,fields)=>{
-      if(err){
-        console.error(err)
-        res.status(500).send(err)
-      }
-      let deleteArr
-      results.map((r)=>{
-        if(reqMap.has(r.Username)) reqMap.delete(r.Username)
-        else deleteArr.push(r.Username)
-      })
-      reqMap.forEach((student,Username)=>{
-        let sqlInsert =
-        `INSERT INTO TAKES (Username, Department, CourseNumber, Section)
-          VALUES ('${Username}', '${strarr[0]}', ${strarr[1]}, ${strarr[2]})`
-          mysqlConnection.query(sqlInsert, (err,results,fields)=>{
-            if(err){
-              console.error(err)
-              res.status(500).send(err)
-            }
-            console.log(results)
-          })
-      })
-      deleteArr.map(Username=>{
-        let sqlDelete = 
-        `DELETE FROM TAKES 
-          WHERE Username = '${Username}' AND TAKES.Department = '${strarr[0]}' AND TAKES.CourseNumber = ${strarr[1]} AND TAKES.Section = ${strarr[2]}`
-        mysqlConnection.query(sqlDelete, (err,results,fields)=>{
-          if(err){
-            console.error(err)
-            res.status(500).send(err)
-          }
-          console.log(results)
-        })
-      })
-      console.log(results)
-      res.status(200).send(true)
-    })
-})
 //Export the router
 module.exports = router;
