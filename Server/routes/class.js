@@ -126,7 +126,23 @@ router.get('/Users/:Username/Classes', (req,res,next)=>{
  * @returns {Student[]}
  */
 router.get('/Users/:Username/Classes/:ClassId',(req,res,next)=>{
+  let strarr = req.params.ClassId.split(',')
   
+  let sqlquery=
+  `SELECT Student.* 
+    FROM Student JOIN TAKES
+    ON Student.Username = TAKES.Username
+    WHERE TAKES.Department = '${strarr[0]}' AND TAKES.CourseNumber = ${strarr[1]} AND TAKES.Section = ${strarr[2]}`
+
+    mysqlConnection.query(sqlquery, (err,results,fields)=>{
+      
+      if(err){
+        console.error(err)
+        res.status(500).send(err)
+      }
+      console.log(results)
+      res.status(200).send(results)
+    })
 })
 
 //Export the router
