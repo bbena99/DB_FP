@@ -16,16 +16,16 @@ var router = express.Router();
 router.get('/users', async(req, res, next)=> {
   const userType = req.query.userType
   //console.log("    GET '/users' was called to get a list of all users");
-  let returnUsers;
   let sqlquery =
-  `SELECT * FROM '${userType}'`
+  `SELECT * FROM ${userType}`
   mysqlConnection.query(sqlquery, (err,results,fields)=>{
     if(err){
       console.error(err)
       res.status(404).send(err)
     }
-    console.log(results)
-    res.status(200).send(returnUsers);
+    delete results.Password
+    results.map((r,i)=>{console.log("["+i+"]UN='"+r.Username+"' FN='"+r.FirstName+"'  LN='"+r.LastName+"'")})
+    res.status(200).send(results);
   })
 });
 

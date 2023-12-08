@@ -79,7 +79,6 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
 router.get('/Users/:Username/Classes', (req,res,next)=>{
   //Get params
   const username = req.params.Username
-  let returnClasses
 
   const teacherBool = req.query.Teacherbool
   let userDef = {type:'Student',verb:'TAKES'}
@@ -91,8 +90,14 @@ router.get('/Users/:Username/Classes', (req,res,next)=>{
   
   // query the db for class[] and store in "returnClasses"
   let sqlquery =
-  `SELECT * 
-      FROM ${userDef.type} JOIN ${userDef.verb} JOIN Class
+  `SELECT DISTINCT ${userDef.type}.Username, Class.CourseNumber, Class.Department, Class.Section, TeacherOfClass.TeacherUsername 
+      FROM ${userDef.type} JOIN ${userDef.verb} JOIN Class JOIN (
+        SELECT TEACHES.Username as TeacherUsername
+          FROM TEACHES JOIN Class
+          ON TEACHES.CourseNumber = Class.CourseNumber
+          AND TEACHES.Department = Class.Department
+          AND TEACHES.Section = Class.Section
+      ) AS TeacherOfClass
       ON ${userDef.type}.Username = ${userDef.verb}.Username
       AND ${userDef.verb}.CourseNumber = Class.CourseNumber
       AND ${userDef.verb}.Department = Class.Department
@@ -103,12 +108,26 @@ router.get('/Users/:Username/Classes', (req,res,next)=>{
       console.error(err)
       res.status(500).send(err)
     }
-    console.log(results)
     results.map((r)=>{
       delete r.Password
     })
+    console.log(results)
     res.status(200).send(results)
   })
 })
+
+/**
+ * GET "/Users/:username/Classes"
+ * @description Get a list of all Students for a Class
+ * 
+ * @param req.param.username Teacher
+ * @param req.param.ClassId class to get roster of (in form of a comma separated list) 
+ * 
+ * @returns {Student[]}
+ */
+router.get('/Users/:Username/Classes/:ClassId',(req,res,next)=>{
+  
+})
+
 //Export the router
 module.exports = router;
