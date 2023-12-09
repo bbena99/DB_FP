@@ -17,7 +17,7 @@ router.all('Users/:Username/Classes/:ClassId/Assignments',(req,res,next)=>{
 })
 
 /**
- * POST "/Assignments"
+ * POST "/Users/:Username/Classes/:ClassId/Assignments"
  * @description A teacher is making a new Assignment
  * 
  * @param req.param.Tid id of the teacher making the assignment
@@ -28,6 +28,7 @@ router.all('Users/:Username/Classes/:ClassId/Assignments',(req,res,next)=>{
 router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   const params = req.params
   const body = req.body
+  console.log(body)
 
   //Check for valid teacher and teacher teaches this class
   //You will actually have to query the db for this value
@@ -37,7 +38,8 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   console.log(body)
 
   //Make creation query here:
-
+  let sqlquery =
+  ``
   //Don't need to send anything back to frontend.
   res.status(200).send()
 })
