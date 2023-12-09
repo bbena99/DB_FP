@@ -14,9 +14,7 @@
   height: 50px;
 }
 .home-btn{
-  height: 100%;
-  padding-top: 1px;
-  padding-left: 2px;
+  padding: 6px;
   color: #35155D;
 }
 .home-btn:active{

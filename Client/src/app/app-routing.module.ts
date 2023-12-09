@@ -6,16 +6,14 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ClasslistComponent } from './components/classlist/classlist.component';
 import { SingleclassComponent } from './components/singleclass/singleclass.component';
-import { GradesComponent } from './components/grades/grades.component';
 import { AssignmentComponent } from './components/assignment/assignment.component';
 
 const routes: Routes = [
   {path: 'Login', component : LoginComponent},
   {path: 'DashBoard', component : DashboardComponent, canActivate: [AuthGuard]},
   {path: 'Classes', component : ClasslistComponent, canActivate: [AuthGuard]},
-  {path: 'Classes/:classNumber', component: SingleclassComponent, canActivate: [AuthGuard]},
-  {path: 'Classes/:classNumber/grades', component: GradesComponent, canActivate: [AuthGuard]},
-  {path: 'Classes/:classNumber/:assignmentId', component: AssignmentComponent, canActivate: [AuthGuard]},
+  {path: 'Classes/:classkey', component: SingleclassComponent, canActivate: [AuthGuard]},
+  {path: 'Classes/:classkey/:assignmentId', component: AssignmentComponent, canActivate: [AuthGuard]},
   {path: 'Account', component : ProfileComponent, canActivate: [AuthGuard]},
   {path: '**', redirectTo: 'Login', pathMatch:'full'}
 ];

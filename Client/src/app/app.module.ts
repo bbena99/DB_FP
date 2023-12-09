@@ -12,7 +12,6 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ClasslistComponent } from './components/classlist/classlist.component';
 import { SingleclassComponent } from './components/singleclass/singleclass.component';
-import { GradesComponent } from './components/grades/grades.component';
 import { AssignmentComponent } from './components/assignment/assignment.component';
 
 @NgModule({
@@ -24,7 +23,6 @@ import { AssignmentComponent } from './components/assignment/assignment.componen
     DashboardComponent,
     ClasslistComponent,
     SingleclassComponent,
-    GradesComponent,
     AssignmentComponent
   ],
   imports: [

@@ -14,7 +14,10 @@ export class ClassService {
   //Variables
   private URL : string = Constants.API_VERSION
   private classes : Map<String,Class>
+  private classRoster : Map<String,Student>
+  private boolRes! : boolean
   public classSubject : BehaviorSubject<Map<String,Class>>
+  public rosterSubject : BehaviorSubject<Map<String,Student>>
 
   constructor(
     private authService : AuthService,
@@ -22,6 +25,8 @@ export class ClassService {
   ) {
     this.classes = new Map<String,Class>()
     this.classSubject = new BehaviorSubject<Map<String,Class>>(this.classes)
+    this.classRoster = new Map<String,Student>()
+    this.rosterSubject = new BehaviorSubject<Map<String,Student>>(this.classRoster)
     this.ngOnInit()
   }
 
@@ -45,7 +50,15 @@ export class ClassService {
     this.classSubject.next(this.classes)
     return this.classes
   }
-
+  setRoster(b:Student[]):Map<String,Student>{
+    console.log(b)
+    b.map((b)=>this.classRoster.set(b.Username,b))
+    this.rosterSubject.next(this.classRoster)
+    return this.classRoster
+  }
+  getRoster():Map<String,Student>{
+    return this.classRoster
+  }
   //Start of external function calls
   createClass(user:Teacher,newClass:Class) : Observable<Class[]>|undefined {
     return this.http
@@ -57,8 +70,23 @@ export class ClassService {
   getAllByUser(user:Student|Teacher) : Observable<Class[]>{
     console.log(user)
     const bool = this.authService.isTeacher()
+    console.log("getAllByUser("+user.Username+") and isTeacher() returned: "+bool)
     return this.http
       .get<Class[]>(this.URL+`/Users/${user.Username}/Classes?Teacherbool=${bool}`)
       .pipe<Class[]>( tap( c => this.setClasses(c) ))
+  }
+  getClassRoster(user:String,classId:String) : Observable<Student[]>{
+    return this.http
+      .get<Student[]>(this.URL+`/Users/${user}/Classes/${classId}`)
+      .pipe<Student[]>(tap(s=>this.setRoster(s)))
+  }
+  setStudentsInClass(user:String,stdMap:Map<String,Student>,classId:String) : Observable<boolean>{
+    let stdArr:Student[]=[]
+    stdMap.forEach(std=>{
+      stdArr.push(std)
+    })
+    return this.http
+      .post<boolean>(this.URL+`/Users/${user}/Classes/${classId}`,stdArr)
+      .pipe<boolean>(tap(b=>this.boolRes=b))
   }
 }

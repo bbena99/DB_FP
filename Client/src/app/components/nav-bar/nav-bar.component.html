@@ -7,16 +7,24 @@
       </h1>
     </button>
     <div id="nav-btn-group" class="btn-group" *ngIf="isAuthenticated()">
-      <button type="button" class="btn my-btn-s" (click)="home()">Dashboard</button>
-      <button type="button" class="btn my-btn-s" (click)="classes()">Class List</button>
+      <button type="button" class="btn my-btn-s" (click)="home()">
+        <i class="fa-solid fa-list"></i>
+        Dashboard
+      </button>
+      <button type="button" class="btn my-btn-s" (click)="classes()">
+        <i class="fa-solid fa-book"></i>
+        Class List
+      </button>
     </div>
   </div>
   <div *ngIf="isAuthenticated()" id="right">
     <button type="button" class="btn my-btn-s" (click)="account()">
+      <i class="fa-solid fa-user"></i>
       {{User!.FirstName}}
     </button>
     <button type="button" class="btn my-btn-p" (click)="logout()">
       Logout
+      <i class="fa-solid fa-right-from-bracket"></i>
     </button>
   </div>
 </nav>

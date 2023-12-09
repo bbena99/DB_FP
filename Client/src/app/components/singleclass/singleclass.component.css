@@ -1,0 +1,133 @@
+.constainer{
+  height: 100%;
+}
+#classNav{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 2vh;
+}
+.body{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 80vh;
+}
+.list{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.assignRowCard{
+  width: 90%;
+  box-shadow: 4px 4px 15px #000000AA,
+              4px 4px 10px #00000055,
+              4px 4px 05px #00000000;
+}
+/* Start of Moderation CSS*/
+.searchRow{
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  align-items: center;
+  min-width: 350px;
+  padding: 15px;
+  background-color : #512B81;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: .5em;
+  border-color: #355ca0;
+  color: #8CABFF;
+  box-shadow: 4px 4px 15px #000000AA,
+              4px 4px 10px #00000055,
+              4px 4px 05px #00000000;
+}
+.searchRow>h3{
+  width: 85%;
+}
+.input{
+  width: 33.33%;
+}
+.view{
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  width: 100%;
+  height: 70%;
+  margin:1%;
+}
+.rowContainer{
+  display: flex;
+  width: 33%;
+  height: 5vh;
+  padding: .5%;
+}
+.rowCard{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color : #512B81;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: .5em;
+  border-color: #355ca0;
+  color: #8CABFF;
+  box-shadow: 4px 4px 15px #000000AA,
+              4px 4px 10px #00000055,
+              4px 4px 05px #00000000;
+
+}
+.form-check-input{
+  width: 4.5%;
+  margin: 2%;
+}
+.form-check-label{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  margin: 3%;
+  padding: 0px;
+}
+.form-check-label>p{
+  margin: 0px;
+}
+.save-btn{
+  position: absolute;
+  top: 90vh;
+  right: 5vw;
+  width: 6vw;
+  height: 4vh;
+  font-size: x-large;
+}
+
+/*Dialog css*/
+.inputContainer{
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: 10px;
+}
+.inputContainer>.form-check-label{
+  width: inherit;
+  margin: 0%;
+}
+.inputContainer>label{
+  width: 100%;
+}
+.big{
+  height: 60px;
+}
+#footer{
+  margin-top: 10px;
+}
+.vis-btn{
+  display: flex;
+  align-items: center;
+  right: 0px;
+  width: 25%;
+  border-style: none;
+}
+.vis-btn>label{
+  width:auto;
+}

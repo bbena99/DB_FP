@@ -1,6 +1,8 @@
-export interface Submission {
+import { Assignment } from "./assignment";
+
+export interface Submission extends Assignment {
   SubmissionId : String,
-  Commentss : String,
+  Comments : String,
   Points : Number,
   SubmisssionStatus : String,
   SubmissionData : Date

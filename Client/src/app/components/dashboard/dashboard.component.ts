@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Assignment } from 'src/app/models/assignment';
 import { Class } from 'src/app/models/class';
 import { Student } from 'src/app/models/student';
+import { Submission } from 'src/app/models/submission';
 import { Teacher } from 'src/app/models/teacher';
 import { AssignmentService } from 'src/app/services/assignment.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -12,50 +13,77 @@ import { ClassService } from 'src/app/services/class.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
+  teacherBool : boolean = false
   byDateBool : Boolean = true
-  byDateMap : Map<String,Assignment[]> = new Map()
-  byClassMap : Map<Number,Assignment[]> = new Map()
+  byDateMapT : Map<String,Assignment[]> = new Map()
+  byClassMapT : Map<String,Assignment[]> = new Map()
+  byDateMapS : Map<String,Submission[]> = new Map()
+  byClassMapS : Map<String,Submission[]> = new Map()
   user! : Student|Teacher
-  assignmentArray! : Assignment[]
 
   constructor(
     private authService : AuthService,
+    private classService : ClassService,
     private assignmentService : AssignmentService
   ) {
-    authService.getAuthenticatedUser().subscribe(
-      u => this.user=u
-    )
-    assignmentService.getAllByUser(this.user)?.subscribe(
-      a => this.assignmentArray=a
-    )
-    if(this.assignmentArray)this.assignmentArray.forEach((assign:Assignment)=>{
-      this.addDate(assign)
-      this.addClass(assign)
+    this.ngOnInit()
+  }
+  ngOnInit(): void {
+    this.authService.getAuthenticatedUser().subscribe(u=>{
+      this.user=u
     })
-  }
-  private addDate(assign:Assignment){
-    let dateArray = this.byDateMap.get(assign.dueData)
-    if(dateArray){
-      dateArray.push(assign)
-      this.byDateMap.set(assign.dueData,dateArray)
+    let classArr:Class[] =[]
+    this.classService.getAllByUser(this.user).subscribe(cArr=>{
+      classArr=cArr
+    })
+    let classID:String[]=[]
+    classArr.forEach(c=>{
+      classID.push(`${c.Department}~${c.CourseNumber}~${c.Section}`)
+    })
+    this.teacherBool = this.authService.isTeacher()
+    if(this.teacherBool){
+      classID.forEach(id=>{
+        this.assignmentService.getAllByTeacher(this.user.Username,id).subscribe(assignArr=>{
+          assignArr.forEach(a=>{
+            let tempArr = this.byDateMapT.get(a.dueData)
+            if(tempArr){
+              tempArr = [...tempArr]
+              tempArr.push(a)
+            }
+            else tempArr=[a]
+            this.byDateMapT.set(a.dueData,tempArr)
+            tempArr = this.byClassMapT.get(id)
+            if(tempArr){
+              tempArr=[...tempArr]
+              tempArr.push(a)
+            }
+            else tempArr=[a]
+            this.byClassMapT.set(id,tempArr)
+          })
+        })
+      })
+    }else{
+      classID.forEach(id=>{
+        this.assignmentService.getAllByStudent(this.user.Username,id).subscribe(subArr=>{
+          subArr.forEach(s=>{
+            let tempArr = this.byDateMapS.get(s.dueData)
+            if(tempArr){
+              tempArr = [...tempArr]
+              tempArr.push(s)
+            }
+            else tempArr=[s]
+            this.byDateMapS.set(s.dueData,tempArr)
+            tempArr = this.byClassMapS.get(id)
+            if(tempArr){
+              tempArr=[...tempArr]
+              tempArr.push(s)
+            }
+            else tempArr=[s]
+            this.byClassMapS.set(id,tempArr)
+          })
+        })
+      })
     }
-    let newArray:Assignment[]=[]
-    newArray.push(assign)
-    this.byDateMap.set(assign.dueData,newArray)
-  }
-  private addClass(assign:Assignment){
-    let classArray = this.byClassMap.get(assign.class.CourseNumber)
-    if(classArray){
-      classArray.push(assign)
-      this.byClassMap.set(assign.class.CourseNumber,classArray)
-    }
-    let newArray:Assignment[]=[]
-    newArray.push(assign)
-    this.byClassMap.set(assign.class.CourseNumber,newArray)
-  }
-
-  changeBool(bool:Boolean){
-    this.byDateBool=bool
   }
 }

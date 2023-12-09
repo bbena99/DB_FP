@@ -2,7 +2,10 @@
   <div class="container">
     <button type="button" *ngFor="let key of classList|keyvalue" class="btn classContainer" (click)="nav(key.key)">
       <div class="classCard">
-        <h3>{{key.key}}</h3>
+        <h3>
+          {{key.key}}
+          <i class="fa-solid fa-share"></i>
+        </h3>
       </div>
     </button>
     <button *ngIf="teacherBool" class="" type="button" class="btn classContainer" (click)="modalBool=true">
@@ -26,7 +29,7 @@
           <i class="fa-solid fa-pen"></i>
           Course Name
         </label>
-        <input type="text" class="form-control" name="Name" placeholder="Name of Course" [(ngModel)]="newClass.Name">
+        <input type="text" class="form-control" name="Name" placeholder="Name of Course" [(ngModel)]="newClass.ClassName">
       </div>
       <div class="form-group">
         <label for="type_of_department">

@@ -1,1 +1,150 @@
-<p>singleclass works!</p>
+<div class="page">
+  <div class="container">
+    <nav id="classNav">
+      <button type="button" class="btn my-btn-s" (click)="page=0">
+        To-Do
+        <i class="fa-solid fa-file"></i>
+      </button>
+      <button type="button" class="btn my-btn-s" (click)="page=1">
+        Grades
+        <i class="fa-solid fa-list-check"></i>
+      </button>
+      <button type="button" class="btn my-btn-s" (click)="page=3" *ngIf="isTeacher">
+        Moderation
+        <i class="fa-solid fa-plus-minus"></i>
+      </button>
+    </nav>
+    <!--Start of Assignments-->
+    <div *ngIf="page===0" class="body">
+      <div class="list" *ngIf="isTeacher">
+        <!--If Teacher-->
+        <button type="button" class="btn assignRowCard my-btn-p" (click)="modalBool=true">
+          Create Assignment
+          <i class="fa-solid fa-plus"></i>
+        </button>
+        <div class="assignRowContainer" *ngFor="let assign of assignmentMap|keyvalue">
+          <button type="button" class="btn assignRowCard">
+            btn
+          </button>
+        </div>
+      </div>
+      <div class="list" *ngIf="!(isTeacher)">
+        <!--Else Student-->
+        <div class="assignRowContainer" *ngFor="let sub of submissionMap|keyvalue">
+          <button class="btn assignRowCard">
+            btn
+          </button>
+        </div>
+      </div>
+    </div>
+    <!--Start of Grades-->
+    <div *ngIf="page===1" class="body">
+      Grades
+    </div>
+    <!--Start of student moderstaion... Needs to be the teacher teaching the class-->
+    <div *ngIf="page===3" class="body">
+      <div class="searchRow">
+        <h3>
+          <i class="fa-solid fa-magnifying-glass"></i>
+          Search
+        </h3>
+        <button type="submit" class="btn my-btn-p" (click)="filter()">Search</button>
+        <div class="input">
+          <label for="studentSearch" class="form-label">
+            <i class="fa-solid fa-user"></i>
+            First Name
+          </label>
+          <input type="text" name="studentSearch" class="form-control" [(ngModel)]="firstNameFilter" placeholder="John">
+        </div>
+        <div class="input">
+          <label for="studentSearch" class="form-label">
+            <i class="fa-solid fa-user"></i>
+            Last Name
+          </label>
+          <input type="text" name="studentSearch" class="form-control" [(ngModel)]="lastNameFilter" placeholder="Smith">
+        </div>
+        <div class="input">
+          <label for="studentSearch" class="form-label">
+            <i class="fa-solid fa-user"></i>
+            Username
+          </label>
+          <input type="text" name="studentSearch" class="form-control" [(ngModel)]="usernameFilter" placeholder="JSmith">
+        </div>
+      </div>
+      <div class="view">
+        <div *ngFor="let student of filteredMap|keyvalue" class="rowContainer">
+          <div class="rowCard">
+            <input type="checkbox" name="classRoster" [checked]="classRoster?.get(student.key)" class="form-check-input" (click)="classRoster?.set(student.key,!getBool(student.key))">
+            <label for="classRoster" class="form-check-label">
+              <p>
+                <i class="fa-solid fa-user"></i>
+                Name:{{" '"+student.value.FirstName}} {{student.value.LastName+"'"}}
+              </p>
+              <p>
+                <i class="fa-solid fa-user"></i>
+                Username:{{" '"+student.value.Username+"'"}}
+              </p>
+            </label>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn my-btn-p save-btn" (click)="runSave()">
+        Save
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<!-- Start of the dialog/modal popup for creating a user -->
+<dialog *ngIf="modalBool"><!--I hate this-->
+  <form #createForm class="user-form float-md-start">
+    <h2>
+      Create Assignment
+    </h2>
+    <div class="inputContainer">
+      <label for="assignName" placeholder="Homework 1">
+        <i class="fa-solid fa-file-signature"></i>
+        Name of Assignment
+      </label>
+      <input name="assignName" class="form-control" type="text" [(ngModel)]="newAssign.AssignName" placeholder="Homework 1">
+    </div>
+    <div class="inputContainer">
+      <label for="description">
+        <i class="fa-solid fa-paragraph"></i>
+        Description
+      </label>
+      <textarea name="description" class="form-control" id="description" cols="30" rows="5" placeholder="Make 2 queries&#10;  Then export as to a PDF"></textarea>
+    </div>
+    <div class="inputContainer">
+      <label for="points">
+        <i class="fa-solid fa-chart-line"></i>
+        Total Points
+      </label>
+      <input name="points" class="form-control" type="number" [(ngModel)]="newAssign.TotalPoints">
+    </div>
+    <div class="inputContainer">
+      <label for="date">Due Date and Time</label>
+      <input name="date" class="form-control half" type="datetime-local" [(ngModel)]="newAssign.dueData">
+    </div>
+    <div class="inputContainer">
+      <button type="button" class="btn my-btn-s vis-btn" (click)="newAssign.Visibility=!newAssign.Visibility">
+        <label for="visibility" class="form-check-label">Visiblity:</label>
+        <i *ngIf="newAssign.Visibility" class="fa-solid fa-eye"></i>
+        <i *ngIf="!newAssign.Visibility" class="fa-solid fa-eye-slash"></i>
+      </button>
+    </div>
+    <button class="btn my-btn-p inputContainer" (click)="debug()">
+      test
+    </button>
+    <div id="footer">
+      <button type="button" (click)="modalBool=false" class="btn my-btn-s">
+        <i class="fa-regular fa-circle-xmark"></i>
+        Close
+      </button>
+      <button type="submit" (click)="createAssign()" class="btn my-btn-p float-end">
+        Create Assignment
+        <i class="fa-solid fa-circle-plus"></i>
+      </button>
+    </div>
+  </form>
+</dialog>

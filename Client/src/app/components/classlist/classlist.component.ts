@@ -55,10 +55,11 @@ export class ClasslistComponent {
       LastName:"",
       DepartmentId:0,
       ReportsTo:"",
-      Name:"",
+      ClassName:"",
       Department:this.departLabel[this.departIndex],
       CourseNumber:0,
-      Section:0
+      Section:0,
+      TeacherUsername:""
     }
     console.log(this.newClass)
   }
@@ -69,7 +70,7 @@ export class ClasslistComponent {
     if(this.teacherBool==false)return
     //@ts-ignore
     this.classService.createClass(this.user,this.newClass).subscribe((c)=>{
-      this.newClass.Name=""
+      this.newClass.ClassName=""
       this.newClass.CourseNumber=0
       this.newClass.Section=0
       this.router.navigateByUrl("/Classes")
