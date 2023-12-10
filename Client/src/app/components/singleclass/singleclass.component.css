@@ -1,4 +1,4 @@
-.constainer{
+.container{
   height: 100%;
 }
 #classNav{
@@ -18,11 +18,24 @@
   flex-wrap: wrap;
   justify-content: center;
 }
+.assignRowContainer{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 .assignRowCard{
+  display: flex;
+  justify-content: space-between;
   width: 90%;
+  margin-bottom: 20px;
   box-shadow: 4px 4px 15px #000000AA,
               4px 4px 10px #00000055,
               4px 4px 05px #00000000;
+}
+.assignRowCard>div{
+  display: flex;
+  width: 50%;
 }
 /* Start of Moderation CSS*/
 .searchRow{
@@ -95,10 +108,10 @@
 }
 .save-btn{
   position: absolute;
-  top: 90vh;
-  right: 5vw;
-  width: 6vw;
-  height: 4vh;
+  bottom: 5vh;
+  right: 4vw;
+  width: 7vw;
+  height: 5vh;
   font-size: x-large;
 }
 
@@ -125,7 +138,7 @@
   display: flex;
   align-items: center;
   right: 0px;
-  width: 25%;
+  width: 28%;
   border-style: none;
 }
 .vis-btn>label{

@@ -46,13 +46,13 @@ export class DashboardComponent implements OnInit {
       classID.forEach(id=>{
         this.assignmentService.getAllByTeacher(this.user.Username,id).subscribe(assignArr=>{
           assignArr.forEach(a=>{
-            let tempArr = this.byDateMapT.get(a.dueData)
+            let tempArr = this.byDateMapT.get(a.DueDate)
             if(tempArr){
               tempArr = [...tempArr]
               tempArr.push(a)
             }
             else tempArr=[a]
-            this.byDateMapT.set(a.dueData,tempArr)
+            this.byDateMapT.set(a.DueDate,tempArr)
             tempArr = this.byClassMapT.get(id)
             if(tempArr){
               tempArr=[...tempArr]
@@ -67,13 +67,13 @@ export class DashboardComponent implements OnInit {
       classID.forEach(id=>{
         this.assignmentService.getAllByStudent(this.user.Username,id).subscribe(subArr=>{
           subArr.forEach(s=>{
-            let tempArr = this.byDateMapS.get(s.dueData)
+            let tempArr = this.byDateMapS.get(s.DueDate)
             if(tempArr){
               tempArr = [...tempArr]
               tempArr.push(s)
             }
             else tempArr=[s]
-            this.byDateMapS.set(s.dueData,tempArr)
+            this.byDateMapS.set(s.DueDate,tempArr)
             tempArr = this.byClassMapS.get(id)
             if(tempArr){
               tempArr=[...tempArr]

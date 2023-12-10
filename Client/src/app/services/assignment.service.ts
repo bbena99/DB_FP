@@ -37,6 +37,8 @@ export class AssignmentService implements OnInit {
   private setSingleSubmission(sub:Submission):Map<String,Submission>{
     this.submissionMap.set(sub.SubmissionId,sub)
     this.submissionSubject.next(this.submissionMap)
+    console.log("assignment.service.ts.setSingleSubmission()")
+    console.log(this.submissionMap)
     return this.submissionMap
   }
   private setMultiSubmissions(subs:Submission[]):Map<String,Submission>{
@@ -44,31 +46,42 @@ export class AssignmentService implements OnInit {
       this.submissionMap.set(sub.SubmissionId,sub)
     })
     this.submissionSubject.next(this.submissionMap)
+    console.log("assignment.service.ts.setMultiSubmission()")
+    console.log(this.submissionMap)
     return this.submissionMap
   }
   public getAllSubmissions():Map<String,Submission>{
+    console.log("assignment.service.ts.getAllSubmission()")
+    console.log(this.submissionMap)
     return this.submissionMap
   }
   public getSingleSubmission(id:String):Submission|undefined{
+    console.log("assignment.service.ts.getSingleSubmission()")
     return this.submissionMap.get(id)
   }
 
   private setSingleAssignment(assign:Assignment):Map<String,Assignment>{
-    this.assignMap.set(assign.AssignmentId,assign)
+    this.assignMap.set(assign.AssignmentID,assign)
     this.assignSubject.next(this.assignMap)
+    console.log("assignment.service.ts.setSingleAssignments()")
+    console.log(this.assignMap)
     return this.assignMap
   }
   private setMultiAssignments(assigns:Assignment[]):Map<String,Assignment>{
     assigns.forEach(assign=>{
-      this.assignMap.set(assign.AssignmentId,assign)
+      this.assignMap.set(assign.AssignmentID,assign)
     })
     this.assignSubject.next(this.assignMap)
+    console.log("assignment.service.ts.setMultiAssignments()")
+    console.log(this.assignMap)
     return this.assignMap
   }
   public getAllAssignments():Map<String,Assignment>{
+    console.log(this.assignMap)
     return this.assignMap
   }
   public getSingleAssignment(id:String):Assignment|undefined{
+    console.log(this.assignMap.get(id))
     return this.assignMap.get(id)
   }
 

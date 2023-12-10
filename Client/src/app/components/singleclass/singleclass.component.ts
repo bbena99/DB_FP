@@ -37,13 +37,14 @@ export class SingleclassComponent implements OnInit {
     this.ngOnInit()
     let date = new Date()
     this.newAssign = {
-      AssignmentId:"",
-      AssignName:"",
+      AssignmentID:"",
+      AssignmentName:"",
       Description:"",
-      FileType:[],
       TotalPoints:0,
       Visibility:false,
-      dueData:"",
+      DueDate:"",
+      maxCount:0,
+      actualCount:0,
       ...this.class
     }
   }
@@ -75,7 +76,7 @@ export class SingleclassComponent implements OnInit {
       })
       this.assignmentService.getAllByTeacher(this.class.Username,classId).subscribe(assignArr=>{
         assignArr.forEach(a=>{
-          this.assignmentMap!.set(a.AssignmentId,a)
+          this.assignmentMap!.set(a.AssignmentID,a)
         })
       })
     } else {
@@ -113,13 +114,14 @@ export class SingleclassComponent implements OnInit {
     this.assignmentService.createNewAssignment(this.class.Username,classId,this.newAssign).subscribe(a=>{
       let date = new Date()
       this.newAssign = {
-        AssignmentId:"",
-        AssignName:"",
+        AssignmentID:"",
+        AssignmentName:"",
         Description:"",
-        FileType:[],
         TotalPoints:0,
         Visibility:false,
-        dueData:"",
+        DueDate:"",
+        maxCount:0,
+        actualCount:0,
         ...this.class
       }
     })

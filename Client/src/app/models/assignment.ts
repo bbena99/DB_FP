@@ -1,11 +1,12 @@
 import { Class } from "./class";
 
 export interface Assignment extends Class {
-  AssignmentId : String,
-  AssignName : String,
+  AssignmentID: String,
+  AssignmentName : String,
   Description : String,
-  FileType : String[],
   TotalPoints : number,
   Visibility : Boolean,
-  dueData : String,
+  DueDate : String,
+  maxCount : number,
+  actualCount : number
 }

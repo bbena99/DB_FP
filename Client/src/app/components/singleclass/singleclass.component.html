@@ -19,12 +19,22 @@
       <div class="list" *ngIf="isTeacher">
         <!--If Teacher-->
         <button type="button" class="btn assignRowCard my-btn-p" (click)="modalBool=true">
-          Create Assignment
-          <i class="fa-solid fa-plus"></i>
+          <div>
+            Create Assignment
+            <i class="fa-solid fa-plus"></i>
+          </div>
         </button>
         <div class="assignRowContainer" *ngFor="let assign of assignmentMap|keyvalue">
-          <button type="button" class="btn assignRowCard">
-            btn
+          <button type="button" class="btn assignRowCard my-btn-p">
+            <div>
+              {{assign.value.AssignmentName}}
+            </div>
+            <p style="margin: 0px;">
+              {{assign.value.actualCount||'-'}}/{{assign.value.maxCount}}
+            </p>
+            <p>
+              Due: {{assign.value.DueDate}}
+            </p>
           </button>
         </div>
       </div>
@@ -106,14 +116,14 @@
         <i class="fa-solid fa-file-signature"></i>
         Name of Assignment
       </label>
-      <input name="assignName" class="form-control" type="text" [(ngModel)]="newAssign.AssignName" placeholder="Homework 1">
+      <input name="assignName" class="form-control" type="text" [(ngModel)]="newAssign.AssignmentName" placeholder="Homework 1">
     </div>
     <div class="inputContainer">
       <label for="description">
         <i class="fa-solid fa-paragraph"></i>
         Description
       </label>
-      <textarea name="description" class="form-control" id="description" cols="30" rows="5" placeholder="Make 2 queries&#10;  Then export as to a PDF"></textarea>
+      <textarea name="description" class="form-control" id="description" [(ngModel)]="newAssign.Description" cols="30" rows="5" placeholder="Make 2 queries&#10;  Then export to a PDF"></textarea>
     </div>
     <div class="inputContainer">
       <label for="points">
@@ -124,7 +134,7 @@
     </div>
     <div class="inputContainer">
       <label for="date">Due Date and Time</label>
-      <input name="date" class="form-control half" type="datetime-local" [(ngModel)]="newAssign.dueData">
+      <input name="date" class="form-control" type="datetime-local" [(ngModel)]="newAssign.DueDate">
     </div>
     <div class="inputContainer">
       <button type="button" class="btn my-btn-s vis-btn" (click)="newAssign.Visibility=!newAssign.Visibility">
