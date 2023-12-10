@@ -82,6 +82,15 @@ router.post("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions
         res.status(500).send(err)
       }
       sqlquery=
+      `INSERT INTO TURNSIN (Username, SubmissionID)
+        VALUES ('${params.username}', '${id}')`
+        mysqlConnection.query(sqlquery,(err,results,fields)=>{
+          if(err){
+            console.error(err)
+            res.status(500).send(err)
+          }
+        })
+      sqlquery=
       `SELECT * FROM Submissions
         WHERE Submissions.SubmissionID = '${id}'`
       console.log(results)
