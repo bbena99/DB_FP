@@ -66,6 +66,22 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
 */
 router.get("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   const params = req.params
+  const classId = req.params.split('~')
+
+  let sqlquery=
+  `SELECT Assignments.*
+    FROM Class JOIN GIVES JOIN Assignments
+    ON Class.Department = GIVES.Department AND Class.CourseNumber = GIVES.CourseNumber AND Class.Section = GIVES.Section
+    AND Assignments.AssignmentID = GIVES.AssignmentID
+    WHERE Class.Department = '${classId(0)}' AND Class.CourseNumber = ${classId(1)} AND Class.Section = ${classId(2)}`
+    mysqlConnection.query(sqlquery, (err,results, fields)=>{
+      if(err){
+        console.log(err)
+        res.status(500).send(err)
+      }
+      console.log(results)
+      res.status(200).send(results)
+    })
 })
 
 /**
