@@ -51,9 +51,9 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
         console.error(err)
         res.status(500).send(err)
       }
-       //Don't need to send anything back to frontend.
+      //Don't need to send anything back to frontend.
       console.log(results)
-      res.status(200).send(results[0])
+      res.status(200).send()
     })
 })
 
