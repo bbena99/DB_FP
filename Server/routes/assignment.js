@@ -43,7 +43,7 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
 
   //Make creation query here:
   let sqlquery =
-  `INSERT INTO Assignments (Name, Description, AssignmentID, TotalPoints, DueDate, Visibility)
+  `INSERT INTO Assignments (AssignmentName, Description, AssignmentID, TotalPoints, DueDate, Visibility)
     VALUES ('${body.AssignName}', '${body.Description}', '${id}',${body.TotalPoints}, '${body.dueData}', ${body.Visibility})`
 
     mysqlConnection.query(sqlquery, (err,results,fields)=>{
@@ -52,9 +52,19 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
         res.status(500).send(err)
       }
       sqlquery=
-      `SELECT *
-        FROM Assignments
-        WHERE AssignmentID = '${id}'`
+      `SELECT *, (SELECT count(*)
+          FROM Student JOIN TAKES JOIN Class
+        ON Class.Department = TAKES.Department 
+                    AND Class.CourseNumber = TAKES.CourseNumber 
+                    AND Class.Section = TAKES.Section) AS maxCount,
+  (SELECT count(*) 
+      FROM TURNSIN JOIN Submissions JOIN SUBMITSTO JOIN Assignments
+                ON Submissions.SubmissionID = TURNSIN.SubmissionID
+                AND Submissions.SubmissionID = SUBMITSTO.SubmissionID
+                AND SUBMITSTO.AssignmentID = Assignments.AssignmentID
+                GROUP BY TURNSIN.Username) AS actualCount
+FROM Assignments NATURAL JOIN GIVES NATURAL JOIN Class
+WHERE Assignments.AssignmentID = '${id}'`
         mysqlConnection.query(sqlquery, (err,results,fields)=>{
           if(err){
             console.error(err)
@@ -81,17 +91,26 @@ router.get("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   const classId = req.params.split('~')
 
   let sqlquery=
-  `SELECT * FROM Teacher`
-  if(req.query.userType=="student")sqlquery = 
-  ``
-  mysqlConnection.query(sqlquery, (err,results, fields)=>{
-    if(err){
-      console.log(err)
-      res.status(500).send(err)
-    }
-    console.log(results)
-    res.status(200).send(results)
-  })
+  `SELECT *, (SELECT count(*)
+  FROM Student JOIN TAKES JOIN Class
+    ON Class.Department = TAKES.Department 
+                AND Class.CourseNumber = TAKES.CourseNumber 
+                AND Class.Section = TAKES.Section) AS maxCount,
+(SELECT count(*) 
+  FROM TURNSIN JOIN Submissions JOIN SUBMITSTO JOIN Assignments
+            ON Submissions.SubmissionID = TURNSIN.SubmissionID
+            AND Submissions.SubmissionID = SUBMITSTO.SubmissionID
+            AND SUBMITSTO.AssignmentID = Assignments.AssignmentID
+            GROUP BY TURNSIN.Username) AS actualCount
+FROM Assignments NATURAL JOIN GIVES NATURAL JOIN Class`
+    mysqlConnection.query(sqlquery, (err,results, fields)=>{
+      if(err){
+        console.log(err)
+        res.status(500).send(err)
+      }
+      console.log(results)
+      res.status(200).send(results)
+    })
 })
 
 /**
