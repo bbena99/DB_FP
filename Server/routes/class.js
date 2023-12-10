@@ -25,10 +25,10 @@ router.all('/Users/:Username/Classes*',(req,res,next)=>{
  * @returns {boolean}
  */
 router.post('/Users/:Username/Classes/:ClassId',(req,res,next)=>{
-  console.log("POST Users/:Username/Classes/:ClassId")
+  //console.log("POST Users/:Username/Classes/:ClassId")
   let stdMap = new Map()
   let stdArr = req.body
-  console.log(stdArr)
+  //console.log(stdArr)
   stdArr.map(std=>{
     stdMap.set(std.Username,std)
   })
@@ -57,7 +57,7 @@ router.post('/Users/:Username/Classes/:ClassId',(req,res,next)=>{
           console.error(err)
           res.status(500).send(err)
         }
-        console.log(results)
+        //console.log(results)
       })
     })
     deleteArr.map(Username=>{
@@ -69,10 +69,10 @@ router.post('/Users/:Username/Classes/:ClassId',(req,res,next)=>{
           console.error(err)
           res.status(500).send(err)
         }
-        console.log(results)
+        //console.log(results)
       })
     })
-    console.log(results)
+    //console.log(results)
     res.status(200).send(true)
   })
 })
@@ -88,8 +88,8 @@ router.post('/Users/:Username/Classes/:ClassId',(req,res,next)=>{
  */
 router.get('/Users/:Username/Classes/:ClassId',(req,res,next)=>{
   let strarr = req.params.ClassId.split('~')
-  console.log('GET /Users/:Username/Classes/:ClassId')
-  console.log(strarr)
+  //console.log('GET /Users/:Username/Classes/:ClassId')
+  //console.log(strarr)
   let sqlquery=
   `SELECT Student.* 
     FROM Student JOIN TAKES
@@ -102,7 +102,7 @@ router.get('/Users/:Username/Classes/:ClassId',(req,res,next)=>{
         console.error(err)
         res.status(500).send(err)
       }
-      console.log(results)
+      //console.log(results)
       res.status(200).send(results)
     })
 })
@@ -121,10 +121,10 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
   const username = req.params.Username
   let newClass = req.body
   //Debug console.logs
-  console.log(`  POST to "/User/:Username/Classes" was called
-  Username : ${username}
-  Class :`)
-  console.log(newClass)
+  // console.log(`  POST to "/User/:Username/Classes" was called
+  // Username : ${username}
+  // Class :`)
+  //console.log(newClass)
 
   //Check if teacher Return status(401) if not
   let sqlquery=
@@ -134,7 +134,7 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
       console.error(err)
       res.status(404).send(err)
     }
-    console.log(results);
+    //console.log(results);
     //Make query to make class
     //Return status(200)
     sqlquery=
@@ -145,7 +145,7 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
         console.error(err)
         res.status(500).send(err)
       }
-      console.log(results)
+      //console.log(results)
       sqlquery=
       `INSERT INTO TEACHES (Username, Department, CourseNumber, Section)
           VALUES ('${username}', '${newClass.Department}', ${newClass.CourseNumber}, ${newClass.Section})`
@@ -154,7 +154,7 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
           console.error(err)
           res.status(500).send(err)
         }
-        console.log(results)
+        //console.log(results)
         res.status(200).send(results)
       })
     })
@@ -204,7 +204,7 @@ router.get('/Users/:Username/Classes', (req,res,next)=>{
     results.map((r)=>{
       delete r.Password
     })
-    console.log(results)
+    //console.log(results)
     res.status(200).send(results)
   })
 })
