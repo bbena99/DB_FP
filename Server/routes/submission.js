@@ -24,12 +24,14 @@ router.all("/Users/:username/Classes/:classId/Assignments/:assignId",(req,res,ne
  * @param req.params.username username of the user
  * @param req.params.classId id of the class that has the assignments
  * @param req.params.assignId id of the assignment that has the submissions
+ * @param req.query.userType type of user getting submissions "Student"|"Teacher"
  * 
  * @returns {Submission[]}
 */
 router.get("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   const params = req.params
   const classId = params.classId.split('~')
+  const userType = req.query.userType
 
   //sqlquery here
   let sqlquery =

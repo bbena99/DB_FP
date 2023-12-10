@@ -1,4 +1,5 @@
 const express = require('express');
+const uuidv4 = require('uuid')
 const { mysqlConnection } = require('../sqlConnect/Connection');
 var router = express.Router();
 
@@ -29,7 +30,6 @@ router.all('Users/:Username/Classes/:ClassId/Assignments',(req,res,next)=>{
 router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   const params = req.params
   const body = req.body
-  const uuidv4 = require('uuid')
   console.log(body)
 
   //Check for valid teacher and teacher teaches this class
