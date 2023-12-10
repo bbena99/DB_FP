@@ -13,7 +13,7 @@ const uuidv4 = require('uuid')
  * @param req.params.classId id of the class that has the assignments
  * @param req.params.assignId id of the assignment that has the submissions
 */
-router.all("/Users/:username/Classes/:classId/Assignments/:assignId",(req,res,next)=>{
+router.all("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions",(req,res,next)=>{
   console.log("submission.js is entered sucessfully ☺")
   console.log(req.params)
   next()
@@ -37,7 +37,7 @@ router.get("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions"
   //sqlquery here
   let sqlquery =
   `SELECT *
-    FROM Submissions JOINS SUBMITSTO JOINS GIVES
+    FROM Submissions JOIN SUBMITSTO JOIN GIVES
       ON Submissions.SubmissionID = SUBMITSTO.SubmissionID
       AND SUBMITSTO.AssignmentID = '${params.assignId}'
       AND GIVES.AssignmentID = '${params.assignId}'`
@@ -74,6 +74,7 @@ router.post("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions
     if(err){
       console.error(err)
       res.status(500).send(err)
+      throw err
     }
     sqlquery=
     `INSERT INTO SUBMITSTO (AssignmentID, SubmissionID)
@@ -82,6 +83,7 @@ router.post("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions
       if(err){
         console.error(err)
         res.status(500).send(err)
+        throw err
       }
       sqlquery=
       `INSERT INTO TURNSIN (Username, SubmissionID)
