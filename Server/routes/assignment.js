@@ -102,7 +102,7 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
 */
 router.get("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   const params = req.params
-  const classId = req.params.split('~')
+  const classId = params.classId.split('~')
 
   let sqlquery=
   `SELECT *, (SELECT count(*)
@@ -111,14 +111,14 @@ router.get("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
                 AND Class.CourseNumber = TAKES.CourseNumber 
                 AND Class.Section = TAKES.Section
                 AND Student.Username = TAKES.Username
-                WHERE Class.Department = '${classId(0)}' AND Class.CourseNumber = ${classId(1)} and Class.Section = ${classId(2)}) AS maxCount,
+                WHERE Class.Department = '${classId[0]}' AND Class.CourseNumber = ${classId[1]} and Class.Section = ${classId[2]}) AS maxCount,
 (SELECT count(*) 
   FROM TURNSIN JOIN Submissions JOIN SUBMITSTO JOIN Assignments JOIN GIVES
             ON Submissions.SubmissionID = TURNSIN.SubmissionID
             AND Submissions.SubmissionID = SUBMITSTO.SubmissionID
             AND SUBMITSTO.AssignmentID = Assignments.AssignmentID
             AND Assignments.AssignmentID = GIVES.AssignmentID
-            WHERE Class.Department = '${classId(0)}' AND Class.CourseNumber = ${classId(1)} and Class.Section = ${classId(2)}
+            WHERE Class.Department = '${classId[0]}' AND Class.CourseNumber = ${classId[1]} and Class.Section = ${classId[2]}
             GROUP BY TURNSIN.Username) AS actualCount
 FROM Assignments NATURAL JOIN GIVES NATURAL JOIN Class`
     mysqlConnection.query(sqlquery, (err,results, fields)=>{
