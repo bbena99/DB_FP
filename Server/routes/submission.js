@@ -90,5 +90,36 @@ router.post("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions
   })
 })
 
+/**
+ * PUT "/Users/:username/Classes/:classId/Assignments/:assignId"
+ * @description Update Submission
+ * 
+ * @param req.params.username username of the user
+ * @param req.params.classId id of the class that has the assignments
+ * @param req.params.assignId id of the assignment that has the submissions
+ * @param req.body newSubmission
+ * 
+ * @returns {Submission[]}
+*/
+router.put("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions/:submissionID",(req,res,next)=>{
+  const params = req.params
+  const classId = params.classId.split('~')
+  let data = req.body
+  //sqlquery here
+  let sqlquery =
+  `UPDATE Submissions
+    SET 
+    Submissions.Points = ${data.Points}
+    Submissions.Comments = '${data.Comments}'
+      WHERE SubmissionID = '${params.submissionID}`
+  mysqlConnection.query(sqlquery,(err,results,fields)=>{
+    if(err){
+      console.error(err)
+      res.status(500).send(err)
+    }
+      console.log(results)
+      res.status(200).send(results)
+    })
+  })
 //Export the router
 module.exports = router;
