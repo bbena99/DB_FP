@@ -36,7 +36,7 @@ router.get("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions"
 
   //sqlquery here
   let sqlquery =
-  `SELECT * FROM Submissions JOINS SUBMITSTO
+  `SELECT Submissions.* FROM Submissions JOINS SUBMITSTO
   ON Submissions.SubmissionID = SUBMITSTO.SubmissionID
   AND SUBMITSTO.AssignmentID = '${params.assignId}'`
   mysqlConnection.query(sqlquery, (err,results,fields)=>{
