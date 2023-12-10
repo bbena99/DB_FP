@@ -96,6 +96,19 @@ router.get("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
 */
 router.get("/User/:username/Classes/:classId/Assignments/:assignmentId",(req,res,next)=>{
   let id = req.params.assignmentId
+
+  let sqlquery=
+  `SELECT *
+    FROM Assignments
+    WHERE AssignmentID = '${id}'`
+    mysqlConnection.sqlquery(sqlquery, (err,results,fields)=>{
+      if(err){
+        console.log(err)
+        res.status(500).send(err)
+      }
+      console.log(results)
+      res.status(200).send(results)
+    })
 })
 
 //Export the router
