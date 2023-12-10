@@ -109,7 +109,8 @@ router.get("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   FROM Student JOIN TAKES JOIN Class
     ON Class.Department = TAKES.Department 
                 AND Class.CourseNumber = TAKES.CourseNumber 
-                AND Class.Section = TAKES.Section) AS maxCount,
+                AND Class.Section = TAKES.Section
+                WHERE Class.Department = '${classId(0)}' AND Class.CourseNumber = ${classId(1)} and Class.Section = ${classId(2)}) AS maxCount,
 (SELECT count(*) 
   FROM TURNSIN JOIN Submissions JOIN SUBMITSTO JOIN Assignments
             ON Submissions.SubmissionID = TURNSIN.SubmissionID
