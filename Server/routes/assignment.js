@@ -1,4 +1,5 @@
 const express = require('express');
+const { mysqlConnection } = require('../sqlConnect/Connection');
 var router = express.Router();
 
 //Start of variables to use
@@ -28,6 +29,7 @@ router.all('Users/:Username/Classes/:ClassId/Assignments',(req,res,next)=>{
 router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   const params = req.params
   const body = req.body
+  const uuidv4 = require('uuid')
   console.log(body)
 
   //Check for valid teacher and teacher teaches this class
@@ -39,9 +41,18 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
 
   //Make creation query here:
   let sqlquery =
-  ``
-  //Don't need to send anything back to frontend.
-  res.status(200).send()
+  `INSERT INTO Assignments (Name, Description, AssignmentID, TotalPoints, DueDate, Visibility)
+    VALUES ('${body.AssignName}', '${body.Description}', '${uuidv4}',${body.TotalPoints}, '${body.dueData}', ${body.Visibility})`
+
+    mysqlConnection.query(sqlquery, (err,results,fields)=>{
+      if(err){
+        console.error(err)
+        res.status(500).send(err)
+      }
+       //Don't need to send anything back to frontend.
+      console.log(results)
+      res.status(200).send()
+    })
 })
 
 /**
@@ -55,6 +66,22 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
 */
 router.get("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   const params = req.params
+  const classId = req.params.split('~')
+
+  let sqlquery=
+  `SELECT Assignments.*
+    FROM Class JOIN GIVES JOIN Assignments
+    ON Class.Department = GIVES.Department AND Class.CourseNumber = GIVES.CourseNumber AND Class.Section = GIVES.Section
+    AND Assignments.AssignmentID = GIVES.AssignmentID
+    WHERE Class.Department = '${classId(0)}' AND Class.CourseNumber = ${classId(1)} AND Class.Section = ${classId(2)}`
+    mysqlConnection.query(sqlquery, (err,results, fields)=>{
+      if(err){
+        console.log(err)
+        res.status(500).send(err)
+      }
+      console.log(results)
+      res.status(200).send(results)
+    })
 })
 
 /**
