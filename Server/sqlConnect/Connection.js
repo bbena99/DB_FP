@@ -23,7 +23,8 @@ mysqlConnection.connect((err) => {
 var query =
 `SELECT *
   FROM Teacher
-  WHERE Teacher.ReportsTo IS NULL`
+  WHERE Teacher.ReportsTo IS NULL
+  ORDER BY DepartmentNumber`
 mysqlConnection.query(query,(err,results,fields)=>{
   //console.log(results)
   results.map((r,index)=>{

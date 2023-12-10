@@ -5,9 +5,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var classRouter = require('./routes/class')
 var authRouter = require('./routes/auth')
 var userRouter = require('./routes/user')
-var classRouter = require('./routes/class')
 var assignmentRouter = require('./routes/assignment')
 var submissionsRouter = require('./routes/submission')
 
@@ -39,7 +39,6 @@ app.use(express.static(path.join(__dirname, 'client')));//need to change later
  * 502: Server Timed out (Level fucked)
  */
 const api = '/api/v1';
-
 app.use(api, submissionsRouter) //used for submission endpoints
 app.use(api, assignmentRouter) //used for assignment endpoints
 app.use(api, classRouter) //used for classes endpoints
