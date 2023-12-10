@@ -51,9 +51,18 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
         console.error(err)
         res.status(500).send(err)
       }
-      //Don't need to send anything back to frontend.
-      console.log(results)
-      res.status(200).send()
+      sqlquery=
+      `SELECT *
+        FROM Assignments
+        WHERE AssignmentID = '${id}'`
+        mysqlConnection.query(sqlquery, (err,results,fields)=>{
+          if(err){
+            console.error(err)
+            res.status(500).send(err)
+          }
+          console.log(results)
+          res.status(200).send(results)
+        })
     })
 })
 
