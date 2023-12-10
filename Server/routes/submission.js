@@ -1,7 +1,7 @@
 const express = require('express');
 const { mysqlConnection } = require('../sqlConnect/Connection');
 var router = express.Router();
-
+const uuidv4 = require('uuid')
 //Start of variables to use
 
 //Start of endpoints
@@ -36,7 +36,17 @@ router.get("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions"
 
   //sqlquery here
   let sqlquery =
-  `INSERT`
+  `SELECT * FROM Submissions JOINS SUBMITSTO
+  ON Submissions.SubmissionID = SUBMITSTO.SubmissionID
+  AND SUBMITSTO.AssignmentID = '${params.assignId}'`
+  mysqlConnection.query(sqlquery, (err,results,fields)=>{
+    if(err){
+      console.error(err)
+      res.status(500).send(err)
+    }
+    console.log(results)
+    res.status(200).send(results)
+  })
 })
 /**
  * POST "/Users/:username/Classes/:classId/Assignments/:assignId"
@@ -53,12 +63,11 @@ router.post("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions
   const params = req.params
   const classId = params.classId.split('~')
   const newSubmission = req.body
-
+  let id = uuidv4.v4()
   //sqlquery here
   let sqlquery =
-  `SELECT * FROM Submissions JOINS SUBMITSTO
-    ON Submissions.SubmissionID = SUBMITSTO.SubmissionID
-    AND SUBMITSTO.AssignmentID = '${params.assignId}'`
+  `INSERT INTO Submissions (SubmissionID, SubmissionDate, StudentAnswer)
+    VALUES ('${id}', '${newSubmission.Date}', '${newSubmission.StudentAnswer}')`
   mysqlConnection.query(sqlquery,(err,results,fields)=>{
     if(err){
       console.error(err)
