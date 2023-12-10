@@ -31,8 +31,13 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   const params = req.params
   const body = req.body
   console.log(body)
+
+  //Check for valid teacher and teacher teaches this class
+  //You will actually have to query the db for this value
   if(params.username==undefined)res.status(401).send("Invalid user tried to make an Assignment")
 
+  //console.log(params)
+  //console.log(body)
   let id = uuidv4.v4()
   console.log(id)
 
@@ -41,39 +46,42 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   `INSERT INTO Assignments (AssignmentName, Description, AssignmentID, TotalPoints, DueDate, Visibility)
     VALUES ('${body.AssignName}', '${body.Description}', '${id}',${body.TotalPoints}, '${body.dueData}', ${body.Visibility})`
 
-  mysqlConnection.query(sqlquery, (err,results,fields)=>{
-    if(err){
-      console.error(err)
-      res.status(500).send(err)
-    }
-    sqlquery=
-    `SELECT *,
-      (SELECT count(*)
-        FROM Student JOIN TAKES JOIN Class
-        ON Class.Department = TAKES.Department 
-          AND Class.CourseNumber = TAKES.CourseNumber 
-          AND Class.Section = TAKES.Section) AS maxCount,
-      (SELECT count(*) 
-        FROM TURNSIN JOIN Submissions JOIN SUBMITSTO JOIN Assignments
-          ON Submissions.SubmissionID = TURNSIN.SubmissionID
-          AND Submissions.SubmissionID = SUBMITSTO.SubmissionID
-          AND SUBMITSTO.AssignmentID = Assignments.AssignmentID
-          GROUP BY TURNSIN.Username) AS actualCount
-      FROM Assignments JOIN GIVES JOIN Class`
-      //WHERE Assignments.AssignmentID = '${id}'`
     mysqlConnection.query(sqlquery, (err,results,fields)=>{
       if(err){
         console.error(err)
         res.status(500).send(err)
       }
-      console.log(results)
-      res.status(200).send(results)
+      sqlquery=
+      `INSERT INTO GIVES ()`//TRAVIS HERE
+      mysqlConnection.query(sqlquery,(err,results,fields)=>{
+        sqlquery=
+        `SELECT *, (SELECT count(*)
+        FROM Student JOIN TAKES JOIN Class
+        ON Class.Department = TAKES.Department 
+        AND Class.CourseNumber = TAKES.CourseNumber 
+        AND Class.Section = TAKES.Section) AS maxCount,
+        (SELECT count(*) 
+        FROM TURNSIN JOIN Submissions JOIN SUBMITSTO JOIN Assignments
+        ON Submissions.SubmissionID = TURNSIN.SubmissionID
+        AND Submissions.SubmissionID = SUBMITSTO.SubmissionID
+        AND SUBMITSTO.AssignmentID = Assignments.AssignmentID
+        GROUP BY TURNSIN.Username) AS actualCount
+        FROM Assignments NATURAL JOIN GIVES NATURAL JOIN Class
+        WHERE Assignments.AssignmentID = '${id}'`
+        mysqlConnection.query(sqlquery, (err,results,fields)=>{
+          if(err){
+            console.error(err)
+            res.status(500).send(err)
+          }
+          console.log(results)
+          res.status(200).send(results)
+        })
+      })
     })
-  })
 })
 
 /**
- * GET "/Users/:username/Classes/:classId/Assignments"
+ * GET "/Assignments"
  * @description Get all assignments for a given class
  * 
  * @param req.params.username username of the user
@@ -84,37 +92,29 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
 */
 router.get("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   const params = req.params
-  const classId = params.classId.split('~')
-  console.log(classId)
+  const classId = req.params.split('~')
+
   let sqlquery=
-  `SELECT *,
-    (SELECT count(*)
-      FROM Student JOIN TAKES JOIN Class
-      ON Class.Department = TAKES.Department 
-          AND Class.CourseNumber = TAKES.CourseNumber 
-          AND Class.Section = TAKES.Section) AS maxCount,
-    (SELECT count(*) 
-      FROM TURNSIN JOIN Submissions JOIN SUBMITSTO JOIN Assignments
-      ON Submissions.SubmissionID = TURNSIN.SubmissionID
-        AND Submissions.SubmissionID = SUBMITSTO.SubmissionID
-        AND SUBMITSTO.AssignmentID = Assignments.AssignmentID
-      GROUP BY TURNSIN.Username) AS actualCount
-    FROM Assignments NATURAL JOIN GIVES NATURAL JOIN Class
-    WHERE Class.Department = '${classId[0]}'
-      AND Class.CourseNumber = ${classId[1]}
-      AND Class.Section = ${classId[2]}`
-  if(req.query.userType==="Student"){
-    sqlquery=
-    ``
-  }
-  mysqlConnection.query(sqlquery, (err,results, fields)=>{
-    if(err){
-      console.log(err)
-      res.status(500).send(err)
-    }
-    console.log(results)
-    res.status(200).send(results)
-  })
+  `SELECT *, (SELECT count(*)
+  FROM Student JOIN TAKES JOIN Class
+    ON Class.Department = TAKES.Department 
+                AND Class.CourseNumber = TAKES.CourseNumber 
+                AND Class.Section = TAKES.Section) AS maxCount,
+(SELECT count(*) 
+  FROM TURNSIN JOIN Submissions JOIN SUBMITSTO JOIN Assignments
+            ON Submissions.SubmissionID = TURNSIN.SubmissionID
+            AND Submissions.SubmissionID = SUBMITSTO.SubmissionID
+            AND SUBMITSTO.AssignmentID = Assignments.AssignmentID
+            GROUP BY TURNSIN.Username) AS actualCount
+FROM Assignments NATURAL JOIN GIVES NATURAL JOIN Class`
+    mysqlConnection.query(sqlquery, (err,results, fields)=>{
+      if(err){
+        console.log(err)
+        res.status(500).send(err)
+      }
+      console.log(results)
+      res.status(200).send(results)
+    })
 })
 
 /**
