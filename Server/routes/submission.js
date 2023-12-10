@@ -73,8 +73,20 @@ router.post("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions
       console.error(err)
       res.status(500).send(err)
     }
-    console.log(results)
-    res.status(200).send(results)
+    sqlquery=
+    `INSERT INTO SUBMITSTO (AssignmentID, SubmissionID)
+      VALUES ('${params.assignId}', '${id}')`
+    mysqlConnection.query(sqlquery,(err,results,fields)=>{
+      if(err){
+        console.error(err)
+        res.status(500).send(err)
+      }
+      sqlquery=
+      `SELECT * FROM Submissions
+        WHERE Submissions.SubmissionID = '${id}'`
+      console.log(results)
+      res.status(200).send(results)
+    })
   })
 })
 
