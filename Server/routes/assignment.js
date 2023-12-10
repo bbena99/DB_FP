@@ -121,14 +121,21 @@ router.get("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
             WHERE Class.Department = '${classId[0]}' AND Class.CourseNumber = ${classId[1]} and Class.Section = ${classId[2]}
             GROUP BY TURNSIN.Username) AS actualCount
 FROM Assignments NATURAL JOIN GIVES NATURAL JOIN Class`
-    mysqlConnection.query(sqlquery, (err,results, fields)=>{
-      if(err){
-        console.log(err)
-        res.status(500).send(err)
-      }
-      console.log(results)
-      res.status(200).send(results)
-    })
+  if(req.query.userType==="Student")sqlquery=
+  `SELECT *, 
+  (SELECT Submissions.Points
+      FROM Submissions NATURAL JOIN SUBMITSTO NATURAL JOIN Assignments
+      ORDER BY Submissions.Points
+      LIMIT 1) AS actualCount
+    FROM Assignments`
+  mysqlConnection.query(sqlquery, (err,results, fields)=>{
+    if(err){
+      console.log(err)
+      res.status(500).send(err)
+    }
+    console.log(results)
+    res.status(200).send(results)
+  })
 })
 
 /**
