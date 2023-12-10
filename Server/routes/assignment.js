@@ -120,7 +120,8 @@ router.get("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
             AND Assignments.AssignmentID = GIVES.AssignmentID
             WHERE Class.Department = '${classId[0]}' AND Class.CourseNumber = ${classId[1]} and Class.Section = ${classId[2]}
             GROUP BY TURNSIN.Username) AS actualCount
-FROM Assignments NATURAL JOIN GIVES NATURAL JOIN Class`
+FROM Assignments NATURAL JOIN GIVES NATURAL JOIN Class
+WHERE Class.Department = '${classId[0]}' AND Class.CourseNumber = ${classId[1]} and Class.Section = ${classId[2]}`
   if(req.query.userType==="Student")sqlquery=
   `SELECT *,
   Assignments.TotalPoints as maxCount,
