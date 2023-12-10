@@ -36,20 +36,22 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   //You will actually have to query the db for this value
   if(params.username==undefined)res.status(401).send("Invalid user tried to make an Assignment")
 
-  console.log(params)
-  console.log(body)
+  //console.log(params)
+  //console.log(body)
+  let id = uuidv4.v4()
+  console.log(id)
 
   //Make creation query here:
   let sqlquery =
   `INSERT INTO Assignments (Name, Description, AssignmentID, TotalPoints, DueDate, Visibility)
-    VALUES ('${body.AssignName}', '${body.Description}', '${uuidv4}',${body.TotalPoints}, '${body.dueData}', ${body.Visibility})`
+    VALUES ('${body.AssignName}', '${body.Description}', '${id}',${body.TotalPoints}, '${body.dueData}', ${body.Visibility})`
 
     mysqlConnection.query(sqlquery, (err,results,fields)=>{
       if(err){
         console.error(err)
         res.status(500).send(err)
       }
-       //Don't need to send anything back to frontend.
+      //Don't need to send anything back to frontend.
       console.log(results)
       res.status(200).send()
     })
