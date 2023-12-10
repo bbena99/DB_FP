@@ -72,6 +72,7 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
  * 
  * @param req.params.username username of the user
  * @param req.params.classId id of the class that has the assignments
+ * @param req.query.userType type of user
  * 
  * @returns {Assignment[]}
 */
@@ -80,19 +81,17 @@ router.get("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   const classId = req.params.split('~')
 
   let sqlquery=
-  `SELECT Assignments.*
-    FROM Class JOIN GIVES JOIN Assignments
-    ON Class.Department = GIVES.Department AND Class.CourseNumber = GIVES.CourseNumber AND Class.Section = GIVES.Section
-    AND Assignments.AssignmentID = GIVES.AssignmentID
-    WHERE Class.Department = '${classId(0)}' AND Class.CourseNumber = ${classId(1)} AND Class.Section = ${classId(2)}`
-    mysqlConnection.query(sqlquery, (err,results, fields)=>{
-      if(err){
-        console.log(err)
-        res.status(500).send(err)
-      }
-      console.log(results)
-      res.status(200).send(results)
-    })
+  `SELECT * FROM Teacher`
+  if(req.query.userType=="student")sqlquery = 
+  ``
+  mysqlConnection.query(sqlquery, (err,results, fields)=>{
+    if(err){
+      console.log(err)
+      res.status(500).send(err)
+    }
+    console.log(results)
+    res.status(200).send(results)
+  })
 })
 
 /**

@@ -1,4 +1,5 @@
 const express = require('express');
+const { mysqlConnection } = require('../sqlConnect/Connection');
 var router = express.Router();
 
 //Start of variables to use
@@ -28,14 +29,14 @@ router.all("/Users/:username/Classes/:classId/Assignments/:assignId",(req,res,ne
  * 
  * @returns {Submission[]}
 */
-router.get("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
+router.get("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions",(req,res,next)=>{
   const params = req.params
   const classId = params.classId.split('~')
   const userType = req.query.userType
 
   //sqlquery here
   let sqlquery =
-  ``
+  `INSERT`
 })
 /**
  * POST "/Users/:username/Classes/:classId/Assignments/:assignId"
@@ -48,14 +49,24 @@ router.get("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
  * 
  * @returns {Submission[]}
 */
-router.get("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
+router.post("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions",(req,res,next)=>{
   const params = req.params
   const classId = params.classId.split('~')
   const newSubmission = req.body
 
   //sqlquery here
   let sqlquery =
-  ``
+  `SELECT * FROM Submissions JOINS SUBMITSTO
+    ON Submissions.SubmissionID = SUBMITSTO.SubmissionID
+    AND SUBMITSTO.AssignmentID = '${params.assignId}'`
+  mysqlConnection.query(sqlquery,(err,results,fields)=>{
+    if(err){
+      console.error(err)
+      res.status(500).send(err)
+    }
+    console.log(results)
+    res.status(200).send(results)
+  })
 })
 
 //Export the router
