@@ -138,7 +138,7 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
     //Make query to make class
     //Return status(200)
     sqlquery=
-    `INSERT INTO Class (Name, Department, CourseNumber, Section)
+    `INSERT INTO Class (ClassName, Department, CourseNumber, Section)
       VALUES ('${newClass.Name}', '${newClass.Department}', ${newClass.CourseNumber}, ${newClass.Section})`
     mysqlConnection.query(sqlquery, (err,results,fields)=>{
       if(err){
