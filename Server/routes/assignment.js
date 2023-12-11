@@ -128,7 +128,7 @@ WHERE Class.Department = '${classId[0]}' AND Class.CourseNumber = ${classId[1]} 
   Assignments.TotalPoints as maxCount,
   (SELECT Submissions.Points
       FROM Submissions NATURAL JOIN SUBMITSTO NATURAL JOIN Assignments
-      ORDER BY Submissions.Points
+      ORDER BY Submissions.Points DESC
       LIMIT 1) AS actualCount
     FROM Assignments NATURAL JOIN GIVES
     WHERE GIVES.Department = '${classId[0]}'
