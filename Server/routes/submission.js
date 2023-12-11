@@ -122,9 +122,9 @@ router.put("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions/
   let sqlquery =
   `UPDATE Submissions
     SET 
-    Submissions.Points = ${data.Points}
+    Submissions.Points = ${data.Points},
     Submissions.Comments = '${data.Comments}'
-      WHERE SubmissionID = '${params.submissionID}`
+      WHERE SubmissionID = '${params.submissionID}'`
   mysqlConnection.query(sqlquery,(err,results,fields)=>{
     if(err){
       //console.error(err)
