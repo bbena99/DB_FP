@@ -14,8 +14,8 @@ const uuidv4 = require('uuid')
  * @param req.params.assignId id of the assignment that has the submissions
 */
 router.all("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions",(req,res,next)=>{
-  console.log("submission.js is entered sucessfully ☺")
-  console.log(req.params)
+  //console.log("submission.js is entered sucessfully ☺")
+  //console.log(req.params)
   next()
 })
 /**
@@ -37,16 +37,16 @@ router.get("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions"
   //sqlquery here
   let sqlquery =
   `SELECT *
-    FROM Submissions JOIN SUBMITSTO JOIN GIVES
+    FROM Submissions JOIN SUBMITSTO JOIN GIVES NATURAL JOIN TURNSIN NATURAL JOIN Student
       ON Submissions.SubmissionID = SUBMITSTO.SubmissionID
       AND SUBMITSTO.AssignmentID = '${params.assignId}'
       AND GIVES.AssignmentID = '${params.assignId}'`
   mysqlConnection.query(sqlquery, (err,results,fields)=>{
     if(err){
-      console.error(err)
+      //console.error(err)
       res.status(500).send(err)
     }
-    console.log(results)
+    //console.log(results)
     res.status(200).send(results)
   })
 })
@@ -72,7 +72,7 @@ router.post("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions
     VALUES ('${id}', '${newSubmission.Date}', '${newSubmission.StudentAnswer}')`
   mysqlConnection.query(sqlquery,(err,results,fields)=>{
     if(err){
-      console.error(err)
+      //console.error(err)
       res.status(500).send(err)
       throw err
     }
@@ -81,7 +81,7 @@ router.post("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions
       VALUES ('${params.assignId}', '${id}')`
     mysqlConnection.query(sqlquery,(err,results,fields)=>{
       if(err){
-        console.error(err)
+        //console.error(err)
         res.status(500).send(err)
         throw err
       }
@@ -90,14 +90,14 @@ router.post("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions
         VALUES ('${params.username}', '${id}')`
         mysqlConnection.query(sqlquery,(err,results,fields)=>{
           if(err){
-            console.error(err)
+            //console.error(err)
             res.status(500).send(err)
           }
         })
       sqlquery=
       `SELECT * FROM Submissions
         WHERE Submissions.SubmissionID = '${id}'`
-      console.log(results)
+      //console.log(results)
       res.status(200).send(results)
     })
   })
@@ -127,10 +127,10 @@ router.put("/Users/:username/Classes/:classId/Assignments/:assignId/Submissions/
       WHERE SubmissionID = '${params.submissionID}`
   mysqlConnection.query(sqlquery,(err,results,fields)=>{
     if(err){
-      console.error(err)
+      //console.error(err)
       res.status(500).send(err)
     }
-      console.log(results)
+      //console.log(results)
       res.status(200).send(results)
     })
   })

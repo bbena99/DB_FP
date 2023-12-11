@@ -20,7 +20,7 @@ router.get('/users', async(req, res, next)=> {
   `SELECT * FROM ${userType}`
   mysqlConnection.query(sqlquery, (err,results,fields)=>{
     if(err){
-      console.error(err)
+      //console.error(err)
       res.status(404).send(err)
     }
     delete results.Password

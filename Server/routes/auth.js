@@ -11,18 +11,18 @@ var headArray = connect.headArray
 // bcrypt
 //   .hash(password, SaltRounds)
 //   .then(hash => {
-//     console.log('Hash ', hash)
+//     //console.log('Hash ', hash)
 //     validatePassword(hash)
 //   })
-//   .catch(err => console.error(err.message))
+//   .catch(err => //console.error(err.message))
 
 //   function validatePassword(hash) {
 //     bcrypt
 //       .compare(password, hash)
 //       .then(res => {
-//         console.log(res) // return true
+//         //console.log(res) // return true
 //       })
-//       .catch(err => console.error(err.message))        
+//       .catch(err => //console.error(err.message))        
 // }
 
 /*
@@ -36,7 +36,7 @@ Router.get("/", (req, res) => {
       if (!err) {
         res.send(results);
       } else {
-        console.log(err);
+        //console.log(err);
       }
     }
   );
@@ -91,7 +91,7 @@ Teacher = {
  * @returns {JSON}
  */
 router.get("/test",(req,res)=>{
-  console.log(headArray)
+  //console.log(headArray)
   let allArray =[]
   let q =
   `SELECT *
@@ -137,12 +137,12 @@ router.post("/Login", async (req,res,next) => {
   mysqlConnection.query(sqlquery, (err, results, fields)=> {
     //console.log(results); // results contains rows returned by server
     if(err){
-      console.error(err)
+      //console.error(err)
       res.status(500).send(err)
     }
     user = results[0]
     if(!user){
-      console.error("User undefined")
+      //console.error("User undefined")
       res.status(404).send("No user found")
     }
   
@@ -155,7 +155,7 @@ router.post("/Login", async (req,res,next) => {
         delete user.Password
       
         //double check user's values are specific
-        console.log(user)
+        //console.log(user)
       
         //Send user back to frontend
         req.session.user=user
@@ -190,18 +190,18 @@ router.post("/CreateUser", async (req,res,next) => {
   let sqlquery =
   `SELECT * FROM ${query.userType}
       WHERE Username = '${query.username}'`
-  //debug console.log
+  //debug //console.log
   //console.log("dbq1 = "+sqlquery)
   //query the db!
   mysqlConnection.query(sqlquery,(err, results, fields)=> {
     if(err)console.error(err)
     user = {...results}
-    //debug console.log
+    //debug //console.log
     //console.log("user after dpq1 : (Should be {})")
     //console.log(user)
     //if username is taken, return an error
     if(user=={}){
-      console.error("!!!Inside of if statement")
+      //console.error("!!!Inside of if statement")
       res.status(401).send("User already exists")
     }
     
@@ -233,7 +233,7 @@ router.post("/CreateUser", async (req,res,next) => {
             `SELECT * FROM ${query.userType}
               WHERE Username = '${query.username}'`
             mysqlConnection.query(sqlquery, (err,results,fields)=>{
-              //debug console.log that the user was made proper
+              //debug //console.log that the user was made proper
               user = results[0]
               //console.log("User after insert : ")
               //console.log(user)
@@ -242,7 +242,7 @@ router.post("/CreateUser", async (req,res,next) => {
               delete user.Password
               
               //Return data to the frontend
-              console.log(user)
+              //console.log(user)
               req.session.user=user
               next()
             })
@@ -262,7 +262,7 @@ router.post("/CreateUser", async (req,res,next) => {
  * @returns {undefined} //returns undefined to frontend
  */
 router.post("/logout", (req, res) => {
-  console.log("Inside of /logout in auth.js")
+  //console.log("Inside of /logout in auth.js")
   req.session.destroy( () => {
     //console.log( req.session );
     res.status(200).send({});

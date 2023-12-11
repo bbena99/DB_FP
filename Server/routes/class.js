@@ -9,8 +9,8 @@ var router = express.Router();
  * ALL "/Users/:Username/Classes"
  */
 router.all('/Users/:Username/Classes*',(req,res,next)=>{
-  console.log('-->Inside of class.js')
-  console.log(req.url)
+  //console.log('-->Inside of class.js')
+  //console.log(req.url)
   next()
 })
 
@@ -40,7 +40,7 @@ router.post('/Users/:Username/Classes/:ClassId',(req,res,next)=>{
 
   mysqlConnection.query(sqlquery,(err,results,fields)=>{
     if(err){
-      console.error(err)
+      //console.error(err)
       res.status(500).send(err)
     }
     let deleteArr=[]
@@ -54,7 +54,7 @@ router.post('/Users/:Username/Classes/:ClassId',(req,res,next)=>{
         VALUES ('${Username}', '${strarr[0]}', ${strarr[1]}, ${strarr[2]})`
       mysqlConnection.query(sqlInsert, (err,results,fields)=>{
         if(err){
-          console.error(err)
+          //console.error(err)
           res.status(500).send(err)
         }
         //console.log(results)
@@ -66,7 +66,7 @@ router.post('/Users/:Username/Classes/:ClassId',(req,res,next)=>{
         WHERE Username = '${Username}' AND TAKES.Department = '${strarr[0]}' AND TAKES.CourseNumber = ${strarr[1]} AND TAKES.Section = ${strarr[2]}`
       mysqlConnection.query(sqlDelete, (err,results,fields)=>{
         if(err){
-          console.error(err)
+          //console.error(err)
           res.status(500).send(err)
         }
         //console.log(results)
@@ -99,7 +99,7 @@ router.get('/Users/:Username/Classes/:ClassId',(req,res,next)=>{
     mysqlConnection.query(sqlquery, (err,results,fields)=>{
       
       if(err){
-        console.error(err)
+        //console.error(err)
         res.status(500).send(err)
       }
       //console.log(results)
@@ -120,8 +120,8 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
   //Get params
   const username = req.params.Username
   let newClass = req.body
-  //Debug console.logs
-  // console.log(`  POST to "/User/:Username/Classes" was called
+  //Debug //console.logs
+  // //console.log(`  POST to "/User/:Username/Classes" was called
   // Username : ${username}
   // Class :`)
   //console.log(newClass)
@@ -131,7 +131,7 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
   `SELECT * FROM Teacher WHERE Username = '${username}'`
   mysqlConnection.query(sqlquery, (err,results,fields)=>{
     if(err){
-      console.error(err)
+      //console.error(err)
       res.status(404).send(err)
     }
     //console.log(results);
@@ -142,7 +142,7 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
       VALUES ('${newClass.Name}', '${newClass.Department}', ${newClass.CourseNumber}, ${newClass.Section})`
     mysqlConnection.query(sqlquery, (err,results,fields)=>{
       if(err){
-        console.error(err)
+        //console.error(err)
         res.status(500).send(err)
       }
       //console.log(results)
@@ -151,7 +151,7 @@ router.post('/Users/:Username/Classes', (req,res,next)=>{
           VALUES ('${username}', '${newClass.Department}', ${newClass.CourseNumber}, ${newClass.Section})`
       mysqlConnection.query(sqlquery, (err,results,fields)=>{
         if(err){
-          console.error(err)
+          //console.error(err)
           res.status(500).send(err)
         }
         //console.log(results)
@@ -177,9 +177,9 @@ router.get('/Users/:Username/Classes', (req,res,next)=>{
   let userDef = {type:'Student',verb:'TAKES'}
   if(teacherBool)userDef = {type:'Teacher',verb:'TEACHES'}
 
-  //Debug console.logs
-  console.log(` GET to "/Users/:Username/Classes" was called proper
-      Username='${username}'    userDef.type=${userDef.type}    userDef.verb=${userDef.verb}`)
+  //Debug //console.logs
+  //console.log(` GET to "/Users/:Username/Classes" was called proper
+  //    Username='${username}'    userDef.type=${userDef.type}    userDef.verb=${userDef.verb}`)
   
   // query the db for class[] and store in "returnClasses"
   let sqlquery =
@@ -198,7 +198,7 @@ router.get('/Users/:Username/Classes', (req,res,next)=>{
       WHERE ${userDef.type}.Username = '${username}'`
   mysqlConnection.query(sqlquery, (err,results,fields)=>{
     if(err){
-      console.error(err)
+      //console.error(err)
       res.status(500).send(err)
     }
     results.map((r)=>{

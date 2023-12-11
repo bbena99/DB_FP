@@ -13,8 +13,8 @@ var router = express.Router();
 router.all('Users/:Username/Classes/:ClassId/Assignments',(req,res,next)=>{
   let un = req.params.Username
   let cid = req.params.ClassId
-  console.log(`Inside Users/:Username/Classes/:ClassId with url:
-  Users/${un}/Classes/:${cid}/Assignments`)
+  //console.log(`Inside Users/:Username/Classes/:ClassId with url:
+  //Users/${un}/Classes/:${cid}/Assignments`)
   next()
 })
 
@@ -31,7 +31,7 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   const params = req.params
   const body = req.body
   const classId = params.classId.split('~')
-  console.log(body)
+  //console.log(body)
 
   //Check for valid teacher and teacher teaches this class
   //You will actually have to query the db for this value
@@ -40,7 +40,7 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
   //console.log(params)
   //console.log(body)
   let id = uuidv4.v4()
-  console.log(id)
+  //console.log(id)
 
   //Make creation query here:
   let sqlquery =
@@ -49,7 +49,7 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
 
     mysqlConnection.query(sqlquery, (err,results,fields)=>{
       if(err){
-        console.error(err)
+        //console.error(err)
         res.status(500).send(err)
       }
       sqlquery=
@@ -58,7 +58,7 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
 
         mysqlConnection.query(sqlquery,(err,results,fields)=>{
           if(err){
-            console.error(err)
+            //console.error(err)
             res.status(500).send(err)
           }
         
@@ -79,10 +79,10 @@ router.post("/Users/:username/Classes/:classId/Assignments",(req,res,next)=>{
             WHERE Assignments.AssignmentID = '${id}'`
             mysqlConnection.query(sqlquery, (err,results,fields)=>{
               if(err){
-                console.error(err)
+                //console.error(err)
                 res.status(500).send(err)
               }
-              console.log(results)
+              //console.log(results)
               res.status(200).send(results)
             })
           })
@@ -135,10 +135,10 @@ WHERE Class.Department = '${classId[0]}' AND Class.CourseNumber = ${classId[1]} 
       AND GIVES.Section = ${classId[2]}`
   mysqlConnection.query(sqlquery, (err,results, fields)=>{
     if(err){
-      console.log(err)
+      //console.log(err)
       res.status(500).send(err)
     }
-    console.log(results)
+    //console.log(results)
     res.status(200).send(results)
   })
 })
@@ -162,10 +162,10 @@ router.get("/User/:username/Classes/:classId/Assignments/:assignmentId",(req,res
     WHERE AssignmentID = '${id}'`
     mysqlConnection.sqlquery(sqlquery, (err,results,fields)=>{
       if(err){
-        console.log(err)
+        //console.log(err)
         res.status(500).send(err)
       }
-      console.log(results)
+      //console.log(results)
       res.status(200).send(results)
     })
 })
